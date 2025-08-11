@@ -1,0 +1,97 @@
+{
+  "name": "AWS DVA-C02 Strategic Exam Trainer",
+  "short_name": "DVA-C02 Trainer",
+  "description": "Strategic exam trainer for AWS Certified Developer Associate certification with timing optimization",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#232F3E",
+  "theme_color": "#FF9900",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Triage Training",
+      "short_name": "Triage",
+      "description": "30-second decision practice",
+      "url": "/?mode=triage",
+      "icons": [
+        {
+          "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Speed Rounds",
+      "short_name": "Speed",
+      "description": "90-second maximum per question",
+      "url": "/?mode=speed",
+      "icons": [
+        {
+          "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Full Exam",
+      "short_name": "Exam",
+      "description": "65 questions in 130 minutes",
+      "url": "/?mode=exam",
+      "icons": [
+        {
+          "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Strategic Practice",
+      "short_name": "Strategic",
+      "description": "Learn flag and skip workflow",
+      "url": "/?mode=strategic",
+      "icons": [
+        {
+          "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "scope": "/",
+  "screenshots": [
+    {
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Quiz interface with timing indicators"
+    }
+  ],
+  "share_target": {
+    "action": "/",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}
