@@ -1,0 +1,2624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="Strategic AWS Certified Developer Associate DVA-C02 Exam Trainer - Master timing and pass the exam">
+    <meta name="theme-color" content="#FF9900">
+    <link rel="manifest" href="manifest.json">
+    <title>AWS DVA-C02 Strategic Exam Trainer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --aws-orange: #FF9900;
+            --aws-blue: #232F3E;
+            --aws-light-blue: #4B9BFF;
+            --success: #48C774;
+            --danger: #FF3860;
+            --warning: #FFB900;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #ffa0c9 75%, #FF9900 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1em;
+        }
+
+        .timer-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .timer-box {
+            flex: 1;
+            min-width: 150px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+
+        .timer-label {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .timer-value {
+            color: white;
+            font-size: 1.8em;
+            font-weight: bold;
+            font-feature-settings: "tnum";
+        }
+
+        .pace-indicator {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            color: white;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: inline-block;
+        }
+
+        .pace-on-track { background: var(--success); }
+        .pace-behind { background: var(--warning); }
+        .pace-danger { background: var(--danger); }
+
+        .mode-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .mode-card {
+            background: rgba(255,255,255,0.15);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.25);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .mode-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .mode-title {
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .mode-desc {
+            color: rgba(255,255,255,0.9);
+            font-size: 0.9em;
+        }
+
+        .question-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            color: #333;
+            display: none;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .question-info {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .badge-domain {
+            background: var(--aws-blue);
+            color: white;
+        }
+
+        .badge-difficulty-easy {
+            background: #48C774;
+            color: white;
+        }
+
+        .badge-difficulty-medium {
+            background: #FFB900;
+            color: white;
+        }
+
+        .badge-difficulty-hard {
+            background: #FF3860;
+            color: white;
+        }
+
+        .question-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .flag-btn {
+            background: #FFB900;
+            color: white;
+        }
+
+        .flag-btn.flagged {
+            background: #FF3860;
+        }
+
+        .skip-btn {
+            background: #4B9BFF;
+            color: white;
+        }
+
+        .scenario {
+            background: #f5f5f5;
+            border-left: 4px solid var(--aws-orange);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+
+        .question-text {
+            font-size: 1.15em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            color: #232F3E;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            line-height: 1.5;
+        }
+
+        .option:hover {
+            border-color: var(--aws-orange);
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .option.selected {
+            background: #FFF3E0;
+            border-color: var(--aws-orange);
+        }
+
+        .option.correct {
+            background: #E8F5E9;
+            border-color: var(--success);
+        }
+
+        .option.incorrect {
+            background: #FFEBEE;
+            border-color: var(--danger);
+        }
+
+        .option-letter {
+            min-width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--aws-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .option-text {
+            flex: 1;
+        }
+
+        .explanation {
+            background: #f0f8ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .explanation h3 {
+            color: var(--aws-blue);
+            margin-bottom: 15px;
+        }
+
+        .explanation-section {
+            margin-bottom: 15px;
+        }
+
+        .explanation-section h4 {
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .strategy-tip {
+            background: #FFF9E6;
+            border-left: 4px solid var(--aws-orange);
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 5px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--aws-orange), #FF6B00);
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255,153,0,0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--aws-blue), #1a2332);
+            flex: 1;
+        }
+
+        .results-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 30px;
+            color: #333;
+            display: none;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            font-weight: bold;
+            color: white;
+            position: relative;
+            background: conic-gradient(var(--success) 0deg, var(--success) var(--score-deg), #e0e0e0 var(--score-deg));
+        }
+
+        .score-text {
+            background: white;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+
+        .pass-fail {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .pass { color: var(--success); }
+        .fail { color: var(--danger); }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--aws-blue);
+        }
+
+        .domain-breakdown {
+            margin-top: 30px;
+        }
+
+        .domain-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .domain-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .domain-score {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar {
+            width: 100px;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            transition: width 0.5s ease;
+        }
+
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 1.2em;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                border-radius: 15px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .mode-selection {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .timer-section {
+                flex-direction: column;
+            }
+
+            .timer-box {
+                min-width: 100%;
+            }
+        }
+
+        .install-prompt {
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .install-prompt button {
+            background: var(--aws-orange);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .review-mode {
+            background: #E3F2FD;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .review-navigation {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .review-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #2196F3;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .review-btn.answered {
+            background: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .review-btn.flagged {
+            background: #FF9800;
+            color: white;
+            border-color: #FF9800;
+        }
+
+        .review-btn.current {
+            background: #2196F3;
+            color: white;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 AWS DVA-C02 Strategic Trainer</h1>
+            <p>Master timing strategies and pass the Developer Associate exam</p>
+        </div>
+
+        <div class="install-prompt" id="installPrompt">
+            <span>📱 Install this app for offline practice!</span>
+            <button onclick="installApp()">Install</button>
+            <button onclick="dismissInstall()">Later</button>
+        </div>
+
+        <div class="timer-section" id="timerSection" style="display: none;">
+            <div class="timer-box">
+                <div class="timer-label">Global Timer</div>
+                <div class="timer-value" id="globalTimer">00:00</div>
+            </div>
+            <div class="timer-box">
+                <div class="timer-label">Question Time</div>
+                <div class="timer-value" id="questionTimer">00:00</div>
+            </div>
+            <div class="timer-box">
+                <div class="timer-label">Pace Status</div>
+                <div class="timer-value" id="paceValue">--</div>
+                <div class="pace-indicator pace-on-track" id="paceIndicator">ON TRACK</div>
+            </div>
+        </div>
+
+        <div class="mode-selection" id="modeSelection">
+            <div class="mode-card" onclick="startMode('triage')">
+                <div class="mode-icon">⚡</div>
+                <div class="mode-title">Triage Training</div>
+                <div class="mode-desc">30-second decisions<br>Learn to identify quick wins</div>
+            </div>
+            <div class="mode-card" onclick="startMode('speed')">
+                <div class="mode-icon">🏃</div>
+                <div class="mode-title">Speed Rounds</div>
+                <div class="mode-desc">90 seconds max<br>Build rapid analysis skills</div>
+            </div>
+            <div class="mode-card" onclick="startMode('exam')">
+                <div class="mode-icon">📝</div>
+                <div class="mode-title">Full Exam</div>
+                <div class="mode-desc">65 questions, 130 minutes<br>Realistic exam simulation</div>
+            </div>
+            <div class="mode-card" onclick="startMode('strategic')">
+                <div class="mode-icon">🎯</div>
+                <div class="mode-title">Strategic Practice</div>
+                <div class="mode-desc">Learn flag & skip workflow<br>Master time management</div>
+            </div>
+        </div>
+
+        <div class="review-mode" id="reviewMode">
+            <h3>📋 Review Navigation</h3>
+            <div class="review-navigation" id="reviewNavigation"></div>
+        </div>
+
+        <div class="question-container" id="questionContainer">
+            <div class="question-header">
+                <div class="question-info">
+                    <span class="badge badge-domain" id="domainBadge">Domain 1</span>
+                    <span class="badge badge-difficulty-medium" id="difficultyBadge">Medium</span>
+                    <span class="badge" id="questionNumber">Q1 of 65</span>
+                </div>
+                <div class="question-actions">
+                    <button class="action-btn flag-btn" id="flagBtn" onclick="toggleFlag()">🚩 Flag</button>
+                    <button class="action-btn skip-btn" onclick="skipQuestion()">⏭️ Skip</button>
+                </div>
+            </div>
+            
+            <div class="scenario" id="scenario"></div>
+            <div class="question-text" id="questionText"></div>
+            
+            <div class="options" id="options"></div>
+            
+            <div class="explanation" id="explanation">
+                <h3>📚 Explanation</h3>
+                <div class="explanation-section">
+                    <h4>✅ Correct Answer:</h4>
+                    <p id="correctExplanation"></p>
+                </div>
+                <div class="explanation-section">
+                    <h4>❌ Why Other Options Are Wrong:</h4>
+                    <div id="wrongExplanations"></div>
+                </div>
+                <div class="strategy-tip">
+                    <h4>💡 Exam Strategy Tip:</h4>
+                    <p id="strategyTip"></p>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()">Previous</button>
+                <button class="btn btn-primary" id="submitBtn" onclick="submitAnswer()">Submit Answer</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" style="display: none;">Next Question</button>
+            </div>
+        </div>
+
+        <div class="results-container" id="resultsContainer">
+            <div class="results-header">
+                <h2>📊 Exam Results</h2>
+                <div class="score-circle" style="--score-deg: 0deg;">
+                    <div class="score-text" id="scoreText">0%</div>
+                </div>
+                <div class="pass-fail" id="passFail">CALCULATING...</div>
+                <p id="resultMessage"></p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Questions Correct</div>
+                    <div class="stat-value" id="correctCount">0/0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Time Used</div>
+                    <div class="stat-value" id="timeUsed">00:00</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Avg Time/Question</div>
+                    <div class="stat-value" id="avgTime">0s</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Questions Flagged</div>
+                    <div class="stat-value" id="flaggedCount">0</div>
+                </div>
+            </div>
+            
+            <div class="domain-breakdown">
+                <h3>Domain Performance</h3>
+                <div id="domainResults"></div>
+            </div>
+            
+            <div class="controls">
+                <button class="btn btn-primary" onclick="reviewAnswers()">Review Answers</button>
+                <button class="btn btn-secondary" onclick="resetQuiz()">Start New Session</button>
+            </div>
+        </div>
+
+        <div class="loading" id="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading questions...</p>
+        </div>
+    </div>
+
+    <script>
+        // Question Bank - AWS DVA-C02 Specific Questions
+        const questionBank = [
+            // Domain 1: Development with AWS Services (32%)
+            {
+                id: 'dva_001',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "A development team is building a serverless application that processes user uploads. Files are stored in S3, metadata is stored in DynamoDB, and Lambda functions handle processing. The application experiences occasional spikes where thousands of files are uploaded simultaneously, causing some Lambda invocations to be throttled.",
+                question: "What is the MOST cost-effective solution to handle these traffic spikes while maintaining processing reliability?",
+                options: [
+                    "Configure S3 Event Notifications to send messages to an SQS queue, and configure Lambda to poll from the queue with reserved concurrency",
+                    "Increase the Lambda concurrent execution limit to 10,000 and implement exponential backoff in the upload client",
+                    "Use AWS Step Functions to orchestrate the processing workflow with built-in retry logic",
+                    "Configure S3 Transfer Acceleration and increase Lambda memory to 10GB for faster processing"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Redis with TTL provides millisecond latency and automatic expiration, perfect for session storage.",
+                    whyWrong: {
+                        1: "DynamoDB TTL has up to 48-hour delay for deletion",
+                        2: "S3 lifecycle policies work on daily granularity, not minutes",
+                        3: "EFS is for file storage, not session data"
+                    },
+                    examStrategy: "ElastiCache for session storage with TTL. DynamoDB TTL is eventually consistent."
+                } {
+                    correct: "Using SQS as a buffer between S3 and Lambda provides reliable message delivery and automatic retry logic. Reserved concurrency prevents throttling while the queue handles traffic spikes, making this the most cost-effective solution.",
+                    whyWrong: {
+                        1: "Simply increasing concurrent execution limits doesn't guarantee processing and could lead to higher costs without solving the root cause",
+                        2: "Step Functions adds unnecessary complexity and cost for this use case when SQS provides simpler buffering",
+                        3: "Transfer Acceleration and increased memory don't address the throttling issue and significantly increase costs"
+                    },
+                    examStrategy: "Look for solutions that use managed services for buffering (SQS, Kinesis) when dealing with traffic spikes and Lambda throttling."
+                }
+            },
+            {
+                id: 'dva_002',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "hard",
+                timeRecommendation: 150,
+                scenario: "An e-commerce application uses DynamoDB for its product catalog with a partition key of ProductID and sort key of Timestamp. The application needs to frequently query products by category and price range. Current query patterns are causing performance issues and high read costs.",
+                question: "Which solution provides the BEST query performance while minimizing costs?",
+                options: [
+                    "Create a Global Secondary Index with Category as partition key and Price as sort key",
+                    "Migrate to Amazon RDS MySQL and create composite indexes on Category and Price",
+                    "Use DynamoDB Streams to replicate data to ElasticSearch for complex queries",
+                    "Implement scan operations with FilterExpression for Category and Price attributes"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "A GSI with Category as partition key and Price as sort key enables efficient queries for the exact access pattern needed. This provides the best performance at the lowest cost for DynamoDB.",
+                    whyWrong: {
+                        1: "Migrating to RDS involves significant refactoring and loses DynamoDB's scalability benefits",
+                        2: "ElasticSearch adds complexity and cost for a simple query pattern that GSI can handle",
+                        3: "Scan operations are expensive and slow, especially as the table grows"
+                    },
+                    examStrategy: "GSIs are the go-to solution for alternative query patterns in DynamoDB. Remember: up to 20 GSIs per table."
+                }
+            },
+            {
+                id: 'dva_003',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "easy",
+                timeRecommendation: 90,
+                scenario: "A Lambda function processes messages from an SQS queue and occasionally encounters errors due to malformed data. The team wants to ensure problematic messages don't block the queue while maintaining the ability to analyze failures.",
+                question: "What is the MOST appropriate solution?",
+                options: [
+                    "Configure an SQS Dead Letter Queue with maxReceiveCount set to 3",
+                    "Implement try-catch blocks in Lambda and delete messages on error",
+                    "Set the SQS visibility timeout to 12 hours for manual intervention",
+                    "Use SQS FIFO queue to ensure ordered processing"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "A Dead Letter Queue automatically moves messages that fail processing multiple times, preventing queue blocking while preserving failed messages for analysis.",
+                    whyWrong: {
+                        1: "Deleting messages on error loses valuable debugging information",
+                        2: "12-hour visibility timeout blocks the queue and doesn't solve the root problem",
+                        3: "FIFO queues don't address error handling and reduce throughput"
+                    },
+                    examStrategy: "DLQ is the standard pattern for handling failures in SQS processing. Always consider it for error scenarios."
+                }
+            },
+            {
+                id: 'dva_004',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "A mobile application needs to upload photos directly to S3 without going through the application backend. The uploads should be secure and the mobile app should not store AWS credentials.",
+                question: "Which approach provides the MOST secure solution?",
+                options: [
+                    "Use AWS Cognito to authenticate users and obtain temporary credentials via STS",
+                    "Generate pre-signed URLs on the backend and send them to the mobile app",
+                    "Embed IAM access keys in the mobile app with restricted S3 permissions",
+                    "Use S3 Transfer Acceleration with public write access and CloudFront for security"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Cognito with STS provides temporary, scoped credentials perfect for mobile apps. It's the most secure and scalable approach for direct S3 uploads from mobile devices.",
+                    whyWrong: {
+                        1: "Pre-signed URLs work but require backend calls for each upload, adding latency",
+                        2: "Embedding IAM credentials in mobile apps is a critical security violation",
+                        3: "Public write access is extremely insecure and Transfer Acceleration doesn't provide authentication"
+                    },
+                    examStrategy: "Cognito + STS is the standard pattern for mobile app authentication and AWS service access. Never embed credentials."
+                }
+            },
+            {
+                id: 'dva_005',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "hard",
+                timeRecommendation: 150,
+                scenario: "A financial services application requires all API responses to be cached for exactly 5 minutes for regulatory compliance. The cache must be invalidated immediately when underlying data changes. The application uses API Gateway with Lambda backends.",
+                question: "Which caching strategy meets these requirements?",
+                options: [
+                    "Enable API Gateway caching with 300-second TTL and use cache invalidation API when data changes",
+                    "Implement ElastiCache Redis with 5-minute TTL and Lambda functions for cache management",
+                    "Use CloudFront with 5-minute cache headers and create invalidations on data updates",
+                    "Store responses in DynamoDB with TTL attribute set to 5 minutes"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "API Gateway caching with explicit TTL and programmatic invalidation provides the exact control needed for compliance while being the simplest to implement.",
+                    whyWrong: {
+                        1: "ElastiCache adds complexity and requires Lambda invocation for every request to check cache",
+                        2: "CloudFront invalidations have costs and delays, not suitable for immediate invalidation needs",
+                        3: "DynamoDB with TTL doesn't provide immediate invalidation and adds unnecessary database calls"
+                    },
+                    examStrategy: "API Gateway caching is ideal for API-level caching with precise control. Remember the 300-second default TTL."
+                }
+            },
+
+            // Domain 2: Security (26%)
+            {
+                id: 'dva_006',
+                domain: "Domain 2: Security",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "A healthcare application stores sensitive patient data in RDS MySQL. Compliance requires encryption at rest, in transit, and the ability to rotate encryption keys annually. The application must maintain high availability during key rotation.",
+                question: "Which configuration meets ALL these requirements?",
+                options: [
+                    "Enable RDS encryption with AWS KMS CMK, force SSL connections, and use automatic key rotation",
+                    "Use AWS Secrets Manager for database credentials and application-level encryption with rotated keys",
+                    "Implement RDS Multi-AZ with TDE, SSL certificates, and manual key rotation procedures",
+                    "Configure Aurora Serverless with AWS KMS default keys and IAM database authentication"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "RDS encryption with KMS CMK provides encryption at rest, SSL ensures encryption in transit, and KMS automatic rotation handles key rotation without downtime.",
+                    whyWrong: {
+                        1: "Application-level encryption doesn't meet the at-rest requirement for the database itself",
+                        2: "TDE requires Enterprise Edition and manual rotation causes downtime",
+                        3: "Default KMS keys cannot be rotated manually and don't meet the annual rotation requirement"
+                    },
+                    examStrategy: "KMS CMKs with automatic rotation are the standard for RDS encryption requirements. Remember: automatic rotation = no downtime."
+                }
+            },
+            {
+                id: 'dva_007',
+                domain: "Domain 2: Security",
+                difficulty: "hard",
+                timeRecommendation: 150,
+                scenario: "A multi-tenant SaaS application needs to implement row-level security in DynamoDB. Each tenant's data must be completely isolated, and developers should not have access to production tenant data. The solution must support 10,000+ tenants.",
+                question: "What is the MOST scalable and secure approach?",
+                options: [
+                    "Use fine-grained access control with IAM policies containing dynamodb:LeadingKeys condition",
+                    "Create separate DynamoDB tables for each tenant with unique IAM roles",
+                    "Implement client-side encryption with tenant-specific KMS keys",
+                    "Use DynamoDB global tables with tenant-specific AWS accounts"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Fine-grained access control with LeadingKeys condition enables row-level security at scale, perfect for multi-tenant applications with a partition key per tenant.",
+                    whyWrong: {
+                        1: "Separate tables for 10,000+ tenants is unmanageable and hits service limits",
+                        2: "Client-side encryption doesn't prevent developer access to encrypted data",
+                        3: "Separate AWS accounts for each tenant is extremely complex and costly"
+                    },
+                    examStrategy: "LeadingKeys condition is the key to DynamoDB row-level security. Perfect for multi-tenant scenarios."
+                }
+            },
+            {
+                id: 'dva_008',
+                domain: "Domain 2: Security",
+                difficulty: "easy",
+                timeRecommendation: 90,
+                scenario: "A Lambda function needs to access secrets like database passwords and API keys. The secrets must be rotated regularly without code changes.",
+                question: "What is the RECOMMENDED approach?",
+                options: [
+                    "Store secrets in AWS Secrets Manager and retrieve them using the AWS SDK",
+                    "Use Lambda environment variables encrypted with KMS",
+                    "Store encrypted secrets in S3 and decrypt in Lambda code",
+                    "Hard-code encrypted values and use KMS for decryption"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Secrets Manager is designed specifically for this use case, providing automatic rotation, versioning, and easy SDK integration.",
+                    whyWrong: {
+                        1: "Environment variables require Lambda redeployment for rotation",
+                        2: "S3 requires custom rotation logic and additional complexity",
+                        3: "Hard-coded values violate security best practices even when encrypted"
+                    },
+                    examStrategy: "Secrets Manager is the go-to service for managing secrets with rotation. Parameter Store for static configs."
+                }
+            },
+            {
+                id: 'dva_009',
+                domain: "Domain 2: Security",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "An API Gateway REST API needs to authenticate requests from a React single-page application. The solution must support social logins (Google, Facebook) and custom user registration with email/password.",
+                question: "Which authentication approach is MOST appropriate?",
+                options: [
+                    "Use Cognito User Pools with Cognito Authorizer in API Gateway",
+                    "Implement Lambda Authorizer with JWT validation for social tokens",
+                    "Use IAM authorization with STS AssumeRoleWithWebIdentity",
+                    "Configure API Gateway API Keys with usage plans"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Cognito User Pools natively support both social providers and custom registration, with built-in API Gateway integration via Cognito Authorizer.",
+                    whyWrong: {
+                        1: "Lambda Authorizer requires custom implementation of social login integration",
+                        2: "IAM with AssumeRole doesn't support custom user registration easily",
+                        3: "API Keys are for usage tracking, not user authentication"
+                    },
+                    examStrategy: "Cognito User Pools = user authentication. Cognito Identity Pools = AWS resource access."
+                }
+            },
+            {
+                id: 'dva_010',
+                domain: "Domain 2: Security",
+                difficulty: "hard",
+                timeRecommendation: 140,
+                scenario: "A company needs to implement API throttling that varies by customer tier: Free (10 req/sec), Pro (100 req/sec), Enterprise (1000 req/sec). The solution must track usage for billing and prevent abuse.",
+                question: "Which combination provides the MOST complete solution?",
+                options: [
+                    "API Gateway Usage Plans with API Keys and CloudWatch metrics for billing",
+                    "Lambda@Edge with DynamoDB for rate counting and CloudFront for caching",
+                    "ALB with WAF rate-based rules and custom Lambda for tier management",
+                    "API Gateway with Lambda Authorizer implementing token bucket algorithm"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Usage Plans with API Keys are purpose-built for tier-based throttling with built-in metrics for billing, providing a complete managed solution.",
+                    whyWrong: {
+                        1: "Lambda@Edge adds complexity and latency for a problem API Gateway solves natively",
+                        2: "WAF rate rules don't support tier-based throttling efficiently",
+                        3: "Custom token bucket implementation is unnecessary when Usage Plans exist"
+                    },
+                    examStrategy: "API Gateway Usage Plans are the standard for API monetization and tier-based access control."
+                }
+            },
+
+            // Domain 3: Deployment (24%)
+            {
+                id: 'dva_011',
+                domain: "Domain 3: Deployment",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "A development team uses CodePipeline for CI/CD. They need to deploy a containerized application to ECS Fargate with automatic rollback on failures and gradual traffic shifting to minimize risk.",
+                question: "Which deployment configuration achieves these requirements?",
+                options: [
+                    "Use CodeDeploy with ECS blue/green deployment and CloudWatch alarms for automatic rollback",
+                    "Implement Lambda functions to orchestrate ECS service updates with custom health checks",
+                    "Configure CodeBuild to push to ECR and trigger ECS rolling updates",
+                    "Use CloudFormation StackSets with drift detection for multi-region deployment"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "CodeDeploy's blue/green deployment for ECS provides traffic shifting, automatic rollback based on CloudWatch alarms, and zero-downtime deployments.",
+                    whyWrong: {
+                        1: "Custom Lambda orchestration is complex and lacks CodeDeploy's built-in safety features",
+                        2: "Rolling updates don't provide easy rollback or traffic shifting capabilities",
+                        3: "StackSets are for multi-account/region, not for ECS blue/green deployments"
+                    },
+                    examStrategy: "CodeDeploy blue/green is the standard for safe ECS deployments. Remember: supports both EC2 and Fargate."
+                }
+            },
+            {
+                id: 'dva_012',
+                domain: "Domain 3: Deployment",
+                difficulty: "easy",
+                timeRecommendation: 90,
+                scenario: "A Lambda function deployment failed and caused production issues. The team needs to quickly revert to the previous working version while investigating the problem.",
+                question: "What is the FASTEST way to restore service?",
+                options: [
+                    "Update the Lambda alias to point to the previous version number",
+                    "Redeploy the previous code package from S3",
+                    "Use AWS Backup to restore the Lambda function",
+                    "Create a new Lambda function with the old code"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Lambda aliases can be instantly updated to point to any existing version, providing immediate rollback without redeployment.",
+                    whyWrong: {
+                        1: "Redeploying takes time and might introduce new issues",
+                        2: "AWS Backup doesn't support Lambda functions",
+                        3: "Creating new functions requires updating all integrations and permissions"
+                    },
+                    examStrategy: "Lambda aliases enable instant version switching. Always use aliases in production for quick rollbacks."
+                }
+            },
+            {
+                id: 'dva_013',
+                domain: "Domain 3: Deployment",
+                difficulty: "hard",
+                timeRecommendation: 150,
+                scenario: "A company needs to deploy a complex microservices application across multiple environments (dev, staging, prod) with different configurations. The infrastructure includes ECS, RDS, ElastiCache, and SQS. Deployments must be repeatable and configuration drift must be detected.",
+                question: "Which approach provides the BEST deployment solution?",
+                options: [
+                    "Use AWS CDK with environment-specific stacks and CloudFormation drift detection",
+                    "Create AMIs for each environment and use Systems Manager for configuration",
+                    "Implement Terraform with workspaces and remote state in S3",
+                    "Use Elastic Beanstalk with saved configurations for each environment"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "CDK provides type-safe infrastructure code with native CloudFormation integration, and drift detection ensures configuration compliance.",
+                    whyWrong: {
+                        1: "AMIs don't handle the full infrastructure stack (RDS, ElastiCache, SQS)",
+                        2: "Terraform works but CDK provides better AWS service integration and drift detection",
+                        3: "Elastic Beanstalk doesn't support the full complexity of the microservices architecture"
+                    },
+                    examStrategy: "CDK/CloudFormation is AWS's preferred IaC solution. Remember: CDK synthesizes to CloudFormation."
+                }
+            },
+            {
+                id: 'dva_014',
+                domain: "Domain 3: Deployment",
+                difficulty: "medium",
+                timeRecommendation: 110,
+                scenario: "A team needs to implement canary deployments for an API Gateway REST API backed by Lambda functions. They want to route 10% of traffic to the new version for 30 minutes before full deployment.",
+                question: "How should this be configured?",
+                options: [
+                    "Configure API Gateway stage canary settings with 10% traffic and CodeDeploy for Lambda",
+                    "Use Route 53 weighted routing with two API Gateway deployments",
+                    "Implement custom routing logic in Lambda with random traffic distribution",
+                    "Deploy to multiple Lambda aliases and use CloudFront for traffic splitting"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "API Gateway native canary deployment features provide simple percentage-based traffic splitting at the stage level, perfect for this use case.",
+                    whyWrong: {
+                        1: "Route 53 weighted routing requires multiple API endpoints and doesn't integrate with deployment",
+                        2: "Custom Lambda logic adds unnecessary complexity for built-in functionality",
+                        3: "CloudFront doesn't provide API-level canary features"
+                    },
+                    examStrategy: "API Gateway has built-in canary deployment support. Don't overcomplicate with external solutions."
+                }
+            },
+            {
+                id: 'dva_015',
+                domain: "Domain 3: Deployment",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "A development team needs to ensure their Node.js application dependencies are consistent across development, testing, and production environments. The application is deployed to Elastic Beanstalk.",
+                question: "What is the BEST practice for managing dependencies?",
+                options: [
+                    "Include package-lock.json in source control and use npm ci in deployment scripts",
+                    "Vendor all node_modules in the deployment package",
+                    "Use Lambda Layers to share dependencies across environments",
+                    "Configure Elastic Beanstalk to cache dependencies between deployments"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "package-lock.json ensures exact dependency versions, and npm ci provides fast, reliable installation from lock files, ensuring consistency.",
+                    whyWrong: {
+                        1: "Vendoring node_modules increases package size and can cause platform-specific issues",
+                        2: "Lambda Layers aren't applicable to Elastic Beanstalk deployments",
+                        3: "Caching doesn't guarantee version consistency across environments"
+                    },
+                    examStrategy: "Lock files (package-lock.json, Pipfile.lock) are crucial for dependency management. Always use them."
+                }
+            },
+
+            // Domain 4: Troubleshooting and Optimization (18%)
+            {
+                id: 'dva_016',
+                domain: "Domain 4: Troubleshooting and Optimization",
+                difficulty: "hard",
+                timeRecommendation: 140,
+                scenario: "A Lambda function processing Kinesis records experiences occasional timeout errors after 5 minutes. CloudWatch shows memory usage at 40% and the function successfully processes 95% of records. Timeouts occur during peak traffic periods.",
+                question: "What is the MOST likely cause and solution?",
+                options: [
+                    "Database connection pool exhaustion; implement connection pooling with RDS Proxy",
+                    "Insufficient memory allocation; increase Lambda memory to reduce CPU throttling",
+                    "Cold start latency; enable Provisioned Concurrency for the function",
+                    "Kinesis shard iterator expiration; reduce batch size and processing time"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Connection pool exhaustion during peak traffic is a common cause of timeouts when memory usage is low. RDS Proxy manages connections efficiently.",
+                    whyWrong: {
+                        1: "Low memory usage indicates CPU isn't the bottleneck",
+                        2: "Cold starts wouldn't cause timeouts after function is warm",
+                        3: "Shard iterator issues would show different error patterns"
+                    },
+                    examStrategy: "Low memory usage + timeouts often = external resource bottleneck (DB connections, API limits)."
+                }
+            },
+            {
+                id: 'dva_017',
+                domain: "Domain 4: Troubleshooting and Optimization",
+                difficulty: "medium",
+                timeRecommendation: 110,
+                scenario: "An application's DynamoDB costs have increased 300% over the past month. CloudWatch metrics show consistent read/write traffic, but the table size has grown marginally. Application logs show no errors.",
+                question: "What is the MOST likely cause of the cost increase?",
+                options: [
+                    "Hot partitions causing automatic scaling to increase provisioned capacity",
+                    "Forgotten Global Secondary Index with high provisioned throughput",
+                    "DynamoDB Streams enabled with no consumer causing data accumulation",
+                    "Point-in-time recovery was enabled without notification"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Hot partitions trigger auto-scaling even when overall traffic is stable, significantly increasing costs without visible errors.",
+                    whyWrong: {
+                        1: "GSI costs would be visible in billing breakdown and wouldn't suddenly appear",
+                        2: "Streams don't accumulate costs based on unconsumed data",
+                        3: "PITR adds about 20% cost, not 300%"
+                    },
+                    examStrategy: "Hot partitions are a common DynamoDB issue. Look for uneven key distribution when costs spike."
+                }
+            },
+            {
+                id: 'dva_018',
+                domain: "Domain 4: Troubleshooting and Optimization",
+                difficulty: "easy",
+                timeRecommendation: 90,
+                scenario: "Users report intermittent 504 Gateway Timeout errors from an API Gateway REST API. The backend Lambda function completes successfully according to CloudWatch Logs.",
+                question: "What is the MOST likely cause?",
+                options: [
+                    "Lambda function execution time exceeds API Gateway's 29-second timeout limit",
+                    "API Gateway throttling due to exceeding 10,000 requests per second",
+                    "Lambda concurrent execution limit reached",
+                    "VPC-enabled Lambda cannot reach RDS database"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "API Gateway has a hard 29-second timeout limit. If Lambda runs longer but succeeds, API Gateway returns 504.",
+                    whyWrong: {
+                        1: "Throttling returns 429 Too Many Requests, not 504",
+                        2: "Concurrent execution limits cause Lambda throttling (429), not Gateway timeouts",
+                        3: "VPC connectivity issues would cause Lambda failures, not success with Gateway timeout"
+                    },
+                    examStrategy: "Remember API Gateway's 29-second timeout. It's a common cause of 504 errors with long-running Lambdas."
+                }
+            },
+            {
+                id: 'dva_019',
+                domain: "Domain 4: Troubleshooting and Optimization",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "An ECS Fargate service experiences memory allocation failures during container startup, despite tasks configured with 4GB memory. The application runs fine locally with 2GB RAM.",
+                question: "What is the MOST likely issue?",
+                options: [
+                    "Container definition memory hard limit is set lower than memory reservation",
+                    "Fargate platform version doesn't support the requested memory configuration",
+                    "Application memory leak during initialization in production environment",
+                    "ECS service auto-scaling is conflicting with task memory requirements"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Mismatched memory settings between hard and soft limits in task definition is a common cause of allocation failures.",
+                    whyWrong: {
+                        1: "Fargate supports 4GB memory across all platform versions",
+                        2: "Memory leaks would cause gradual failure, not immediate startup issues",
+                        3: "Service auto-scaling doesn't affect individual task memory allocation"
+                    },
+                    examStrategy: "Check task definition memory/cpu compatibility matrix and hard/soft limit settings for ECS issues."
+                }
+            },
+            {
+                id: 'dva_020',
+                domain: "Domain 4: Troubleshooting and Optimization",
+                difficulty: "hard",
+                timeRecommendation: 150,
+                scenario: "X-Ray traces show a Lambda function making DynamoDB queries with 50ms latency in us-east-1, but the same queries from EC2 instances in the same region show 5ms latency. Both use the same SDK and IAM role.",
+                question: "What explains this performance difference?",
+                options: [
+                    "Lambda functions run in a separate network with additional NAT traversal overhead",
+                    "Lambda SDK includes additional retry logic not present in EC2",
+                    "EC2 instances use placement groups for optimized network performance",
+                    "DynamoDB throttles Lambda requests differently than EC2 requests"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Lambda functions run in AWS-managed VPC with additional network hops and NAT traversal, adding latency compared to EC2.",
+                    whyWrong: {
+                        1: "SDK retry logic is identical regardless of compute platform",
+                        2: "Placement groups don't affect DynamoDB query latency",
+                        3: "DynamoDB doesn't discriminate throttling based on compute source"
+                    },
+                    examStrategy: "Lambda networking has inherent overhead. Consider this when comparing performance with EC2."
+                }
+            },
+
+            // Additional questions to reach 500+ total
+            // Domain 1: Development with AWS Services (continued)
+            {
+                id: 'dva_021',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "A real-time analytics application ingests 10,000 events per second from IoT devices. Events must be processed within 2 seconds, stored for 7 days for replay, and aggregated data must be available for dashboards.",
+                question: "Which architecture provides the BEST solution?",
+                options: [
+                    "Kinesis Data Streams → Kinesis Analytics → Lambda → DynamoDB and S3",
+                    "API Gateway → SQS FIFO → Lambda → RDS PostgreSQL",
+                    "IoT Core → DynamoDB Streams → Lambda → ElasticSearch",
+                    "EventBridge → Step Functions → ECS Tasks → Redshift"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Kinesis Data Streams handles high-throughput ingestion with replay capability, Analytics provides real-time aggregation, and Lambda processes for storage.",
+                    whyWrong: {
+                        1: "SQS FIFO has 300 TPS limit, far below requirements",
+                        2: "DynamoDB Streams doesn't support 7-day retention for replay",
+                        3: "EventBridge has 10,000 events/second limit per region but lacks replay"
+                    },
+                    examStrategy: "Kinesis Data Streams is the go-to for high-throughput real-time data with replay needs."
+                }
+            },
+            {
+                id: 'dva_022',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "easy",
+                timeRecommendation: 90,
+                scenario: "A web application needs to send email notifications to users for account activities. The solution must handle bounces and complaints automatically.",
+                question: "Which AWS service is MOST appropriate?",
+                options: [
+                    "Amazon SES with SNS notifications for bounce and complaint handling",
+                    "Amazon SNS with email subscription endpoints",
+                    "Lambda function using SMTP library to send emails",
+                    "Amazon WorkMail with custom email rules"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "SES is designed for transactional emails with built-in bounce and complaint handling via SNS notifications.",
+                    whyWrong: {
+                        1: "SNS email subscriptions require user confirmation and don't handle bounces",
+                        2: "SMTP libraries require managing email infrastructure and bounce handling",
+                        3: "WorkMail is for business email, not transactional notifications"
+                    },
+                    examStrategy: "SES for transactional/marketing emails, SNS for pub/sub notifications, WorkMail for business email."
+                }
+            },
+            {
+                id: 'dva_023',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "hard",
+                timeRecommendation: 140,
+                scenario: "A video streaming platform needs to support 100,000 concurrent viewers with sub-3-second latency. Content is stored in S3 and needs adaptive bitrate streaming for various device types.",
+                question: "Which solution provides the BEST viewing experience?",
+                options: [
+                    "CloudFront with S3 origin, MediaConvert for HLS preparation, and CloudFront signed cookies",
+                    "EC2 Auto Scaling group with Nginx RTMP servers and ELB",
+                    "API Gateway WebSocket connections with Lambda streaming functions",
+                    "Kinesis Video Streams with real-time transcoding"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "CloudFront provides global distribution with low latency, MediaConvert creates HLS for adaptive streaming, and signed cookies enable access control.",
+                    whyWrong: {
+                        1: "EC2-based solution requires significant infrastructure management and scaling complexity",
+                        2: "API Gateway WebSockets aren't designed for video streaming",
+                        3: "Kinesis Video Streams is for ingestion, not distribution to viewers"
+                    },
+                    examStrategy: "CloudFront + MediaConvert is the standard for scalable video delivery. Remember HLS for adaptive streaming."
+                }
+            },
+            {
+                id: 'dva_024',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "medium",
+                timeRecommendation: 110,
+                scenario: "A mobile game needs to store player profiles, match history, and real-time leaderboards. The solution must support millions of players with millisecond response times.",
+                question: "Which database strategy is MOST suitable?",
+                options: [
+                    "DynamoDB for profiles and history, ElastiCache Redis Sorted Sets for leaderboards",
+                    "Aurora MySQL with read replicas for all data",
+                    "Neptune graph database for player relationships and scoring",
+                    "DocumentDB for JSON player data with aggregation pipelines"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "DynamoDB provides scalable storage for profiles, while Redis Sorted Sets are purpose-built for real-time leaderboards with millisecond latency.",
+                    whyWrong: {
+                        1: "Aurora read replicas still have replication lag for leaderboard updates",
+                        2: "Neptune is for graph relationships, not optimized for leaderboards",
+                        3: "DocumentDB aggregations aren't real-time enough for live leaderboards"
+                    },
+                    examStrategy: "Redis Sorted Sets are the standard for leaderboards. Combine services for optimal performance."
+                }
+            },
+            {
+                id: 'dva_025',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "An application needs to process large CSV files (100GB+) uploaded to S3, perform data transformations, and load results into Redshift for analytics.",
+                question: "What is the MOST efficient processing approach?",
+                options: [
+                    "Use AWS Glue ETL jobs with Spark for distributed processing",
+                    "Lambda function with S3 Select to query and transform data",
+                    "ECS Fargate tasks with Python pandas for processing",
+                    "EMR cluster with Hadoop MapReduce jobs"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Glue ETL with Spark handles large-scale data processing efficiently with automatic scaling and native Redshift integration.",
+                    whyWrong: {
+                        1: "Lambda has 10GB memory limit, insufficient for 100GB files",
+                        2: "Fargate with pandas would require chunking and complex orchestration",
+                        3: "EMR requires more management overhead compared to serverless Glue"
+                    },
+                    examStrategy: "Glue is the serverless choice for ETL. Use EMR when you need specific Hadoop ecosystem tools."
+                }
+            },
+
+            // Domain 2: Security (continued)
+            {
+                id: 'dva_026',
+                domain: "Domain 2: Security",
+                difficulty: "hard",
+                timeRecommendation: 140,
+                scenario: "A financial institution requires all S3 objects to be encrypted with customer-managed keys, automatic key rotation every 90 days, and detailed audit logs of all key usage. Encryption keys must never leave AWS.",
+                question: "Which solution meets ALL requirements?",
+                options: [
+                    "S3 bucket encryption with KMS CMK, CloudTrail for key usage audit, and Lambda for 90-day rotation",
+                    "S3 client-side encryption with AWS Encryption SDK and Parameter Store for key management",
+                    "S3 SSE-C with keys stored in Secrets Manager with rotation",
+                    "CloudHSM for key generation with S3 SSE-KMS integration"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "KMS CMK with S3 bucket encryption ensures all objects are encrypted, CloudTrail logs all key usage, and Lambda can enforce 90-day rotation.",
+                    whyWrong: {
+                        1: "Client-side encryption requires key distribution to clients",
+                        2: "SSE-C requires passing keys with each request, violating the 'never leave AWS' requirement",
+                        3: "CloudHSM is overkill and doesn't provide easier 90-day rotation"
+                    },
+                    examStrategy: "KMS CMKs provide the best balance of security and manageability for encryption requirements."
+                }
+            },
+            {
+                id: 'dva_027',
+                domain: "Domain 2: Security",
+                difficulty: "medium",
+                timeRecommendation: 110,
+                scenario: "A Lambda function needs to call an external HTTPS API that requires OAuth 2.0 authentication. The access token expires every hour and must be refreshed automatically.",
+                question: "What is the BEST way to manage the OAuth tokens?",
+                options: [
+                    "Store refresh token in Secrets Manager and implement token refresh logic in Lambda",
+                    "Use API Gateway as a proxy with Lambda authorizer for token management",
+                    "Store tokens in DynamoDB with TTL and Lambda scheduled refresh",
+                    "Implement token caching in ElastiCache with Lambda token refresh"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Secrets Manager securely stores the refresh token, and Lambda can handle refresh logic when the access token expires.",
+                    whyWrong: {
+                        1: "API Gateway proxy adds unnecessary complexity for outbound OAuth",
+                        2: "DynamoDB storage doesn't add value over Secrets Manager for tokens",
+                        3: "ElastiCache for single token is overengineering"
+                    },
+                    examStrategy: "Secrets Manager for credentials, Parameter Store for configuration. Keep OAuth logic simple."
+                }
+            },
+            {
+                id: 'dva_028',
+                domain: "Domain 2: Security",
+                difficulty: "easy",
+                timeRecommendation: 90,
+                scenario: "A development team needs to ensure their Docker images stored in ECR are scanned for vulnerabilities before deployment to production ECS clusters.",
+                question: "Which approach provides automated security scanning?",
+                options: [
+                    "Enable ECR image scanning on push and integrate with EventBridge for notifications",
+                    "Use Lambda to trigger third-party scanning tools on image upload",
+                    "Implement CodeBuild project to scan images during build process",
+                    "Configure ECS task definition to validate images at runtime"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "ECR native image scanning on push automatically scans for CVEs with EventBridge integration for automated responses.",
+                    whyWrong: {
+                        1: "Third-party tools add complexity when ECR has native scanning",
+                        2: "CodeBuild scanning doesn't catch vulnerabilities in base images",
+                        3: "Runtime validation is too late in the deployment process"
+                    },
+                    examStrategy: "Use native AWS security features when available. ECR scanning is integrated and comprehensive."
+                }
+            },
+            {
+                id: 'dva_029',
+                domain: "Domain 2: Security",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "An application stores PII data in DynamoDB. Compliance requires that specific fields (SSN, credit card) are encrypted with unique keys per customer and support key rotation.",
+                question: "Which encryption approach meets these requirements?",
+                options: [
+                    "Use DynamoDB Encryption Client with KMS and separate data keys per customer",
+                    "Enable DynamoDB table encryption with KMS CMK",
+                    "Implement field-level encryption in application code with Secrets Manager",
+                    "Use DynamoDB SSE with customer-managed CMKs per partition"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "DynamoDB Encryption Client enables field-level encryption with per-item data keys, perfect for customer-specific encryption.",
+                    whyWrong: {
+                        1: "Table encryption doesn't provide field-level or per-customer granularity",
+                        2: "Application-level encryption lacks the key management of DynamoDB Encryption Client",
+                        3: "SSE doesn't support per-partition CMKs or field-level encryption"
+                    },
+                    examStrategy: "DynamoDB Encryption Client for field-level encryption, table encryption for at-rest protection."
+                }
+            },
+            {
+                id: 'dva_030',
+                domain: "Domain 2: Security",
+                difficulty: "hard",
+                timeRecommendation: 150,
+                scenario: "A multi-region application needs to implement end-to-end encryption for data in transit between regions, including VPC peering connections, with the ability to inspect traffic for compliance.",
+                question: "Which solution provides encryption AND inspection capabilities?",
+                options: [
+                    "Transit Gateway with AWS Network Firewall and Site-to-Site VPN for encryption",
+                    "VPC Peering with Security Groups and NACLs for traffic control",
+                    "PrivateLink endpoints with KMS encryption for data",
+                    "Direct Connect with MACsec encryption and VPC Flow Logs"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Transit Gateway centralizes connectivity, Network Firewall enables inspection, and Site-to-Site VPN provides encryption.",
+                    whyWrong: {
+                        1: "VPC Peering traffic is encrypted but doesn't support inspection",
+                        2: "PrivateLink is for service endpoints, not inter-region VPC connectivity",
+                        3: "Direct Connect MACsec only encrypts at Layer 2, not application traffic"
+                    },
+                    examStrategy: "Transit Gateway is the hub for complex multi-region networking with security requirements."
+                }
+            },
+
+            // Domain 3: Deployment (continued)
+            {
+                id: 'dva_031',
+                domain: "Domain 3: Deployment",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "A team needs to deploy a Python application that requires specific system libraries and binary dependencies. The application must run on Lambda with consistent behavior across environments.",
+                question: "What is the BEST deployment approach?",
+                options: [
+                    "Create a Lambda container image with all dependencies and deploy from ECR",
+                    "Use Lambda Layers for dependencies and ZIP file for application code",
+                    "Compile dependencies on Amazon Linux 2 and include in deployment package",
+                    "Use SAM CLI with requirements.txt for automatic dependency management"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Container images allow full control over the runtime environment including system libraries, ensuring consistency.",
+                    whyWrong: {
+                        1: "Layers have size limits and don't handle system libraries well",
+                        2: "Manual compilation is error-prone and hard to maintain",
+                        3: "SAM CLI doesn't handle binary dependencies reliably"
+                    },
+                    examStrategy: "Container images for Lambda when you need system dependencies or consistency with existing containers."
+                }
+            },
+            {
+                id: 'dva_032',
+                domain: "Domain 3: Deployment",
+                difficulty: "hard",
+                timeRecommendation: 140,
+                scenario: "A company uses multiple AWS accounts for different environments. They need to deploy a CloudFormation stack that creates resources across all accounts simultaneously with rollback capability.",
+                question: "Which deployment strategy is MOST appropriate?",
+                options: [
+                    "CloudFormation StackSets with organizational units targeting",
+                    "CodePipeline with cross-account roles and parallel actions",
+                    "Systems Manager Automation with multi-account execution",
+                    "Lambda function with AssumeRole for each account"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "StackSets are designed for multi-account deployments with automatic rollback and organizational unit targeting.",
+                    whyWrong: {
+                        1: "CodePipeline parallel actions don't provide unified rollback",
+                        2: "Systems Manager Automation lacks StackSets' deployment orchestration",
+                        3: "Lambda AssumeRole is manual and lacks rollback coordination"
+                    },
+                    examStrategy: "StackSets = multi-account CloudFormation. Remember: requires trusted access with Organizations."
+                }
+            },
+            {
+                id: 'dva_033',
+                domain: "Domain 3: Deployment",
+                difficulty: "easy",
+                timeRecommendation: 90,
+                scenario: "A developer needs to test Lambda function changes locally before deploying to AWS. The function uses environment variables and connects to DynamoDB.",
+                question: "Which tool provides the BEST local testing experience?",
+                options: [
+                    "SAM CLI with sam local start-lambda and DynamoDB Local",
+                    "AWS CLI with --dry-run flag for validation",
+                    "CloudFormation with change sets for preview",
+                    "Lambda console test events with mocked responses"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "SAM CLI provides local Lambda runtime emulation with DynamoDB Local for complete local testing.",
+                    whyWrong: {
+                        1: "AWS CLI --dry-run only validates syntax, doesn't execute code",
+                        2: "Change sets preview infrastructure changes, not function behavior",
+                        3: "Console testing requires deployment and doesn't work offline"
+                    },
+                    examStrategy: "SAM CLI is the standard for local Lambda development. Remember: sam local for testing."
+                }
+            },
+            {
+                id: 'dva_034',
+                domain: "Domain 3: Deployment",
+                difficulty: "medium",
+                timeRecommendation: 110,
+                scenario: "An application deployed on Elastic Beanstalk needs configuration updates without downtime. The changes include environment variables and nginx configuration.",
+                question: "What is the RECOMMENDED approach?",
+                options: [
+                    "Use .ebextensions configuration files with Rolling deployment policy",
+                    "SSH into instances and manually update configuration files",
+                    "Create new environment and use Blue/Green swap",
+                    "Update configuration through Elastic Beanstalk console with All at Once"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: ".ebextensions provides version-controlled configuration with Rolling deployment ensuring zero downtime.",
+                    whyWrong: {
+                        1: "Manual SSH changes are lost on instance replacement",
+                        2: "Blue/Green is overkill for configuration changes",
+                        3: "All at Once causes downtime during configuration updates"
+                    },
+                    examStrategy: ".ebextensions for Elastic Beanstalk configuration. Rolling or Rolling with batch for zero downtime."
+                }
+            },
+            {
+                id: 'dva_035',
+                domain: "Domain 3: Deployment",
+                difficulty: "hard",
+                timeRecommendation: 150,
+                scenario: "A CI/CD pipeline needs to deploy containerized microservices to EKS with automated testing, security scanning, and progressive rollout based on business metrics.",
+                question: "Which tool combination provides the MOST comprehensive solution?",
+                options: [
+                    "CodePipeline → CodeBuild → ECR scanning → Flux/Argo CD → CloudWatch metrics",
+                    "Jenkins → Docker Hub → kubectl rolling update → Prometheus",
+                    "GitHub Actions → EKS Fargate → ALB weighted targets",
+                    "CircleCI → Helm charts → Istio service mesh"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "CodePipeline orchestrates AWS-native CI/CD, ECR provides security scanning, and GitOps tools like Flux enable progressive delivery with CloudWatch metrics.",
+                    whyWrong: {
+                        1: "Jenkins setup lacks native AWS integration and security scanning",
+                        2: "GitHub Actions with Fargate doesn't address Kubernetes deployment patterns",
+                        3: "CircleCI requires external integration and Istio adds complexity"
+                    },
+                    examStrategy: "Combine AWS services with Kubernetes-native tools for EKS deployments. GitOps is becoming standard."
+                }
+            },
+
+            // Domain 4: Troubleshooting and Optimization (continued)
+            {
+                id: 'dva_036',
+                domain: "Domain 4: Troubleshooting and Optimization",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "CloudWatch Logs show Lambda function duration averaging 100ms, but X-Ray traces show total request latency of 2 seconds for API Gateway → Lambda → DynamoDB flow.",
+                question: "What is the MOST likely cause of the latency gap?",
+                options: [
+                    "Lambda cold start time not included in function duration metrics",
+                    "API Gateway request validation and transformation overhead",
+                    "DynamoDB auto-scaling lag during traffic spikes",
+                    "Network latency between availability zones"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Cold starts add significant latency but aren't included in Lambda duration metrics, explaining the gap between function execution and total latency.",
+                    whyWrong: {
+                        1: "API Gateway overhead is typically milliseconds, not seconds",
+                        2: "DynamoDB latency would appear in X-Ray traces",
+                        3: "Inter-AZ latency is single-digit milliseconds"
+                    },
+                    examStrategy: "Lambda duration excludes cold start time. Use X-Ray for complete latency analysis."
+                }
+            },
+            {
+                id: 'dva_037',
+                domain: "Domain 4: Troubleshooting and Optimization",
+                difficulty: "hard",
+                timeRecommendation: 140,
+                scenario: "An ECS service using Fargate shows healthy tasks in the console, but ALB health checks fail intermittently. Tasks use awsvpc network mode with service discovery.",
+                question: "What is the MOST likely root cause?",
+                options: [
+                    "Security group rules blocking health check traffic from ALB subnets",
+                    "Fargate task CPU throttling during health checks",
+                    "DNS resolution failures in Service Discovery",
+                    "Container memory limits causing OOM kills"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "With awsvpc mode, security groups must explicitly allow health check traffic from ALB, a common misconfiguration.",
+                    whyWrong: {
+                        1: "CPU throttling would affect performance, not cause intermittent failures",
+                        2: "Service Discovery issues would prevent all connections, not just health checks",
+                        3: "OOM kills would show unhealthy tasks in console"
+                    },
+                    examStrategy: "awsvpc mode requires careful security group configuration. ALB needs explicit ingress rules."
+                }
+            },
+            {
+                id: 'dva_038',
+                domain: "Domain 4: Troubleshooting and Optimization",
+                difficulty: "easy",
+                timeRecommendation: 90,
+                scenario: "A DynamoDB table shows ConsumedReadCapacityUnits consistently at the provisioned limit, but UserErrors metrics show zero throttled requests.",
+                question: "What explains this behavior?",
+                options: [
+                    "DynamoDB auto-scaling is increasing capacity before throttling occurs",
+                    "Application is using eventually consistent reads counting as 0.5 units",
+                    "Burst capacity is absorbing traffic spikes",
+                    "CloudWatch metrics have a delay in showing throttling"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Auto-scaling proactively increases capacity when utilization is high, preventing throttling while keeping consumption at limits.",
+                    whyWrong: {
+                        1: "Eventually consistent reads would show lower consumption, not at limit",
+                        2: "Burst capacity would show consumption above provisioned capacity",
+                        3: "CloudWatch metrics for throttling are near real-time"
+                    },
+                    examStrategy: "No throttling despite high utilization usually means auto-scaling is working correctly."
+                }
+            },
+            {
+                id: 'dva_039',
+                domain: "Domain 4: Troubleshooting and Optimization",
+                difficulty: "medium",
+                timeRecommendation: 110,
+                scenario: "Lambda functions in a VPC experience 10-second delays during first invocation, but subsequent invocations complete in 200ms. The function doesn't access VPC resources.",
+                question: "What is the BEST optimization?",
+                options: [
+                    "Remove VPC configuration since the function doesn't need VPC resources",
+                    "Enable Provisioned Concurrency to eliminate cold starts",
+                    "Increase Lambda memory to speed up ENI attachment",
+                    "Use VPC endpoints to reduce network latency"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Removing unnecessary VPC configuration eliminates ENI attachment overhead, the primary cause of long cold starts.",
+                    whyWrong: {
+                        1: "Provisioned Concurrency adds cost for an unnecessary VPC configuration",
+                        2: "Memory doesn't significantly affect ENI attachment time",
+                        3: "VPC endpoints don't help with ENI attachment delays"
+                    },
+                    examStrategy: "Only use VPC configuration when Lambda needs VPC resources. It adds significant cold start time."
+                }
+            },
+            {
+                id: 'dva_040',
+                domain: "Domain 4: Troubleshooting and Optimization",
+                difficulty: "hard",
+                timeRecommendation: 150,
+                scenario: "An application using Aurora Serverless v1 experiences connection timeouts during scale-up events. The application uses connection pooling with 100 connections per instance.",
+                question: "What is the BEST solution to prevent timeouts during scaling?",
+                options: [
+                    "Migrate to Aurora Serverless v2 which scales without connection interruption",
+                    "Implement RDS Proxy to manage connections during scaling events",
+                    "Reduce connection pool size to prevent overwhelming during scale-up",
+                    "Enable Aurora Auto Scaling with predictive scaling policies"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Aurora Serverless v2 scales incrementally without dropping connections, solving the v1 scaling interruption issue.",
+                    whyWrong: {
+                        1: "RDS Proxy helps but doesn't eliminate v1 scaling interruptions",
+                        2: "Smaller connection pools don't solve the scaling interruption",
+                        3: "Auto Scaling doesn't apply to Serverless Aurora"
+                    },
+                    examStrategy: "Aurora Serverless v2 solved v1's connection dropping during scaling. Key improvement to remember."
+                }
+            },
+
+            // Continue adding more questions to reach 500+
+            // Adding high-quality scenario-based questions for each domain
+
+            {
+                id: 'dva_041',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "hard",
+                timeRecommendation: 150,
+                scenario: "A social media platform needs to implement a 'trending topics' feature that identifies popular hashtags from millions of posts per hour. Results must update every minute with the top 100 trending tags globally and per region.",
+                question: "Which architecture provides the MOST scalable and cost-effective solution?",
+                options: [
+                    "Kinesis Data Analytics with tumbling windows and SQL queries for aggregation",
+                    "DynamoDB Streams → Lambda → ElasticSearch with aggregation queries",
+                    "SQS → EC2 Auto Scaling group with Redis for counting",
+                    "EventBridge → Step Functions → Batch for periodic processing"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Kinesis Data Analytics is purpose-built for real-time streaming analytics with SQL-based tumbling windows perfect for trending calculations.",
+                    whyWrong: {
+                        1: "DynamoDB Streams to ElasticSearch adds complexity and cost for a streaming analytics problem",
+                        2: "SQS with EC2 requires managing infrastructure and custom aggregation logic",
+                        3: "EventBridge with Batch is for batch processing, not real-time streaming analytics"
+                    },
+                    examStrategy: "Kinesis Analytics excels at time-window aggregations. Think SQL queries on streams."
+                }
+            },
+            {
+                id: 'dva_042',
+                domain: "Domain 2: Security",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "A healthcare application must ensure that all S3 objects containing patient data are encrypted and can only be accessed by specific IAM roles. Accidental public exposure must be prevented at the account level.",
+                question: "Which combination of controls provides defense in depth?",
+                options: [
+                    "S3 Block Public Access, bucket policies with Deny for non-encrypted uploads, and SCPs",
+                    "IAM policies with MFA requirements and CloudTrail logging",
+                    "VPC endpoints for S3 with private DNS and NACLs",
+                    "AWS Config rules with auto-remediation Lambda functions"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Block Public Access prevents exposure, bucket policies enforce encryption, and SCPs provide organization-level controls.",
+                    whyWrong: {
+                        1: "MFA and logging provide audit but don't prevent public exposure",
+                        2: "VPC endpoints control network access but don't enforce encryption",
+                        3: "Config rules are detective controls, not preventive"
+                    },
+                    examStrategy: "Layer preventive controls: Block Public Access (account) → SCPs (organization) → Bucket policies (resource)."
+                }
+            },
+            {
+                id: 'dva_043',
+                domain: "Domain 3: Deployment",
+                difficulty: "medium",
+                timeRecommendation: 110,
+                scenario: "A team needs to deploy infrastructure changes that might affect production stability. They want to preview changes, test in isolation, and have automatic rollback capabilities.",
+                question: "Which CloudFormation feature set BEST meets these requirements?",
+                options: [
+                    "Change Sets for preview, Stack Policy for protection, and Rollback Triggers with CloudWatch",
+                    "Drift Detection, Stack Imports, and Manual Snapshots",
+                    "Nested Stacks with Conditions and WaitConditions",
+                    "Transform macros with Custom Resources and DeletionPolicy"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Change Sets preview changes, Stack Policy prevents unwanted updates, and Rollback Triggers automate rollback on failures.",
+                    whyWrong: {
+                        1: "Drift Detection identifies changes but doesn't provide rollback",
+                        2: "Nested Stacks organize templates but don't provide rollback automation",
+                        3: "Transforms and Custom Resources extend functionality but don't address the requirements"
+                    },
+                    examStrategy: "Change Sets + Stack Policy + Rollback Triggers = safe production deployments."
+                }
+            },
+            {
+                id: 'dva_044',
+                domain: "Domain 4: Troubleshooting and Optimization",
+                difficulty: "hard",
+                timeRecommendation: 140,
+                scenario: "A Lambda function processing SQS messages shows increasing iterator age in CloudWatch, despite successful message processing. The function timeout is 5 minutes and batch size is 10.",
+                question: "What is the MOST likely cause and solution?",
+                options: [
+                    "Function duration approaching timeout causes partial batch failures; implement batch item failures",
+                    "Memory pressure causing garbage collection delays; increase memory allocation",
+                    "Network latency to downstream services; implement connection pooling",
+                    "SQS visibility timeout too short; increase to match Lambda timeout"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "When functions approach timeout with batch processing, partial failures cause reprocessing. Batch item failures allow reporting specific message failures.",
+                    whyWrong: {
+                        1: "Memory issues would show in metrics and cause errors, not iterator age",
+                        2: "Network latency would increase duration but not specifically iterator age",
+                        3: "Visibility timeout issues would cause duplicate processing, not iterator age"
+                    },
+                    examStrategy: "Iterator age indicates processing delays. With SQS+Lambda, consider batch item failures for partial success."
+                }
+            },
+            {
+                id: 'dva_045',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "An IoT application collects temperature readings from 50,000 sensors every 30 seconds. Data must be stored for 1 year, queryable by sensor ID and timestamp, with real-time alerting for anomalies.",
+                question: "Which combination provides the BEST solution?",
+                options: [
+                    "IoT Core → IoT Analytics → S3 for storage, QuickSight for visualization, IoT Events for alerts",
+                    "Kinesis Data Streams → Lambda → DynamoDB with TTL → SNS for alerts",
+                    "API Gateway → SQS → RDS PostgreSQL → CloudWatch Alarms",
+                    "Direct sensor → EC2 fleet → ElasticSearch → Kibana dashboards"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "IoT Core handles device connectivity, IoT Analytics provides time-series analysis, and IoT Events enables rule-based alerting - purpose-built for IoT.",
+                    whyWrong: {
+                        1: "Kinesis+DynamoDB works but IoT services are purpose-built for this use case",
+                        2: "API Gateway+RDS doesn't scale well for high-frequency IoT data",
+                        3: "Direct EC2 connections require managing infrastructure and security"
+                    },
+                    examStrategy: "Use IoT-specific services for IoT use cases. They're optimized for device management and time-series data."
+                }
+            },
+            {
+                id: 'dva_046',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "easy",
+                timeRecommendation: 90,
+                scenario: "A web application needs to display user profile images. Images are stored in S3 and should load quickly globally. URLs should not expose the S3 bucket structure.",
+                question: "What is the MOST appropriate solution?",
+                options: [
+                    "CloudFront distribution with S3 origin and Origin Access Identity",
+                    "S3 Static Website Hosting with Route 53 ALIAS records",
+                    "API Gateway with Lambda function to retrieve and return images",
+                    "S3 Transfer Acceleration with presigned URLs"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "CloudFront provides global caching and OAI ensures S3 remains private while CloudFront serves content with custom domains.",
+                    whyWrong: {
+                        1: "Static hosting requires public S3 access, exposing bucket structure",
+                        2: "API Gateway+Lambda adds unnecessary latency and cost for static content",
+                        3: "Transfer Acceleration is for uploads, presigned URLs still expose bucket structure"
+                    },
+                    examStrategy: "CloudFront + OAI is the standard pattern for serving S3 content globally and privately."
+                }
+            },
+            {
+                id: 'dva_047',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "hard",
+                timeRecommendation: 150,
+                scenario: "A machine learning pipeline processes 10TB of daily data through multiple stages: ingestion, cleaning, feature extraction, model training, and inference. Each stage has different compute requirements.",
+                question: "Which orchestration approach provides the BEST flexibility and cost optimization?",
+                options: [
+                    "Step Functions with AWS Batch for compute-intensive stages and Lambda for lightweight tasks",
+                    "Apache Airflow on EC2 with EMR clusters for all processing",
+                    "SageMaker Pipelines with Processing Jobs and Training Jobs",
+                    "Glue Workflows with Glue ETL jobs and SageMaker integration"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Step Functions orchestrates different compute types optimally - Batch for heavy processing, Lambda for coordination, providing maximum flexibility.",
+                    whyWrong: {
+                        1: "Airflow+EMR requires infrastructure management and isn't cost-optimized for varying workloads",
+                        2: "SageMaker Pipelines is ML-specific and less flexible for general data processing",
+                        3: "Glue Workflows are ETL-focused and less suitable for ML training orchestration"
+                    },
+                    examStrategy: "Step Functions excels at orchestrating heterogeneous compute. Mix services for cost optimization."
+                }
+            },
+            {
+                id: 'dva_048',
+                domain: "Domain 2: Security",
+                difficulty: "medium",
+                timeRecommendation: 110,
+                scenario: "A mobile banking app needs to implement biometric authentication. Biometric data must never leave the device, but the backend must verify user identity for transactions.",
+                question: "Which authentication flow is MOST secure?",
+                options: [
+                    "Device stores biometric hash, authenticates locally, sends signed JWT to Cognito for verification",
+                    "Send biometric data to Lambda for comparison with stored templates in DynamoDB",
+                    "Use Rekognition for facial comparison with stored user photos",
+                    "Store encrypted biometrics in S3 and compare on device after download"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Local biometric verification with JWT signing ensures biometric data never leaves device while maintaining secure authentication.",
+                    whyWrong: {
+                        1: "Sending biometric data to Lambda violates the security requirement",
+                        2: "Rekognition requires sending facial data to AWS",
+                        3: "Downloading biometrics to device creates security vulnerabilities"
+                    },
+                    examStrategy: "Biometric data should stay on-device. Use cryptographic proofs for verification."
+                }
+            },
+            {
+                id: 'dva_049',
+                domain: "Domain 2: Security",
+                difficulty: "easy",
+                timeRecommendation: 90,
+                scenario: "Developers need read-only access to production CloudWatch Logs for debugging, but must not see sensitive data like credit card numbers in log messages.",
+                question: "What is the BEST way to provide this access?",
+                options: [
+                    "CloudWatch Logs data protection policies to mask sensitive data patterns",
+                    "Lambda function to filter logs before developers access them",
+                    "Separate log groups for sensitive and non-sensitive data",
+                    "IAM policies with Deny statements for specific log streams"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Data protection policies automatically mask sensitive patterns in CloudWatch Logs, providing transparent protection.",
+                    whyWrong: {
+                        1: "Lambda filtering adds complexity and latency",
+                        2: "Separate log groups require application changes and may miss sensitive data",
+                        3: "IAM policies control access, not content masking"
+                    },
+                    examStrategy: "CloudWatch Logs data protection policies are the newest feature for PII masking."
+                }
+            },
+            {
+                id: 'dva_050',
+                domain: "Domain 3: Deployment",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "A company wants to standardize Lambda function deployments across 50+ development teams. Each team should use approved runtimes, layers, and security configurations.",
+                question: "Which approach BEST enforces standards while maintaining team autonomy?",
+                options: [
+                    "AWS Service Catalog with SAM/CDK products and launch constraints",
+                    "Shared CloudFormation templates in S3 with documentation",
+                    "Lambda function policy requiring specific tags and configurations",
+                    "CodeCommit repository with approved function templates"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Service Catalog enforces standards through products while launch constraints ensure compliance, giving teams self-service deployment.",
+                    whyWrong: {
+                        1: "Shared templates rely on teams following standards voluntarily",
+                        2: "Function policies don't enforce runtime or layer standards",
+                        3: "Code repositories don't enforce deployment standards"
+                    },
+                    examStrategy: "Service Catalog is the tool for standardized self-service provisioning in enterprises."
+                }
+            },
+
+            // Continue with more questions to reach 500+ total
+            // Adding diverse scenarios across all domains
+
+            {
+                id: 'dva_051',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "A gaming company needs to implement a global matchmaking system that groups players based on skill level and geographic location. Matches must start within 30 seconds of request.",
+                question: "Which architecture provides the BEST matchmaking performance?",
+                options: [
+                    "GameLift FlexMatch with SQS for match notifications and Lambda for game server allocation",
+                    "DynamoDB Global Tables with Lambda for matching logic and SNS for notifications",
+                    "ElastiCache Redis with Lua scripts for atomic matching operations",
+                    "Neptune graph database for player relationships and matching algorithms"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "GameLift FlexMatch is purpose-built for game matchmaking with built-in rules engine and automatic server allocation.",
+                    whyWrong: {
+                        1: "DynamoDB Global Tables provide data distribution but lack matchmaking logic",
+                        2: "Redis with Lua works but requires building matchmaking from scratch",
+                        3: "Neptune is for graph relationships, not optimized for real-time matchmaking"
+                    },
+                    examStrategy: "Use purpose-built services when available. GameLift for games, not generic solutions."
+                }
+            },
+            {
+                id: 'dva_052',
+                domain: "Domain 4: Troubleshooting and Optimization",
+                difficulty: "hard",
+                timeRecommendation: 140,
+                scenario: "An application shows P99 latency spikes every day at 3 AM UTC. CloudWatch shows no correlation with traffic, CPU, or memory. The application uses DynamoDB with on-demand pricing.",
+                question: "What is the MOST likely cause?",
+                options: [
+                    "DynamoDB point-in-time recovery backup process causing brief latency",
+                    "Lambda container image garbage collection during low traffic",
+                    "CloudWatch Logs agent batch upload causing resource contention",
+                    "AWS internal maintenance window affecting availability zone"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "PITR continuous backups can cause brief latency spikes during snapshot consolidation, often scheduled during low-traffic periods.",
+                    whyWrong: {
+                        1: "Lambda container GC happens based on memory pressure, not time",
+                        2: "CloudWatch Logs agent doesn't cause application latency",
+                        3: "AWS maintenance is staggered and wouldn't happen daily at same time"
+                    },
+                    examStrategy: "Regular timing patterns often indicate scheduled AWS operations. Check backup and maintenance settings."
+                }
+            },
+            {
+                id: 'dva_053',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "easy",
+                timeRecommendation: 90,
+                scenario: "A blog platform needs to send email notifications to subscribers when new posts are published. Emails should be personalized with subscriber names and preferences.",
+                question: "Which service combination is MOST cost-effective?",
+                options: [
+                    "SES with personalization templates and SNS for triggering sends",
+                    "SES with Lambda for personalization and EventBridge for scheduling",
+                    "WorkMail with distribution lists and Lambda for content generation",
+                    "SNS with email protocol and Lambda for formatting"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "SES templates support personalization natively, and SNS can trigger bulk sends efficiently.",
+                    whyWrong: {
+                        1: "Lambda for personalization adds unnecessary compute cost",
+                        2: "WorkMail is for business email, not bulk notifications",
+                        3: "SNS email protocol doesn't support HTML or personalization"
+                    },
+                    examStrategy: "SES for bulk/marketing emails with formatting. SNS for simple notifications."
+                }
+            },
+            {
+                id: 'dva_054',
+                domain: "Domain 2: Security",
+                difficulty: "hard",
+                timeRecommendation: 150,
+                scenario: "A fintech application requires all database queries to be logged with the executing user's identity, query text, and results for compliance. The audit logs must be tamper-proof and retained for 7 years.",
+                question: "Which solution provides the MOST comprehensive audit trail?",
+                options: [
+                    "RDS Aurora with Database Activity Streams to Kinesis, processed to S3 with Object Lock",
+                    "CloudTrail with RDS Data API events and CloudWatch Logs retention",
+                    "RDS Proxy with logging enabled and AWS Backup for retention",
+                    "Custom Lambda triggers on database tables writing to DynamoDB"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Database Activity Streams capture all database activity in real-time, and S3 Object Lock ensures tamper-proof storage.",
+                    whyWrong: {
+                        1: "CloudTrail only logs API calls, not query content or results",
+                        2: "RDS Proxy logs connections, not query details",
+                        3: "Lambda triggers miss direct database access and aren't tamper-proof"
+                    },
+                    examStrategy: "Database Activity Streams for comprehensive database auditing. Object Lock for compliance retention."
+                }
+            },
+            {
+                id: 'dva_055',
+                domain: "Domain 3: Deployment",
+                difficulty: "medium",
+                timeRecommendation: 110,
+                scenario: "A team needs to deploy a three-tier web application (frontend, API, database) where each tier may be updated independently. Rollback must be possible for any tier.",
+                question: "Which deployment strategy provides the BEST independence?",
+                options: [
+                    "Separate CloudFormation stacks with exports/imports for cross-stack references",
+                    "Single CloudFormation stack with nested stacks for each tier",
+                    "Terraform modules with separate state files per tier",
+                    "Elastic Beanstalk with multiple environments linked by configuration"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Separate stacks allow independent updates and rollbacks while exports/imports maintain references.",
+                    whyWrong: {
+                        1: "Nested stacks still require parent stack updates affecting all tiers",
+                        2: "Terraform works but CloudFormation provides better AWS integration",
+                        3: "Elastic Beanstalk is primarily for application deployment, not infrastructure"
+                    },
+                    examStrategy: "Separate stacks for independent lifecycle management. Exports/imports for dependencies."
+                }
+            },
+            {
+                id: 'dva_056',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "hard",
+                timeRecommendation: 150,
+                scenario: "A news aggregator needs to fetch content from 1000+ RSS feeds every 5 minutes, extract articles, perform sentiment analysis, and update a searchable index. The system must handle feed failures gracefully.",
+                question: "Which architecture provides the BEST scalability and fault tolerance?",
+                options: [
+                    "EventBridge Scheduler → SQS → Lambda (fetch) → Comprehend → OpenSearch",
+                    "EC2 with cron jobs → RabbitMQ → Container tasks → ElasticSearch",
+                    "Step Functions with Map state → Lambda → DynamoDB → CloudSearch",
+                    "Fargate scheduled tasks → Kinesis → Lambda → DocumentDB"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "EventBridge Scheduler handles scheduling at scale, SQS provides fault tolerance, and OpenSearch offers powerful search capabilities.",
+                    whyWrong: {
+                        1: "EC2 cron jobs don't scale well for 1000+ feeds",
+                        2: "Step Functions Map state has concurrency limits for 1000+ iterations",
+                        3: "Fargate scheduled tasks are harder to manage at this scale"
+                    },
+                    examStrategy: "EventBridge Scheduler for large-scale scheduling. SQS for decoupling and fault tolerance."
+                }
+            },
+            {
+                id: 'dva_057',
+                domain: "Domain 2: Security",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "An application needs to call multiple third-party APIs, each requiring different authentication methods (OAuth, API Key, Basic Auth). Credentials must be centrally managed and rotated.",
+                question: "What is the BEST way to manage these diverse credentials?",
+                options: [
+                    "Secrets Manager with different secret types and rotation Lambda functions per API",
+                    "Systems Manager Parameter Store with SecureString parameters",
+                    "Cognito Identity Pools with custom authentication providers",
+                    "IAM roles with external ID for each third-party service"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Secrets Manager supports different secret types and custom rotation Lambda functions for any authentication method.",
+                    whyWrong: {
+                        1: "Parameter Store doesn't support automatic rotation",
+                        2: "Cognito Identity Pools are for user authentication, not API credentials",
+                        3: "IAM roles don't work for third-party API authentication"
+                    },
+                    examStrategy: "Secrets Manager for any rotating credential. Parameter Store for static configuration."
+                }
+            },
+            {
+                id: 'dva_058',
+                domain: "Domain 4: Troubleshooting and Optimization",
+                difficulty: "medium",
+                timeRecommendation: 110,
+                scenario: "A Lambda function consuming from Kinesis shows increasing iterator age despite processing records successfully. The function reserves 100 concurrent executions.",
+                question: "What is the MOST likely issue?",
+                options: [
+                    "Number of Kinesis shards exceeds Lambda reserved concurrency causing throttling",
+                    "Kinesis record size exceeding Lambda payload limit",
+                    "Lambda function memory too low causing slow processing",
+                    "Kinesis stream retention period set too high"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Each Kinesis shard requires one Lambda concurrent execution. With more shards than reserved concurrency, some shards can't be processed.",
+                    whyWrong: {
+                        1: "Oversized records would cause errors, not successful processing with lag",
+                        2: "Low memory would increase duration, but reserved concurrency is the bottleneck",
+                        3: "Retention period doesn't affect iterator age"
+                    },
+                    examStrategy: "Lambda-Kinesis integration: one concurrent execution per shard. Plan concurrency accordingly."
+                }
+            },
+            {
+                id: 'dva_059',
+                domain: "Domain 3: Deployment",
+                difficulty: "easy",
+                timeRecommendation: 90,
+                scenario: "A development team needs to quickly create multiple identical development environments for testing. Each environment should be isolated and easy to terminate.",
+                question: "What is the MOST efficient approach?",
+                options: [
+                    "CloudFormation template with parameters for environment names",
+                    "Manually create resources and document the process",
+                    "Use production environment with different IAM policies",
+                    "EC2 AMIs with all software pre-installed"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "CloudFormation templates ensure consistency and can be parameterized for multiple identical environments with easy cleanup.",
+                    whyWrong: {
+                        1: "Manual creation is error-prone and time-consuming",
+                        2: "Sharing production environment is dangerous and not isolated",
+                        3: "AMIs only handle EC2, not entire environment infrastructure"
+                    },
+                    examStrategy: "Infrastructure as Code for repeatable environments. CloudFormation or CDK for consistency."
+                }
+            },
+            {
+                id: 'dva_060',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "A mobile app needs offline-first functionality with data synchronization when online. Users should see their own data immediately and shared data when synchronized.",
+                question: "Which service provides the BEST offline-first experience?",
+                options: [
+                    "AWS AppSync with Amplify DataStore for offline persistence and sync",
+                    "API Gateway with Lambda and client-side SQLite database",
+                    "DynamoDB with Global Tables and client-side caching",
+                    "S3 with Transfer Acceleration and local file storage"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "AppSync with DataStore provides automatic offline persistence, conflict resolution, and seamless synchronization.",
+                    whyWrong: {
+                        1: "API Gateway requires custom offline logic and sync mechanisms",
+                        2: "DynamoDB Global Tables are for multi-region, not offline-first",
+                        3: "S3 is for file storage, not structured data synchronization"
+                    },
+                    examStrategy: "AppSync + Amplify DataStore is the AWS solution for offline-first mobile apps."
+                }
+            },
+
+            // Continue adding more comprehensive questions...
+            // Domain 1: Advanced Development Patterns
+
+            {
+                id: 'dva_061',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "hard",
+                timeRecommendation: 150,
+                scenario: "A financial trading platform requires sub-millisecond latency for order matching. The system must handle 1 million orders per second during peak hours with strict ordering guarantees per trading symbol.",
+                question: "Which architecture provides the REQUIRED performance?",
+                options: [
+                    "EC2 with placement groups, ElastiCache Redis with Lua scripts, and SR-IOV networking",
+                    "Lambda with Provisioned Concurrency and DynamoDB with strong consistency",
+                    "ECS on Fargate with Application Load Balancer and Aurora Serverless",
+                    "API Gateway with caching and Kinesis Data Streams"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Placement groups minimize network latency, Redis Lua scripts provide atomic operations, and SR-IOV offers highest network performance.",
+                    whyWrong: {
+                        1: "Lambda has inherent overhead incompatible with sub-millisecond requirements",
+                        2: "Fargate and ALB add latency layers unsuitable for ultra-low latency",
+                        3: "API Gateway has minimum latency overhead exceeding requirements"
+                    },
+                    examStrategy: "Sub-millisecond latency requires EC2 with placement groups and memory-based data stores."
+                }
+            },
+            {
+                id: 'dva_062',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "medium",
+                timeRecommendation: 110,
+                scenario: "An e-learning platform needs to transcode uploaded video courses into multiple formats and resolutions. Processing must be cost-effective and scale based on upload volume.",
+                question: "Which solution provides the BEST cost-performance balance?",
+                options: [
+                    "S3 upload → Lambda trigger → MediaConvert jobs with queue priorities",
+                    "S3 upload → EC2 Spot Fleet with FFmpeg → S3 output",
+                    "Kinesis Video Streams → Lambda → Elastic Transcoder",
+                    "ECS Fargate tasks with custom encoding containers"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "MediaConvert is serverless, scales automatically, and provides professional-grade encoding with pay-per-job pricing.",
+                    whyWrong: {
+                        1: "Spot Fleet requires management and may be interrupted during processing",
+                        2: "Kinesis Video Streams is for live streaming, not file transcoding",
+                        3: "Fargate tasks require custom encoding logic and container management"
+                    },
+                    examStrategy: "MediaConvert for file transcoding, Kinesis Video for streaming, Elastic Transcoder is legacy."
+                }
+            },
+            {
+                id: 'dva_063',
+                domain: "Domain 2: Security",
+                difficulty: "hard",
+                timeRecommendation: 140,
+                scenario: "A healthcare SaaS platform must implement field-level encryption for PII across multiple databases (RDS, DynamoDB, DocumentDB) with customer-managed keys per tenant.",
+                question: "Which approach provides the MOST comprehensive encryption solution?",
+                options: [
+                    "AWS Encryption SDK with KMS multi-tenant key hierarchy and caching",
+                    "Native database encryption with separate KMS keys per database",
+                    "Client-side encryption libraries with keys in Secrets Manager",
+                    "CloudHSM with custom key management application"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Encryption SDK provides consistent field-level encryption across services with efficient key caching and multi-tenant support.",
+                    whyWrong: {
+                        1: "Native database encryption doesn't provide field-level granularity",
+                        2: "Client-side libraries lack the key management sophistication of Encryption SDK",
+                        3: "CloudHSM adds complexity without field-level encryption benefits"
+                    },
+                    examStrategy: "AWS Encryption SDK for application-layer encryption across multiple services."
+                }
+            },
+            {
+                id: 'dva_064',
+                domain: "Domain 3: Deployment",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "A microservices application with 50+ services needs coordinated deployments where some services must deploy together while others can deploy independently.",
+                question: "Which orchestration approach provides the REQUIRED flexibility?",
+                options: [
+                    "CodePipeline with parallel and sequential stages using stage transitions",
+                    "Jenkins with Pipeline as Code and conditional stages",
+                    "Step Functions with Choice states and parallel branches",
+                    "GitLab CI/CD with dependency graphs"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "CodePipeline's stage transitions and approval actions enable complex orchestration with native AWS service integration.",
+                    whyWrong: {
+                        1: "Jenkins requires additional AWS integration setup",
+                        2: "Step Functions is for workflow orchestration, not CI/CD pipelines",
+                        3: "GitLab CI/CD requires external AWS integration"
+                    },
+                    examStrategy: "CodePipeline for AWS-native CI/CD orchestration with complex dependencies."
+                }
+            },
+            {
+                id: 'dva_065',
+                domain: "Domain 4: Troubleshooting and Optimization",
+                difficulty: "hard",
+                timeRecommendation: 150,
+                scenario: "An application experiences cascading failures when one microservice becomes slow. Response times increase across all services, eventually causing timeouts and service unavailability.",
+                question: "Which pattern BEST prevents cascade failures?",
+                options: [
+                    "Circuit breaker pattern with exponential backoff and bulkhead isolation",
+                    "Increase timeout values and add more service instances",
+                    "Implement service mesh with automatic retries",
+                    "Add caching layers between all service calls"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Circuit breakers prevent cascading failures by failing fast, while bulkheads isolate failures to prevent spread.",
+                    whyWrong: {
+                        1: "Increasing timeouts worsens cascading failures by holding resources longer",
+                        2: "Automatic retries can amplify problems during failures",
+                        3: "Caching helps but doesn't address the root cause of cascade failures"
+                    },
+                    examStrategy: "Circuit breaker pattern is key for preventing cascading failures in microservices."
+                }
+            },
+            {
+                id: 'dva_066',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "A real estate platform needs to search properties by location (within radius), price range, amenities, and availability dates. The search must support complex filters and sorting.",
+                question: "Which data store provides the BEST search capabilities?",
+                options: [
+                    "OpenSearch with geospatial queries and custom analyzers",
+                    "DynamoDB with composite keys and filter expressions",
+                    "RDS PostgreSQL with PostGIS extension",
+                    "Neptune with property graph model"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "OpenSearch excels at complex searches with geospatial support, faceted search, and custom scoring.",
+                    whyWrong: {
+                        1: "DynamoDB filter expressions are limited and inefficient for complex queries",
+                        2: "PostgreSQL PostGIS works but lacks the search features of OpenSearch",
+                        3: "Neptune is for graph relationships, not property searches"
+                    },
+                    examStrategy: "OpenSearch (formerly Elasticsearch) for complex search requirements with geospatial needs."
+                }
+            },
+            {
+                id: 'dva_067',
+                domain: "Domain 2: Security",
+                difficulty: "medium",
+                timeRecommendation: 110,
+                scenario: "A mobile payment app needs to comply with PCI DSS. Credit card data must be tokenized before storage, with tokens usable for recurring payments.",
+                question: "Which approach BEST meets PCI compliance requirements?",
+                options: [
+                    "Payment tokenization service with tokens in DynamoDB, never storing actual card data",
+                    "KMS encryption for credit card data with restricted IAM access",
+                    "Lambda function to hash credit cards with salt stored in Secrets Manager",
+                    "API Gateway with request validation to reject credit card numbers"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Tokenization replaces sensitive data with non-sensitive tokens, meeting PCI DSS requirements for data protection.",
+                    whyWrong: {
+                        1: "Encryption alone doesn't meet PCI tokenization requirements",
+                        2: "Hashing doesn't allow for recurring payments and may not meet PCI standards",
+                        3: "Request validation doesn't address storage requirements"
+                    },
+                    examStrategy: "Tokenization > Encryption for PCI compliance. Never store actual card data."
+                }
+            },
+            {
+                id: 'dva_068',
+                domain: "Domain 3: Deployment",
+                difficulty: "easy",
+                timeRecommendation: 90,
+                scenario: "A Lambda function deployment package exceeds the 50MB limit when zipped. The function requires large ML model files.",
+                question: "What is the BEST solution?",
+                options: [
+                    "Package the function as a container image up to 10GB",
+                    "Split the model into multiple Lambda Layers",
+                    "Store model in S3 and download at runtime",
+                    "Use EFS to mount model files"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Container images support up to 10GB, perfect for large ML models with all dependencies included.",
+                    whyWrong: {
+                        1: "Layers have combined 250MB extracted size limit",
+                        2: "S3 download adds cold start latency",
+                        3: "EFS adds complexity and latency for model loading"
+                    },
+                    examStrategy: "Lambda container images for large deployments (up to 10GB). Layers for shared code under 250MB."
+                }
+            },
+            {
+                id: 'dva_069',
+                domain: "Domain 4: Troubleshooting and Optimization",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "CloudWatch shows Lambda duration of 3 seconds, but X-Ray traces show 8-second end-to-end latency for the same request. The Lambda function makes multiple AWS service calls.",
+                question: "What is the MOST likely cause of the latency difference?",
+                options: [
+                    "Lambda cold start and runtime initialization not included in duration metric",
+                    "X-Ray tracing overhead adding significant latency",
+                    "Network latency between AWS services",
+                    "CloudWatch metrics aggregation delay"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Lambda duration metrics exclude cold start and initialization time, which X-Ray captures in total latency.",
+                    whyWrong: {
+                        1: "X-Ray overhead is minimal, typically microseconds",
+                        2: "Inter-service latency would be included in Lambda duration",
+                        3: "Metrics show actual duration, not affected by aggregation"
+                    },
+                    examStrategy: "Lambda duration != total latency. Cold starts and init time are excluded from duration metrics."
+                }
+            },
+            {
+                id: 'dva_070',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "hard",
+                timeRecommendation: 140,
+                scenario: "A collaborative document editing application needs real-time synchronization across users with conflict resolution, offline support, and revision history.",
+                question: "Which architecture provides the BEST real-time collaboration features?",
+                options: [
+                    "AppSync with subscriptions, DynamoDB versioning, and Amplify DataStore",
+                    "API Gateway WebSockets with Lambda and ElasticSearch",
+                    "IoT Core with MQTT topics per document and S3 versioning",
+                    "Kinesis Data Streams with Lambda processors and RDS"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "AppSync subscriptions enable real-time updates, DynamoDB handles versioning, and DataStore provides offline sync with conflict resolution.",
+                    whyWrong: {
+                        1: "WebSockets require custom conflict resolution and offline logic",
+                        2: "IoT Core is not designed for document collaboration",
+                        3: "Kinesis is for streaming, not bidirectional collaboration"
+                    },
+                    examStrategy: "AppSync excels at real-time collaborative applications with built-in conflict resolution."
+                }
+            },
+
+            // Adding final set of questions to reach 500+
+            {
+                id: 'dva_071',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "medium",
+                timeRecommendation: 110,
+                scenario: "A music streaming service needs to recommend songs based on listening history, with recommendations updating in real-time as users listen to new tracks.",
+                question: "Which combination provides real-time personalized recommendations?",
+                options: [
+                    "Kinesis Data Streams → Kinesis Analytics → Lambda → Personalize → DynamoDB",
+                    "SQS → Batch → SageMaker training → RDS PostgreSQL",
+                    "EventBridge → Step Functions → Comprehend → ElasticSearch",
+                    "API Gateway → Lambda → Rekognition → CloudSearch"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Kinesis handles streaming data, Analytics processes in real-time, and Personalize provides ML-based recommendations.",
+                    whyWrong: {
+                        1: "Batch processing doesn't provide real-time updates",
+                        2: "Comprehend is for text analysis, not recommendations",
+                        3: "Rekognition is for image/video analysis, not music recommendations"
+                    },
+                    examStrategy: "Amazon Personalize is the managed service for recommendation engines."
+                }
+            },
+            {
+                id: 'dva_072',
+                domain: "Domain 2: Security",
+                difficulty: "easy",
+                timeRecommendation: 90,
+                scenario: "A Lambda function needs to access an RDS database in a private subnet. The function should have minimal network configuration overhead.",
+                question: "What is the SIMPLEST secure solution?",
+                options: [
+                    "RDS Proxy with IAM authentication, Lambda without VPC configuration",
+                    "Lambda in VPC with security groups and RDS password in Secrets Manager",
+                    "RDS Data API with IAM authentication",
+                    "VPC peering between Lambda VPC and RDS VPC"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "RDS Proxy allows Lambda to connect without VPC configuration while providing IAM authentication and connection pooling.",
+                    whyWrong: {
+                        1: "VPC configuration adds cold start latency",
+                        2: "Data API only works with Aurora Serverless",
+                        3: "VPC peering is unnecessary complexity"
+                    },
+                    examStrategy: "RDS Proxy eliminates VPC configuration needs for Lambda-RDS connections."
+                }
+            },
+            {
+                id: 'dva_073',
+                domain: "Domain 3: Deployment",
+                difficulty: "hard",
+                timeRecommendation: 150,
+                scenario: "A company needs to deploy applications across 100+ AWS accounts with centralized governance, automated compliance checks, and the ability to enforce specific configurations.",
+                question: "Which solution provides the MOST comprehensive governance?",
+                options: [
+                    "Control Tower with Service Catalog, Config Rules, and CloudFormation StackSets",
+                    "Organizations with SCPs and manual CloudFormation deployment",
+                    "Landing Zone with CodePipeline and cross-account roles",
+                    "Systems Manager with Automation documents and Parameter Store"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Control Tower provides account vending, Service Catalog enforces standards, Config Rules ensure compliance, and StackSets enable multi-account deployment.",
+                    whyWrong: {
+                        1: "Manual deployment doesn't scale to 100+ accounts",
+                        2: "Landing Zone is superseded by Control Tower",
+                        3: "Systems Manager alone lacks account governance features"
+                    },
+                    examStrategy: "Control Tower is AWS's solution for multi-account governance and deployment."
+                }
+            },
+            {
+                id: 'dva_074',
+                domain: "Domain 4: Troubleshooting and Optimization",
+                difficulty: "medium",
+                timeRecommendation: 120,
+                scenario: "An API shows increasing response times during business hours. CloudWatch shows normal CPU and memory, but RDS shows connection count at maximum.",
+                question: "What is the BEST immediate solution?",
+                options: [
+                    "Implement RDS Proxy for connection pooling and multiplexing",
+                    "Increase RDS instance size for more connections",
+                    "Add read replicas to distribute connection load",
+                    "Implement caching to reduce database calls"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "RDS Proxy immediately solves connection pooling issues without application changes or downtime.",
+                    whyWrong: {
+                        1: "Larger instance requires downtime and may not solve pooling issues",
+                        2: "Read replicas don't help with connection pool exhaustion",
+                        3: "Caching helps but doesn't address immediate connection limit"
+                    },
+                    examStrategy: "RDS Proxy is the solution for connection pool exhaustion and management."
+                }
+            },
+            {
+                id: 'dva_075',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "medium",
+                timeRecommendation: 110,
+                scenario: "A serverless application needs to execute workflows where each step may take 5-30 minutes, with complex branching logic based on results.",
+                question: "Which service is MOST appropriate for this use case?",
+                options: [
+                    "Step Functions Standard Workflows with AWS Batch for long-running tasks",
+                    "Step Functions Express Workflows with Lambda functions",
+                    "SWF with EC2 workers for task execution",
+                    "EventBridge with Lambda for workflow coordination"
+                ],
+                correct: 0,
+                explanation: {
+                    correct: "Standard Workflows support year-long executions and Batch handles long-running compute tasks efficiently.",
+                    whyWrong: {
+                        1: "Express Workflows have 5-minute maximum duration",
+                        2: "SWF is legacy, replaced by Step Functions",
+                        3: "EventBridge doesn't provide workflow state management"
+                    },
+                    examStrategy: "Step Functions Standard for long-running workflows, Express for high-volume short workflows."
+                }
+            },
+            {
+                id: 'dva_076',
+                domain: "Domain 1: Development with AWS Services",
+                difficulty: "easy",
+                timeRecommendation: 90,
+                scenario: "A web application needs to store user session data that expires after 30 minutes of inactivity. The solution must be highly available and fast.",
+                question: "Which storage solution is MOST appropriate?",
+                options: [
+                    "ElastiCache Redis with TTL settings",
+                    "DynamoDB with TTL attribute",
+                    "S3 with lifecycle policies",
+                    "EFS with cron job cleanup"
+                ],
+                correct: 0,
+                explanation:
