@@ -6,6 +6,7 @@
     <meta name="description" content="Strategic AWS Certified Developer Associate DVA-C02 Exam Trainer - Master timing and pass the exam">
     <meta name="theme-color" content="#FF9900">
     <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FF9900">
     <title>AWS DVA-C02 Strategic Exam Trainer</title>
     <style>
         * {
@@ -13908,6 +13909,32 @@
 ]; // Close the questions array
 
 // Any additional JavaScript code (event listeners, functions, etc.) would go here
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('ServiceWorker registration successful');
+                
+                // Listen for updates
+                registration.addEventListener('updatefound', () => {
+                    console.log('New service worker available');
+                });
+            })
+            .catch(err => console.log('ServiceWorker registration failed: ', err));
+    });
+}
+      
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent Chrome 67 and earlier from automatically showing the prompt
+    e.preventDefault();
+    // Stash the event so it can be triggered later
+    deferredPrompt = e;
+    console.log('Install prompt ready');
+    
+    // You could show a custom install button here if you want
+});
 
 </script>
 </body>
