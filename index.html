@@ -1027,38 +1027,30 @@
         // Question Bank - AWS DVA-C02 Specific Questions
         const questionBank = [
             // Domain 1: Development with AWS Services (32%)
-            {
-                id: 'dva_001',
-                domain: "Domain 1: Development with AWS Services",
-                difficulty: "medium",
-                timeRecommendation: 120,
-                scenario: "A development team is building a serverless application that processes user uploads. Files are stored in S3, metadata is stored in DynamoDB, and Lambda functions handle processing. The application experiences occasional spikes where thousands of files are uploaded simultaneously, causing some Lambda invocations to be throttled.",
-                question: "What is the MOST cost-effective solution to handle these traffic spikes while maintaining processing reliability?",
-                options: [
-                    "Configure S3 Event Notifications to send messages to an SQS queue, and configure Lambda to poll from the queue with reserved concurrency",
-                    "Increase the Lambda concurrent execution limit to 10,000 and implement exponential backoff in the upload client",
-                    "Use AWS Step Functions to orchestrate the processing workflow with built-in retry logic",
-                    "Configure S3 Transfer Acceleration and increase Lambda memory to 10GB for faster processing"
-                ],
-                correct: 0,
-                explanation: {
-                    correct: "Redis with TTL provides millisecond latency and automatic expiration, perfect for session storage.",
-                    whyWrong: {
-                        1: "DynamoDB TTL has up to 48-hour delay for deletion",
-                        2: "S3 lifecycle policies work on daily granularity, not minutes",
-                        3: "EFS is for file storage, not session data"
-                    },
-                    examStrategy: "ElastiCache for session storage with TTL. DynamoDB TTL is eventually consistent."
-                }, 
-                    correct: "Using SQS as a buffer between S3 and Lambda provides reliable message delivery and automatic retry logic. Reserved concurrency prevents throttling while the queue handles traffic spikes, making this the most cost-effective solution.",
-                    whyWrong: {
-                        1: "Simply increasing concurrent execution limits doesn't guarantee processing and could lead to higher costs without solving the root cause",
-                        2: "Step Functions adds unnecessary complexity and cost for this use case when SQS provides simpler buffering",
-                        3: "Transfer Acceleration and increased memory don't address the throttling issue and significantly increase costs"
-                    },
-                    examStrategy: "Look for solutions that use managed services for buffering (SQS, Kinesis) when dealing with traffic spikes and Lambda throttling."
-                }
-            },
+{
+    id: 'dva_001',
+    domain: "Domain 1: Development with AWS Services",
+    difficulty: "medium",
+    timeRecommendation: 120,
+    scenario: "A development team is building a serverless application that processes user uploads. Files are stored in S3, metadata is stored in DynamoDB, and Lambda functions handle processing. The application experiences occasional spikes where thousands of files are uploaded simultaneously, causing some Lambda invocations to be throttled.",
+    question: "What is the MOST cost-effective solution to handle these traffic spikes while maintaining processing reliability?",
+    options: [
+        "Configure S3 Event Notifications to send messages to an SQS queue, and configure Lambda to poll from the queue with reserved concurrency",
+        "Increase the Lambda concurrent execution limit to 10,000 and implement exponential backoff in the upload client",
+        "Use AWS Step Functions to orchestrate the processing workflow with built-in retry logic",
+        "Configure S3 Transfer Acceleration and increase Lambda memory to 10GB for faster processing"
+    ],
+    correct: 0,
+    explanation: {
+        correct: "Using SQS as a buffer between S3 and Lambda provides reliable message delivery and automatic retry logic. Reserved concurrency prevents throttling while the queue handles traffic spikes, making this the most cost-effective solution.",
+        whyWrong: {
+            1: "Simply increasing concurrent execution limits doesn't guarantee processing and could lead to higher costs without solving the root cause",
+            2: "Step Functions adds unnecessary complexity and cost for this use case when SQS provides simpler buffering",
+            3: "Transfer Acceleration and increased memory don't address the throttling issue and significantly increase costs"
+        },
+        examStrategy: "Look for solutions that use managed services for buffering (SQS, Kinesis) when dealing with traffic spikes and Lambda throttling."
+    }
+},
             {
                 id: 'dva_002',
                 domain: "Domain 1: Development with AWS Services",
