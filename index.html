@@ -1049,7 +1049,7 @@
                         3: "EFS is for file storage, not session data"
                     },
                     examStrategy: "ElastiCache for session storage with TTL. DynamoDB TTL is eventually consistent."
-                } 
+                }, 
                     correct: "Using SQS as a buffer between S3 and Lambda provides reliable message delivery and automatic retry logic. Reserved concurrency prevents throttling while the queue handles traffic spikes, making this the most cost-effective solution.",
                     whyWrong: {
                         1: "Simply increasing concurrent execution limits doesn't guarantee processing and could lead to higher costs without solving the root cause",
