@@ -13155,6 +13155,87 @@
 }
 ]; // Close the questions array
 
+        // Make questions available with the expected name
+const questions = questionBank;
+
+// Quiz state variables
+let currentQuestionIndex = 0;
+let score = 0;
+let userAnswers = [];
+let currentMode = 'practice';
+
+// Start quiz mode function
+function startMode(mode) {
+    currentMode = mode;
+    currentQuestionIndex = 0;
+    score = 0;
+    userAnswers = [];
+    
+    // Hide mode selection
+    document.querySelector('.mode-selection').style.display = 'none';
+    
+    // Show quiz interface
+    document.querySelector('.quiz-container').style.display = 'block';
+    
+    // Display first question
+    displayQuestion();
+    
+    console.log(`Started ${mode} mode with ${questions.length} questions`);
+}
+
+// Display current question
+function displayQuestion() {
+    if (currentQuestionIndex >= questions.length) {
+        showResults();
+        return;
+    }
+    
+    const question = questions[currentQuestionIndex];
+    
+    // Update question display (adjust selectors to match your HTML)
+    document.querySelector('.question-number').textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+    document.querySelector('.question-text').textContent = question.question;
+    
+    // Display options
+    const optionsContainer = document.querySelector('.options-container');
+    optionsContainer.innerHTML = '';
+    
+    question.options.forEach((option, index) => {
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'option';
+        optionDiv.textContent = option;
+        optionDiv.onclick = () => selectAnswer(index);
+        optionsContainer.appendChild(optionDiv);
+    });
+}
+
+// Handle answer selection
+function selectAnswer(index) {
+    userAnswers[currentQuestionIndex] = index;
+    
+    // Check if correct
+    const question = questions[currentQuestionIndex];
+    if (index === question.correct) {
+        score++;
+    }
+    
+    // Move to next question
+    currentQuestionIndex++;
+    displayQuestion();
+}
+
+// Show results
+function showResults() {
+    const percentage = Math.round((score / questions.length) * 100);
+    alert(`Quiz Complete!\n\nScore: ${score}/${questions.length} (${percentage}%)`);
+    
+    // Reset and return to mode selection
+    document.querySelector('.quiz-container').style.display = 'none';
+    document.querySelector('.mode-selection').style.display = 'block';
+}
+
+console.log(`Quiz loaded with ${questions.length} questions`);
+
 // Any additional JavaScript code (event listeners, functions, etc.) would go here
 
 if ('serviceWorker' in navigator) {
