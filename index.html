@@ -13195,253 +13195,45 @@ let score = 0;
 let userAnswers = [];
 let currentMode = 'practice';
 let modeQuestions = [];
-let startTime = null;
-let flaggedQuestions = new Set();
 
 // Define mode configurations
 const modeConfigs = {
-    triage: {
-        name: 'Triage Training',
-        questionCount: 20,
-        timePerQuestion: 30,
-        description: 'Quick 30-second decisions'
-    },
-    speed: {
-        name: 'Speed Round',
-        questionCount: 30,
-        timePerQuestion: 90,
-        description: '90 seconds per question'
-    },
-    exam: {
-        name: 'Full Exam Simulation',
-        questionCount: 65,
-        totalTime: 130 * 60, // 130 minutes in seconds
-        description: 'DVA-C02 exam simulation'
-    },
-    strategic: {
-        name: 'Strategic Practice',
-        questionCount: 40,
-        timePerQuestion: 120,
-        description: 'Practice flagging and time management'
-    },
-    practice: {
-        name: 'Practice Mode',
-        questionCount: 50,
-        untimed: true,
-        description: 'Untimed practice with explanations'
-    }
+    triage: { name: 'Triage Training', questionCount: 20 },
+    speed: { name: 'Speed Round', questionCount: 30 },
+    exam: { name: 'Full Exam', questionCount: 65 },
+    strategic: { name: 'Strategic Practice', questionCount: 40 },
+    practice: { name: 'Practice Mode', questionCount: 50 }
 };
 
-// Start quiz mode function
+// Define startMode function
 function startMode(mode) {
-    console.log("Starting", mode, "mode");
+    console.log("startMode called with:", mode);
     
     currentMode = mode;
     currentQuestionIndex = 0;
     score = 0;
     userAnswers = [];
-    flaggedQuestions.clear();
     
     // Get mode configuration
-    const config = modeConfigs[mode];
+    const config = modeConfigs[mode] || modeConfigs.practice;
     
     // Select random questions for this mode
     const shuffled = [...questions].sort(() => Math.random() - 0.5);
     modeQuestions = shuffled.slice(0, config.questionCount);
     
-    // Set up timer if needed
-    if (!config.untimed) {
-        startTime = Date.now();
-    }
+    // For now, just show the correct counts
+    alert(`Starting ${config.name}!\n\nQuestions in this mode: ${config.questionCount}\n(Selected from pool of ${questions.length} total questions)`);
     
-    // Update UI to show quiz
-    const modeSelection = document.querySelector('.mode-selection');
-    if (modeSelection) {
-        modeSelection.style.display = 'none';
-    }
-    
-    // Show quiz interface (you'll need to create this)
-    let quizContainer = document.querySelector('.quiz-interface');
-    if (!quizContainer) {
-        // Create quiz interface if it doesn't exist
-        quizContainer = document.createElement('div');
-        quizContainer.className = 'quiz-interface';
-        quizContainer.innerHTML = `
-            <div class="quiz-header">
-                <h2>${config.name}</h2>
-                <div class="quiz-stats">
-                    <span class="question-counter">Question 1 of ${config.questionCount}</span>
-                    <span class="timer" style="display: ${config.untimed ? 'none' : 'block'}">Time: 00:00</span>
-                    <span class="score">Score: 0/${config.questionCount}</span>
-                </div>
-            </div>
-            <div class="question-container">
-                <div class="question-text"></div>
-                <div class="options-container"></div>
-            </div>
-            <div class="quiz-controls">
-                <button onclick="previousQuestion()" class="btn-secondary">Previous</button>
-                <button onclick="flagQuestion()" class="btn-warning">Flag</button>
-                <button onclick="submitAnswer()" class="btn-primary">Submit Answer</button>
-                <button onclick="nextQuestion()" class="btn-primary">Next</button>
-                <button onclick="endQuiz()" class="btn-danger">End Quiz</button>
-            </div>
-        `;
-        document.body.appendChild(quizContainer);
-    }
-    
-    quizContainer.style.display = 'block';
-    
-    // Display first question
-    displayQuestion();
-    
-    // Start timer if needed
-    if (!config.untimed) {
-        startTimer();
-    }
-    
-    console.log(`Started ${mode} mode with ${config.questionCount} questions out of ${questions.length} total`);
+    // Log for debugging
+    console.log(`Mode: ${config.name}`);
+    console.log(`Questions selected: ${modeQuestions.length}`);
+    console.log(`First question:`, modeQuestions[0]);
 }
 
-// Display current question
-function displayQuestion() {
-    if (currentQuestionIndex >= modeQuestions.length) {
-        showResults();
-        return;
-    }
-    
-    const question = modeQuestions[currentQuestionIndex];
-    const config = modeConfigs[currentMode];
-    
-    // Update counter
-    document.querySelector('.question-counter').textContent = 
-        `Question ${currentQuestionIndex + 1} of ${config.questionCount}`;
-    
-    // Update question text
-    document.querySelector('.question-text').innerHTML = `
-        <div class="domain-badge">${question.domain}</div>
-        <div class="difficulty-badge ${question.difficulty}">${question.difficulty}</div>
-        <p class="scenario">${question.scenario}</p>
-        <p class="question"><strong>${question.question}</strong></p>
-    `;
-    
-    // Display options
-    const optionsContainer = document.querySelector('.options-container');
-    optionsContainer.innerHTML = '';
-    
-    question.options.forEach((option, index) => {
-        const optionDiv = document.createElement('div');
-        optionDiv.className = 'option';
-        optionDiv.innerHTML = `
-            <input type="radio" name="answer" id="option${index}" value="${index}">
-            <label for="option${index}">${String.fromCharCode(65 + index)}. ${option}</label>
-        `;
-        optionDiv.onclick = () => {
-            document.getElementById(`option${index}`).checked = true;
-        };
-        optionsContainer.appendChild(optionDiv);
-    });
-    
-    // Restore previous answer if exists
-    if (userAnswers[currentQuestionIndex] !== undefined) {
-        document.getElementById(`option${userAnswers[currentQuestionIndex]}`).checked = true;
-    }
-}
+console.log("All functions defined - app ready!");
 
-// Submit answer
-function submitAnswer() {
-    const selected = document.querySelector('input[name="answer"]:checked');
-    if (selected) {
-        userAnswers[currentQuestionIndex] = parseInt(selected.value);
-        nextQuestion();
-    } else {
-        alert('Please select an answer');
-    }
-}
-
-// Navigation functions
-function nextQuestion() {
-    if (currentQuestionIndex < modeQuestions.length - 1) {
-        currentQuestionIndex++;
-        displayQuestion();
-    } else {
-        showResults();
-    }
-}
-
-function previousQuestion() {
-    if (currentQuestionIndex > 0) {
-        currentQuestionIndex--;
-        displayQuestion();
-    }
-}
-
-function flagQuestion() {
-    if (flaggedQuestions.has(currentQuestionIndex)) {
-        flaggedQuestions.delete(currentQuestionIndex);
-        console.log('Unflagged question', currentQuestionIndex + 1);
-    } else {
-        flaggedQuestions.add(currentQuestionIndex);
-        console.log('Flagged question', currentQuestionIndex + 1);
-    }
-}
-
-// Timer function
-function startTimer() {
-    const timerInterval = setInterval(() => {
-        if (!startTime) {
-            clearInterval(timerInterval);
-            return;
-        }
-        
-        const elapsed = Math.floor((Date.now() - startTime) / 1000);
-        const minutes = Math.floor(elapsed / 60);
-        const seconds = elapsed % 60;
-        
-        const timerElement = document.querySelector('.timer');
-        if (timerElement) {
-            timerElement.textContent = `Time: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
-        
-        // Check if time limit exceeded for exam mode
-        const config = modeConfigs[currentMode];
-        if (config.totalTime && elapsed >= config.totalTime) {
-            clearInterval(timerInterval);
-            alert('Time is up!');
-            showResults();
-        }
-    }, 1000);
-}
-
-// Show results
-function showResults() {
-    // Calculate score
-    score = 0;
-    modeQuestions.forEach((question, index) => {
-        if (userAnswers[index] === question.correct) {
-            score++;
-        }
-    });
-    
-    const percentage = Math.round((score / modeQuestions.length) * 100);
-    
-    alert(`Quiz Complete!\n\n` +
-          `Mode: ${modeConfigs[currentMode].name}\n` +
-          `Score: ${score}/${modeQuestions.length} (${percentage}%)\n` +
-          `Flagged Questions: ${flaggedQuestions.size}`);
-    
-    endQuiz();
-}
-
-// End quiz
-function endQuiz() {
-    startTime = null;
-    document.querySelector('.quiz-interface')?.remove();
-    document.querySelector('.mode-selection').style.display = 'block';
-}
-
-console.log("All quiz functions loaded!");
-
+// Make sure functions are available globally
+window.startMode = startMode;
 // Any additional JavaScript code (event listeners, functions, etc.) would go here
 
 if ('serviceWorker' in navigator) {
