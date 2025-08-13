@@ -13154,87 +13154,61 @@
     }
 }
 ]; // Close the questions array
+// Find the exact line where questionBank array closes
+fetch(window.location.href)
+    .then(response => response.text())
+    .then(html => {
+        const lines = html.split('\n');
+        
+        // Find where questionBank ends
+        for(let i = 0; i < lines.length; i++) {
+            if (lines[i].includes('const questionBank = [')) {
+                console.log(`✅ questionBank starts at line ${i + 1}`);
+            }
+            
+            // Look for the closing of questionBank
+            if (lines[i].trim() === '];' && i > 1000) {  // After line 1000 to skip early code
+                console.log(`📍 Possible questionBank end at line ${i + 1}`);
+                console.log("Previous line:", lines[i-1].substring(0, 100));
+                console.log("This line:", lines[i]);
+                console.log("Next line:", lines[i+1].substring(0, 100));
+                
+                // Check if this is really the end of questionBank
+                if (lines[i-1].includes('}')) {
+                    console.log(`✅ This looks like the END of questionBank array at line ${i + 1}`);
+                    console.log("\n⚠️ ADD THE startMode FUNCTION AFTER LINE", i + 1);
+                    break;
+                }
+            }
+        }
+    });        
 
-        // Make questions available with the expected name
+// PASTE ALL OF THIS AFTER THE LINE ABOVE:
+
+// Make questions available
 const questions = questionBank;
+console.log("Questions loaded:", questions.length);
 
-// Quiz state variables
-let currentQuestionIndex = 0;
-let score = 0;
-let userAnswers = [];
-let currentMode = 'practice';
-
-// Start quiz mode function
+// Define startMode function
 function startMode(mode) {
+    console.log("startMode called with:", mode);
+    alert(`Starting ${mode} mode with ${questions.length} questions!`);
+    
+    // Your quiz logic here
     currentMode = mode;
     currentQuestionIndex = 0;
     score = 0;
-    userAnswers = [];
-    
-    // Hide mode selection
-    document.querySelector('.mode-selection').style.display = 'none';
-    
-    // Show quiz interface
-    document.querySelector('.quiz-container').style.display = 'block';
-    
-    // Display first question
-    displayQuestion();
-    
-    console.log(`Started ${mode} mode with ${questions.length} questions`);
 }
 
-// Display current question
-function displayQuestion() {
-    if (currentQuestionIndex >= questions.length) {
-        showResults();
-        return;
-    }
-    
-    const question = questions[currentQuestionIndex];
-    
-    // Update question display (adjust selectors to match your HTML)
-    document.querySelector('.question-number').textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
-    document.querySelector('.question-text').textContent = question.question;
-    
-    // Display options
-    const optionsContainer = document.querySelector('.options-container');
-    optionsContainer.innerHTML = '';
-    
-    question.options.forEach((option, index) => {
-        const optionDiv = document.createElement('div');
-        optionDiv.className = 'option';
-        optionDiv.textContent = option;
-        optionDiv.onclick = () => selectAnswer(index);
-        optionsContainer.appendChild(optionDiv);
-    });
-}
+// Define other required variables
+let currentQuestionIndex = 0;
+let score = 0;
+let currentMode = 'practice';
 
-// Handle answer selection
-function selectAnswer(index) {
-    userAnswers[currentQuestionIndex] = index;
-    
-    // Check if correct
-    const question = questions[currentQuestionIndex];
-    if (index === question.correct) {
-        score++;
-    }
-    
-    // Move to next question
-    currentQuestionIndex++;
-    displayQuestion();
-}
+console.log("All functions defined - app ready!");
 
-// Show results
-function showResults() {
-    const percentage = Math.round((score / questions.length) * 100);
-    alert(`Quiz Complete!\n\nScore: ${score}/${questions.length} (${percentage}%)`);
-    
-    // Reset and return to mode selection
-    document.querySelector('.quiz-container').style.display = 'none';
-    document.querySelector('.mode-selection').style.display = 'block';
-}
-
-console.log(`Quiz loaded with ${questions.length} questions`);
+// Make sure functions are available globally
+window.startMode = startMode;
 
 // Any additional JavaScript code (event listeners, functions, etc.) would go here
 
