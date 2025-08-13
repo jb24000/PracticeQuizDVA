@@ -1,12 +1,12 @@
 {
-  "name": "AWS DVA-C02 Practice Quiz - 500 Questions",
-  "short_name": "DVA-C02 Quiz",
-  "description": "Comprehensive practice quiz for AWS Certified Developer Associate (DVA-C02) with 500 questions covering all exam domains",
+  "name": "AWS DVA-C02 Strategic Exam Trainer",
+  "short_name": "DVA-C02 Trainer",
+  "description": "Strategic exam trainer for AWS Certified Developer Associate certification with timing optimization",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#232F3E",
   "theme_color": "#FF9900",
-  "orientation": "portrait-primary",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZDEiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRkY5OTAwO3N0b3Atb3BhY2l0eToxIiAvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNGRjZCMDA7c3RvcC1vcGFjaXR5OjEiIC8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQwIiBmaWxsPSJ1cmwoI2dyYWQxKSIvPgogIDxwYXRoIGQ9Ik0gNjAgNzAgTCA5NiA0MCBMIDM2IDcwIEwgMTMyIDkwIEwgMTEwIDkwIEwgMTEwIDEyMCBMIDgyIDEyMCBMIDgyIDkwIEwgNjAgOTAgWiIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuOSIvPgogIDx0ZXh0IHg9Ijk2IiB5PSIxNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIj5EVkEtQzAyPC90ZXh0Pgo8L3N2Zz4=",
@@ -19,58 +19,60 @@
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNiIgZmlsbD0iI0ZGOTkwMCIvPgogIDx0ZXh0IHg9IjE2IiB5PSIyMyIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iYm9sZCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiPkQ8L3RleHQ+Cjwvc3ZnPg==",
+      "sizes": "32x32",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ],
   "shortcuts": [
     {
-      "name": "Practice Mode",
-      "short_name": "Practice",
-      "description": "Untimed practice with immediate feedback",
-      "url": "/?mode=practice",
+      "name": "Triage Training",
+      "short_name": "Triage",
+      "description": "30-second decision practice",
+      "url": "/?mode=triage",
       "icons": [
         {
-          "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NiA5NiI+CiAgPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDQiIGZpbGw9IiM0QjlCRkYiLz4KICA8dGV4dCB4PSI0OCIgeT0iNjIiIGZvbnQtc2l6ZT0iMzYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIj7wn5OOPC90ZXh0Pgo8L3N2Zz4=",
-          "sizes": "96x96",
-          "type": "image/svg+xml"
+          "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NiA5NiI+CiAgPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDQiIGZpbGw9IiNGRkI5MDAiLz4KICA8dGV4dCB4PSI0OCIgeT0iNjAiIGZvbnQtc2l6ZT0iNDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIj7imqE8L3RleHQ+Cjwvc3ZnPg==",
+          "sizes": "96x96"
         }
       ]
     },
     {
-      "name": "Timed Mode",
-      "short_name": "Timed",
-      "description": "2 minutes per question with timer",
-      "url": "/?mode=timed",
+      "name": "Speed Rounds",
+      "short_name": "Speed",
+      "description": "90-second maximum per question",
+      "url": "/?mode=speed",
       "icons": [
         {
-          "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NiA5NiI+CiAgPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDQiIGZpbGw9IiNGRkI5MDAiLz4KICA8dGV4dCB4PSI0OCIgeT0iNjIiIGZvbnQtc2l6ZT0iMzYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIj7ijbE8L3RleHQ+Cjwvc3ZnPg==",
-          "sizes": "96x96",
-          "type": "image/svg+xml"
+          "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NiA5NiI+CiAgPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDQiIGZpbGw9IiM0QjlCRkYiLz4KICA8dGV4dCB4PSI0OCIgeT0iNjAiIGZvbnQtc2l6ZT0iNDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIj7wn4+DPC90ZXh0Pgo8L3N2Zz4=",
+          "sizes": "96x96"
         }
       ]
     },
     {
-      "name": "Exam Simulation",
+      "name": "Full Exam",
       "short_name": "Exam",
       "description": "65 questions in 130 minutes",
       "url": "/?mode=exam",
       "icons": [
         {
-          "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NiA5NiI+CiAgPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDQiIGZpbGw9IiM0OEM3NzQiLz4KICA8dGV4dCB4PSI0OCIgeT0iNjIiIGZvbnQtc2l6ZT0iMzYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIj7wn5KKPC90ZXh0Pgo8L3N2Zz4=",
-          "sizes": "96x96",
-          "type": "image/svg+xml"
+          "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NiA5NiI+CiAgPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDQiIGZpbGw9IiM0OEM3NzQiLz4KICA8dGV4dCB4PSI0OCIgeT0iNjAiIGZvbnQtc2l6ZT0iNDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIj7wn5KKPC90ZXh0Pgo8L3N2Zz4=",
+          "sizes": "96x96"
         }
       ]
     },
     {
-      "name": "Domain Review",
-      "short_name": "Domains",
-      "description": "Practice by specific exam domain",
-      "url": "/?mode=domain",
+      "name": "Strategic Practice",
+      "short_name": "Strategic",
+      "description": "Learn flag and skip workflow",
+      "url": "/?mode=strategic",
       "icons": [
         {
-          "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NiA5NiI+CiAgPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDQiIGZpbGw9IiNGRjM4NjAiLz4KICA8dGV4dCB4PSI0OCIgeT0iNjIiIGZvbnQtc2l6ZT0iMzYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIj7wn5OZPC90ZXh0Pgo8L3N2Zz4=",
-          "sizes": "96x96",
-          "type": "image/svg+xml"
+          "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NiA5NiI+CiAgPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDQiIGZpbGw9IiNGRjM4NjAiLz4KICA8dGV4dCB4PSI0OCIgeT0iNjAiIGZvbnQtc2l6ZT0iNDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIj7wn46vPC90ZXh0Pgo8L3N2Zz4=",
+          "sizes": "96x96"
         }
       ]
     }
@@ -79,5 +81,15 @@
   "lang": "en-US",
   "dir": "ltr",
   "prefer_related_applications": false,
-  "scope": "/"
+  "related_applications": [],
+  "scope": "/",
+  "share_target": {
+    "action": "/",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
 }
