@@ -4,10 +4,10 @@ const OFFLINE_URL = 'offline.html';
 
 // Files to cache for offline functionality
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/offline.html'
+  './',
+  './index.html',
+  './manifest.json',
+  './offline.html'
 ];
 
 // Install event - cache essential files
