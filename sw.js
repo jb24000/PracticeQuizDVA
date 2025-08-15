@@ -53,10 +53,40 @@ self.addEventListener('activate', (event) => {
 
 // Fetch event - serve from cache or network
 self.addEventListener('fetch', (event) => {
-  // Ignore non-HTTP(S) requests (like chrome-extension://, file://, etc.)
-  if (!event.request.url.startsWith('http')) {
-    return;
-  }
+    // Ignore non-HTTP(S) requests
+    if (!event.request.url.startsWith('http')) {
+        return;
+    }
+    
+    event.respondWith(
+        caches.match(event.request)
+            .then((response) => {
+                if (response) {
+                    return response;
+                }
+                
+                return fetch(event.request).then((response) => {
+                    // Check if valid response
+                    if (!response || response.status !== 200 || response.type !== 'basic') {
+                        return response;
+                    }
+                    
+                    const responseToCache = response.clone();
+                    
+                    caches.open(CACHE_NAME)
+                        .then((cache) => {
+                            // Double-check it's HTTP before caching
+                            if (event.request.url.startsWith('http')) {
+                                cache.put(event.request, responseToCache)
+                                    .catch(err => console.log('Cannot cache:', event.request.url));
+                            }
+                        });
+                    
+                    return response;
+                });
+            })
+    );
+});
   
   // Ignore cross-origin requests except for CDNs
   const requestUrl = new URL(event.request.url);
