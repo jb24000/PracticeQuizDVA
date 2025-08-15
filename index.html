@@ -13205,7 +13205,7 @@ const modeConfigs = {
     practice: { name: 'Practice Mode', questionCount: 50 }
 };
 
-// Define startMode function
+// REPLACE everything from here...
 function startMode(mode) {
     console.log("startMode called with:", mode);
     
@@ -13229,11 +13229,10 @@ function startMode(mode) {
     console.log(`Questions selected: ${modeQuestions.length}`);
     console.log(`First question:`, modeQuestions[0]);
 }
-
 console.log("All functions defined - app ready!");
-
 // Make sure functions are available globally
 window.startMode = startMode;
+// ...to here
 // Any additional JavaScript code (event listeners, functions, etc.) would go here
 
 if ('serviceWorker' in navigator) {
