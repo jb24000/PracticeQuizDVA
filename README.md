@@ -55,13 +55,6 @@ Simply open `index.html` in any modern browser. No build process required!
 - **Storage**: LocalStorage for progress persistence
 - **PWA**: Service Worker for offline functionality
 
-## 📱 Screenshots
-
-<div align="center">
-  <img src="https://via.placeholder.com/300x600" alt="Mobile View" width="200">
-  <img src="https://via.placeholder.com/800x600" alt="Desktop View" width="400">
-</div>
-
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
