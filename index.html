@@ -13205,35 +13205,266 @@ const modeConfigs = {
     practice: { name: 'Practice Mode', questionCount: 50 }
 };
 
-// REPLACE everything from here...
+// Enhanced quiz functionality
+let currentQuiz = {
+    mode: null,
+    questions: [],
+    currentIndex: 0,
+    answers: [],
+    startTime: null,
+    questionTimes: [],
+    flagged: [],
+    score: 0
+};
+
 function startMode(mode) {
-    console.log("startMode called with:", mode);
-    
-    currentMode = mode;
-    currentQuestionIndex = 0;
-    score = 0;
-    userAnswers = [];
+    console.log("Starting quiz mode:", mode);
     
     // Get mode configuration
     const config = modeConfigs[mode] || modeConfigs.practice;
     
+    // Reset quiz data
+    currentQuiz = {
+        mode: mode,
+        questions: [],
+        currentIndex: 0,
+        answers: [],
+        startTime: Date.now(),
+        questionTimes: [],
+        flagged: [],
+        score: 0
+    };
+    
     // Select random questions for this mode
     const shuffled = [...questions].sort(() => Math.random() - 0.5);
-    modeQuestions = shuffled.slice(0, config.questionCount);
+    currentQuiz.questions = shuffled.slice(0, config.questionCount);
     
-    // For now, just show the correct counts
-    alert(`Starting ${config.name}!\n\nQuestions in this mode: ${config.questionCount}\n(Selected from pool of ${questions.length} total questions)`);
+    // Hide welcome screen
+    const welcomeScreen = document.querySelector('.welcome-container, .home-screen, #welcome');
+    if (welcomeScreen) welcomeScreen.style.display = 'none';
     
-    // Log for debugging
-    console.log(`Mode: ${config.name}`);
-    console.log(`Questions selected: ${modeQuestions.length}`);
-    console.log(`First question:`, modeQuestions[0]);
+    // Create or show quiz container
+    showQuizScreen();
+    
+    // Load first question
+    loadQuestion(0);
+    
+    // Start timer
+    startQuizTimer();
 }
-console.log("All functions defined - app ready!");
-// Make sure functions are available globally
+
+function showQuizScreen() {
+    let quizContainer = document.getElementById('quiz-container');
+    
+    if (!quizContainer) {
+        quizContainer = document.createElement('div');
+        quizContainer.id = 'quiz-container';
+        quizContainer.innerHTML = `
+            <div class="quiz-header">
+                <h2 id="mode-title">${modeConfigs[currentQuiz.mode]?.name || 'Practice Mode'}</h2>
+                <div class="quiz-progress">
+                    <span id="question-counter">Question 1 of ${currentQuiz.questions.length}</span>
+                    <span id="timer">00:00</span>
+                </div>
+            </div>
+            
+            <div class="question-section">
+                <h3 id="question-text"></h3>
+                <div id="options-list" class="options-container"></div>
+            </div>
+            
+            <div class="quiz-navigation">
+                <button onclick="previousQuestion()" id="prev-btn">Previous</button>
+                <button onclick="flagQuestion()" id="flag-btn">Flag</button>
+                <button onclick="nextQuestion()" id="next-btn">Next</button>
+                <button onclick="finishQuiz()" id="finish-btn" style="display:none;">Finish</button>
+            </div>
+        `;
+        document.body.appendChild(quizContainer);
+    }
+    
+    quizContainer.style.display = 'block';
+}
+
+function loadQuestion(index) {
+    if (index >= currentQuiz.questions.length || index < 0) return;
+    
+    const question = currentQuiz.questions[index];
+    currentQuiz.currentIndex = index;
+    
+    // Update question text
+    document.getElementById('question-text').textContent = question.question;
+    document.getElementById('question-counter').textContent = 
+        `Question ${index + 1} of ${currentQuiz.questions.length}`;
+    
+    // Update options
+    const optionsList = document.getElementById('options-list');
+    optionsList.innerHTML = '';
+    
+    question.options.forEach((option, i) => {
+        const optionEl = document.createElement('div');
+        optionEl.className = 'option-item';
+        optionEl.innerHTML = `
+            <input type="radio" id="option-${i}" name="answer" value="${i}">
+            <label for="option-${i}">${option}</label>
+        `;
+        optionEl.onclick = () => selectOption(i);
+        optionsList.appendChild(optionEl);
+    });
+    
+    // Restore previous answer if exists
+    if (currentQuiz.answers[index] !== undefined) {
+        const radio = document.getElementById(`option-${currentQuiz.answers[index]}`);
+        if (radio) radio.checked = true;
+    }
+    
+    // Update navigation buttons
+    document.getElementById('prev-btn').disabled = (index === 0);
+    document.getElementById('next-btn').style.display = 
+        (index === currentQuiz.questions.length - 1) ? 'none' : 'inline-block';
+    document.getElementById('finish-btn').style.display = 
+        (index === currentQuiz.questions.length - 1) ? 'inline-block' : 'none';
+}
+
+function selectOption(optionIndex) {
+    currentQuiz.answers[currentQuiz.currentIndex] = optionIndex;
+}
+
+function nextQuestion() {
+    saveCurrentAnswer();
+    if (currentQuiz.currentIndex < currentQuiz.questions.length - 1) {
+        loadQuestion(currentQuiz.currentIndex + 1);
+    }
+}
+
+function previousQuestion() {
+    saveCurrentAnswer();
+    if (currentQuiz.currentIndex > 0) {
+        loadQuestion(currentQuiz.currentIndex - 1);
+    }
+}
+
+function flagQuestion() {
+    const index = currentQuiz.currentIndex;
+    if (currentQuiz.flagged.includes(index)) {
+        currentQuiz.flagged = currentQuiz.flagged.filter(i => i !== index);
+        document.getElementById('flag-btn').textContent = 'Flag';
+    } else {
+        currentQuiz.flagged.push(index);
+        document.getElementById('flag-btn').textContent = 'Unflag';
+    }
+}
+
+function saveCurrentAnswer() {
+    const selected = document.querySelector('input[name="answer"]:checked');
+    if (selected) {
+        currentQuiz.answers[currentQuiz.currentIndex] = parseInt(selected.value);
+    }
+}
+
+function finishQuiz() {
+    saveCurrentAnswer();
+    calculateResults();
+}
+
+function calculateResults() {
+    let correct = 0;
+    
+    currentQuiz.questions.forEach((question, i) => {
+        if (currentQuiz.answers[i] === question.correct) {
+            correct++;
+        }
+    });
+    
+    const totalTime = Math.round((Date.now() - currentQuiz.startTime) / 1000);
+    const score = Math.round((correct / currentQuiz.questions.length) * 100);
+    
+    const results = {
+        score: score,
+        correct: correct,
+        total: currentQuiz.questions.length,
+        time: totalTime,
+        flagged: currentQuiz.flagged.length,
+        mode: currentQuiz.mode,
+        date: new Date().toISOString()
+    };
+    
+    // Save results
+    localStorage.setItem('lastQuizResults', JSON.stringify(results));
+    
+    // Show results screen
+    showResultsScreen(results);
+}
+
+function showResultsScreen(results) {
+    // Hide quiz container
+    document.getElementById('quiz-container').style.display = 'none';
+    
+    // Create or update results screen
+    let resultsScreen = document.getElementById('results-screen');
+    if (!resultsScreen) {
+        resultsScreen = document.createElement('div');
+        resultsScreen.id = 'results-screen';
+        document.body.appendChild(resultsScreen);
+    }
+    
+    resultsScreen.innerHTML = `
+        <h2>📊 Performance Analysis</h2>
+        <div class="results-stats">
+            <div class="stat-box">
+                <div class="stat-value">${results.score}%</div>
+                <div class="stat-label">Final Score</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">${results.correct}/${results.total}</div>
+                <div class="stat-label">Correct Answers</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">${Math.floor(results.time / 60)}</div>
+                <div class="stat-label">Total Minutes</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">${results.score >= 70 ? 'PASS ✅' : 'FAIL ❌'}</div>
+                <div class="stat-label">Result</div>
+            </div>
+        </div>
+        <div class="results-actions">
+            <button onclick="location.reload()">Take Another Exam</button>
+            <button onclick="reviewQuiz()">Review Answers</button>
+        </div>
+    `;
+    
+    resultsScreen.style.display = 'block';
+}
+
+function startQuizTimer() {
+    setInterval(() => {
+        if (currentQuiz.startTime) {
+            const elapsed = Math.floor((Date.now() - currentQuiz.startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            const timerEl = document.getElementById('timer');
+            if (timerEl) {
+                timerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }
+    }, 1000);
+}
+
+// Make functions globally available
 window.startMode = startMode;
-// ...to here
-// Any additional JavaScript code (event listeners, functions, etc.) would go here
+window.nextQuestion = nextQuestion;
+window.previousQuestion = previousQuestion;
+window.flagQuestion = flagQuestion;
+window.finishQuiz = finishQuiz;
+window.reviewQuiz = function() {
+    alert('Review feature coming soon!');
+};
+
+console.log("Quiz system initialized!");
+
+// KEEP ALL YOUR SERVICE WORKER CODE BELOW THIS LINE
+// Don't delete anything below here!
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
