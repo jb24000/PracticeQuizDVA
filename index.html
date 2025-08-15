@@ -1025,6 +1025,38 @@
     </div>
 
     <script>
+        // Map questionBank to questions array
+if (typeof questionBank !== 'undefined') {
+    // If questionBank is an object with categories
+    if (typeof questionBank === 'object' && !Array.isArray(questionBank)) {
+        // Combine all questions from all categories into one array
+        window.questions = [];
+        for (let category in questionBank) {
+            if (Array.isArray(questionBank[category])) {
+                window.questions = window.questions.concat(questionBank[category]);
+                console.log(`Added ${questionBank[category].length} questions from ${category}`);
+            }
+        }
+        console.log(`Total questions loaded: ${window.questions.length}`);
+    } else if (Array.isArray(questionBank)) {
+        // If it's already an array
+        window.questions = questionBank;
+    }
+} else {
+    console.error('No question bank found!');
+    // Create fallback questions
+    window.questions = [
+        {
+            question: "Sample question for testing",
+            options: ["Option A", "Option B", "Option C", "Option D"],
+            correct: 0,
+            explanation: "This is a test question"
+        }
+    ];
+}
+
+// Verify questions are loaded
+console.log('Questions ready:', window.questions?.length || 0);
         // Question Bank - AWS DVA-C02 Specific Questions
         const questionBank = [
             // Domain 1: Development with AWS Services (32%)
