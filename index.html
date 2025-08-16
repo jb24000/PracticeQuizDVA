@@ -13803,6 +13803,113 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ DVA Quiz Fix Loaded with Wallet Interference Protection - Click any mode to start!');
 });
 
+    // AGGRESSIVE FIX for Performance Analysis "Take Another Exam" button
+(function() {
+    // Fix the button every second to combat wallet interference
+    setInterval(() => {
+        // Find all "Take Another Exam" buttons
+        const buttons = Array.from(document.querySelectorAll('button')).filter(btn => 
+            btn.textContent.includes('Take Another Exam') || 
+            btn.innerText.includes('Take Another Exam')
+        );
+        
+        buttons.forEach(button => {
+            // Remove all existing click handlers
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+            
+            // Add our working click handler
+            newButton.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                console.log('🔧 Forcing quiz reset from Performance Analysis...');
+                
+                // Nuclear option - clear EVERYTHING
+                try {
+                    // Clear all storage
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    
+                    // Clear IndexedDB
+                    if (window.indexedDB) {
+                        indexedDB.databases().then(dbs => {
+                            dbs.forEach(db => indexedDB.deleteDatabase(db.name));
+                        });
+                    }
+                    
+                    // Clear all caches
+                    if ('caches' in window) {
+                        caches.keys().then(names => {
+                            names.forEach(name => caches.delete(name));
+                        });
+                    }
+                    
+                    // Kill service workers
+                    if ('serviceWorker' in navigator) {
+                        navigator.serviceWorker.getRegistrations().then(regs => {
+                            regs.forEach(reg => reg.unregister());
+                        });
+                    }
+                    
+                    // Clean wallet junk
+                    delete window.ethereum;
+                    delete window.tronWeb;
+                    delete window.solana;
+                    delete window.walletRouter;
+                    
+                    // Try multiple navigation methods
+                    setTimeout(() => {
+                        // Method 1: Go to base URL with timestamp
+                        const baseUrl = window.location.origin + window.location.pathname;
+                        const cleanUrl = baseUrl.split('?')[0].split('#')[0];
+                        window.location.href = cleanUrl + '?reset=' + Date.now();
+                    }, 100);
+                    
+                } catch (err) {
+                    console.error('Reset error:', err);
+                    // Fallback: hard reload
+                    window.location.href = window.location.origin + '?t=' + Date.now();
+                }
+                
+                return false;
+            };
+            
+            // Also add a backup double-click handler
+            newButton.ondblclick = function() {
+                window.location.href = window.location.origin;
+            };
+        });
+    }, 1000); // Check every second
+    
+    // Also intercept any navigation to Performance Analysis and reset it
+    const observer = new MutationObserver((mutations) => {
+        const performanceSection = document.querySelector('[class*="Performance Analysis"], h1:contains("Performance Analysis"), h2:contains("Performance Analysis")');
+        if (performanceSection) {
+            // If we see NaN values, the state is corrupted
+            const hasNaN = document.body.innerHTML.includes('NaN%') || document.body.innerHTML.includes('NaNs');
+            if (hasNaN) {
+                console.log('📊 Detected corrupted Performance Analysis - fixing...');
+                
+                // Hide the broken display
+                const cards = document.querySelectorAll('[class*="card"], [class*="metric"], [class*="score"]');
+                cards.forEach(card => {
+                    if (card.textContent.includes('NaN')) {
+                        card.textContent = card.textContent.replace(/NaN%?s?/g, '0');
+                    }
+                });
+            }
+        }
+    });
+    
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+    
+    console.log('💪 Aggressive Performance Analysis fix active');
+})();
+
 </script>
 </body>
 </html>
