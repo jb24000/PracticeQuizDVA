@@ -814,6 +814,52 @@
     </style>
 </head>
 <body>
+// Fixed resetQuiz function
+window.resetQuiz = function() {
+    console.log('🔄 Fixed resetQuiz running...');
+    
+    // Clear all timers
+    for (let i = 1; i < 9999; i++) {
+        window.clearInterval(i);
+        window.clearTimeout(i);
+    }
+    
+    // Reset trainer state WITHOUT calling resetQuiz again
+    if (window.trainer) {
+        window.trainer.currentQuestionIndex = 0;
+        window.trainer.userAnswers = [];
+        window.trainer.score = 0;
+        window.trainer.quizStartTime = null;
+        window.trainer.questionStartTime = null;
+        window.trainer.timePerQuestion = [];
+        window.trainer.flaggedQuestions.clear();
+        window.trainer.skippedQuestions.clear();
+        window.trainer.shuffledAnswers.clear();
+    }
+    
+    // Clear storage
+    localStorage.clear();
+    sessionStorage.clear();
+    
+    // Hide ALL screens first
+    document.getElementById('resultsScreen').style.display = 'none';
+    document.getElementById('quizContainer').style.display = 'none';
+    document.querySelectorAll('.performance-analysis, [class*="Performance"]').forEach(el => {
+        el.style.display = 'none';
+    });
+    
+    // Show welcome screen
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    if (welcomeScreen) {
+        welcomeScreen.style.display = 'block';
+    }
+    
+    // Scroll to top
+    window.scrollTo(0, 0);
+    
+    console.log('✅ Quiz reset complete - ready for new quiz');
+};
+    
     <div class="main-header">
         <h1>🎯 AWS DVA-C02 Strategic Exam Trainer</h1>
         <p class="tagline">Master exam timing and strategy with 500+ realistic scenarios · Turn 72% fails into 85+ passes</p>
@@ -13669,114 +13715,54 @@ function createSimpleQuiz(mode) {
     showQuestion();
 }
 
-// Clean wallet pollution on load and continuously
-(function() {
-    setInterval(() => {
-        if (window.ethereum && window.ethereum.isTally) delete window.ethereum;
-        if (window.tronWeb) delete window.tronWeb;
-        if (window.solana) delete window.solana;
-        if (window.walletRouter) delete window.walletRouter;
-    }, 2000);
-})();
-
-// CRITICAL FIX: Override the "Take Another Exam" button behavior
-window.takeAnotherQuiz = function() {
-    console.log('🔄 Resetting quiz state properly...');
+// Override resetQuiz WITHOUT the loop
+window.resetQuiz = function() {
+    console.log('🔄 Fixed resetQuiz running...');
     
-    // Stop any running timers (like your working PWA does)
-    if (window.globalTimer) clearInterval(window.globalTimer);
-    if (window.questionTimer) clearInterval(window.questionTimer);
-    if (window.quizTimer) clearInterval(window.quizTimer);
-    
-    // Clear all intervals just to be safe
-    for (let i = 1; i < 99999; i++) {
+    // Clear all timers
+    for (let i = 1; i < 9999; i++) {
         window.clearInterval(i);
+        window.clearTimeout(i);
     }
     
-    // Reset all quiz state variables
-    window.currentQuizState = null;
-    window.currentQuestionIndex = 0;
-    window.userAnswers = [];
-    window.score = 0;
-    window.quizStartTime = null;
-    window.questionStartTime = null;
-    window.timePerQuestion = [];
+    // Reset trainer state WITHOUT calling resetQuiz again
+    if (window.trainer) {
+        window.trainer.currentQuestionIndex = 0;
+        window.trainer.userAnswers = [];
+        window.trainer.score = 0;
+        window.trainer.quizStartTime = null;
+        window.trainer.questionStartTime = null;
+        window.trainer.timePerQuestion = [];
+        window.trainer.flaggedQuestions.clear();
+        window.trainer.skippedQuestions.clear();
+        window.trainer.shuffledAnswers.clear();
+    }
     
     // Clear storage
     localStorage.clear();
     sessionStorage.clear();
     
-    // Hide results screen, show welcome/mode selection screen
-    const resultsScreen = document.querySelector('[id*="result"], [class*="result"], [id*="performance"], [class*="performance"]');
-    const welcomeScreen = document.querySelector('[id*="welcome"], [id*="mode"], [id*="start"], #simpleQuiz');
-    const quizContainer = document.querySelector('[id*="quiz"], [id*="question"]');
-    
-    if (resultsScreen) resultsScreen.style.display = 'none';
-    if (welcomeScreen) welcomeScreen.style.display = 'block';
-    if (quizContainer && quizContainer !== welcomeScreen) quizContainer.style.display = 'none';
-    
-    // Reset any NaN displays
-    document.querySelectorAll('*').forEach(el => {
-        if (el.textContent && el.textContent.includes('NaN')) {
-            el.textContent = el.textContent.replace(/NaN%?s?/g, '0');
-        }
+    // Hide ALL screens first
+    document.getElementById('resultsScreen').style.display = 'none';
+    document.getElementById('quizContainer').style.display = 'none';
+    document.querySelectorAll('.performance-analysis, [class*="Performance"]').forEach(el => {
+        el.style.display = 'none';
     });
     
-    // If there's a startMode or similar function, call it
-    if (window.startMode) window.startMode('exam');
-    else if (window.startQuiz) window.startQuiz();
-    else if (window.initializeQuiz) window.initializeQuiz();
+    // Show welcome screen
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    if (welcomeScreen) {
+        welcomeScreen.style.display = 'block';
+        console.log('✅ Welcome screen shown');
+    }
+    
+    // Scroll to top
+    window.scrollTo(0, 0);
     
     console.log('✅ Quiz reset complete - ready for new quiz');
 };
 
-// Fix ALL buttons that say "Take Another Exam"
-setInterval(() => {
-    document.querySelectorAll('button').forEach(btn => {
-        if ((btn.textContent.includes('Take Another Exam') || 
-             btn.textContent.includes('Take Another Quiz')) && 
-            !btn.hasAttribute('data-fixed')) {
-            
-            btn.setAttribute('data-fixed', 'true');
-            
-            // Remove all existing handlers
-            const newBtn = btn.cloneNode(true);
-            btn.parentNode.replaceChild(newBtn, btn);
-            
-            // Add our working handler
-            newBtn.onclick = function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                window.takeAnotherQuiz();
-                return false;
-            };
-        }
-    });
-}, 500);
-
-// Also intercept the Performance Analysis screen specifically
-document.addEventListener('DOMContentLoaded', function() {
-    // Watch for Performance Analysis screen
-    const observer = new MutationObserver(() => {
-        const perfScreen = document.querySelector('.performance-analysis, #resultsScreen, [class*="Performance Analysis"]');
-        if (perfScreen && perfScreen.style.display !== 'none') {
-            // Fix any Take Another Exam button on this screen
-            const buttons = perfScreen.querySelectorAll('button');
-            buttons.forEach(btn => {
-                if (btn.textContent.includes('Take Another')) {
-                    btn.onclick = window.takeAnotherQuiz;
-                }
-            });
-        }
-    });
-    
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
-    });
-});
-
-console.log('✅ DVA Quiz Fix Loaded - Based on working PWA pattern');
+console.log('Fixed version installed');
   
         // AGGRESSIVE FIX for Performance Analysis "Take Another Exam" button
 (function() {
