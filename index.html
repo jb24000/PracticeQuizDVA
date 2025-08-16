@@ -13522,6 +13522,220 @@ window.addEventListener('beforeinstallprompt', (e) => {
     console.log('Install prompt ready');
     
     // You could show a custom install button here if you want
+// ============= DVA QUIZ COMPLETE FIX =============
+// Add this at the END of your script, right before </script>
+
+// Fix 1: Map questionBank to questions if needed
+if (typeof questions === 'undefined' && typeof questionBank !== 'undefined') {
+    window.questions = [];
+    for (let category in questionBank) {
+        if (Array.isArray(questionBank[category])) {
+            window.questions = window.questions.concat(questionBank[category]);
+        }
+    }
+    console.log('Questions loaded:', window.questions.length);
+}
+
+// Fix 2: Override broken startMode
+window.startMode = function(mode) {
+    console.log('Starting DVA Quiz - Mode:', mode);
+    
+    // Hide all screens
+    document.querySelectorAll('.welcome-container, .mode-selection, .container, #welcomeContainer').forEach(el => {
+        if (el) el.style.display = 'none';
+    });
+    
+    // Show quiz container
+    const quizContainer = document.getElementById('quizContainer');
+    if (quizContainer) {
+        quizContainer.style.display = 'block';
+        quizContainer.style.opacity = '1';
+        quizContainer.style.filter = 'none';
+        
+        // Remove any modal overlays
+        document.querySelectorAll('.modal, .modal-backdrop, .overlay').forEach(el => {
+            el.style.display = 'none';
+        });
+        
+        // If using trainer object
+        if (typeof trainer !== 'undefined') {
+            trainer.currentMode = mode;
+            trainer.selectedQuestions = questions.slice(0, 10); // Start with 10 questions
+            trainer.currentQuestionIndex = 0;
+            trainer.userAnswers = [];
+            trainer.showQuestion();
+        }
+    } else {
+        // Create simple quiz if container doesn't exist
+        createSimpleQuiz(mode);
+    }
+};
+
+// Fix 3: Create simple quiz UI if needed
+function createSimpleQuiz(mode) {
+    const quizHTML = `
+        <div id="simpleQuiz" style="
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 800px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            z-index: 9999;
+        ">
+            <h2>DVA Practice Quiz - ${mode}</h2>
+            <div id="questionArea">Loading questions...</div>
+            <div id="quizControls" style="margin-top: 20px;">
+                <button onclick="nextQuestion()" style="
+                    padding: 10px 30px;
+                    background: #007bff;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                ">Next Question</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', quizHTML);
+    
+    // Initialize quiz
+    window.currentQuizState = {
+        mode: mode,
+        questions: questions.slice(0, 20),
+        currentIndex: 0,
+        answers: [],
+        score: 0
+    };
+    
+    showQuestion();
+}
+
+// Fix 4: Show question function
+window.showQuestion = function() {
+    if (!window.currentQuizState) return;
+    
+    const state = window.currentQuizState;
+    const question = state.questions[state.currentIndex];
+    
+    if (!question) {
+        showResults();
+        return;
+    }
+    
+    const questionHTML = `
+        <h3>Question ${state.currentIndex + 1} of ${state.questions.length}</h3>
+        <p style="font-size: 18px; margin: 20px 0;">${question.question}</p>
+        <div>
+            ${question.options.map((opt, i) => `
+                <div style="
+                    margin: 10px 0;
+                    padding: 15px;
+                    background: #f8f9fa;
+                    border: 2px solid #dee2e6;
+                    border-radius: 5px;
+                    cursor: pointer;
+                " onclick="selectAnswer(${i}, this)" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <input type="radio" name="answer" value="${i}" id="opt${i}">
+                    <label for="opt${i}" style="cursor: pointer;">
+                        ${String.fromCharCode(65 + i)}. ${opt}
+                    </label>
+                </div>
+            `).join('')}
+        </div>
+    `;
+    
+    const questionArea = document.getElementById('questionArea');
+    if (questionArea) {
+        questionArea.innerHTML = questionHTML;
+    }
+};
+
+// Fix 5: Answer selection
+window.selectAnswer = function(index, element) {
+    window.currentQuizState.answers[window.currentQuizState.currentIndex] = index;
+    document.getElementById(`opt${index}`).checked = true;
+    
+    // Visual feedback
+    document.querySelectorAll('[name="answer"]').forEach(el => {
+        el.parentElement.style.background = '#f8f9fa';
+    });
+    element.style.background = '#d1ecf1';
+};
+
+// Fix 6: Next question
+window.nextQuestion = function() {
+    if (!window.currentQuizState) return;
+    
+    window.currentQuizState.currentIndex++;
+    
+    if (window.currentQuizState.currentIndex >= window.currentQuizState.questions.length) {
+        showResults();
+    } else {
+        showQuestion();
+    }
+};
+
+// Fix 7: Show results without NaN
+window.showResults = function() {
+    if (!window.currentQuizState) return;
+    
+    const state = window.currentQuizState;
+    let correct = 0;
+    
+    state.questions.forEach((q, i) => {
+        if (state.answers[i] === q.correct) correct++;
+    });
+    
+    const total = state.questions.length || 1; // Prevent division by zero
+    const score = Math.round((correct / total) * 100) || 0; // Prevent NaN
+    
+    const resultsHTML = `
+        <div style="text-align: center;">
+            <h2>Quiz Complete!</h2>
+            <div style="font-size: 48px; font-weight: bold; color: ${score >= 70 ? '#28a745' : '#dc3545'};">
+                ${score}%
+            </div>
+            <p style="font-size: 20px;">You got ${correct} out of ${total} questions correct</p>
+            <div style="margin-top: 30px;">
+                <button onclick="location.reload()" style="
+                    padding: 15px 40px;
+                    background: #28a745;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    font-size: 18px;
+                    cursor: pointer;
+                ">Take Another Quiz</button>
+            </div>
+        </div>
+    `;
+    
+    const container = document.getElementById('simpleQuiz') || document.getElementById('questionArea');
+    if (container) {
+        container.innerHTML = resultsHTML;
+    }
+};
+
+// Fix 8: Remove grey overlay on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Remove any blocking overlays
+    setTimeout(() => {
+        document.querySelectorAll('.modal, .modal-backdrop, .overlay').forEach(el => {
+            if (el.style.display !== 'none') {
+                console.log('Removing overlay:', el.className);
+                el.style.display = 'none';
+            }
+        });
+    }, 100);
+
+console.log('✅ DVA Quiz Fix Loaded - Click any mode to start!');
+    
 });
 
 </script>
