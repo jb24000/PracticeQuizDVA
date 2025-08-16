@@ -1,1162 +1,401 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="description" content="Strategic AWS Certified Developer Associate DVA-C02 Exam Trainer - Master timing and pass the exam">
-    <meta name="theme-color" content="#FF9900">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#FF9900">
-    <title>AWS DVA-C02 Strategic Exam Trainer</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #FF6B6B;
-            --primary-dark: #EE5A5A;
-            --primary-light: #FF8787;
-            --card-bg: rgba(255, 255, 255, 0.15);
-            --card-hover: rgba(255, 255, 255, 0.25);
-            --text-white: #FFFFFF;
-            --text-light: rgba(255, 255, 255, 0.95);
-            --success: #48C774;
-            --danger: #FF3860;
-            --warning: #FFB900;
-            --shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.15);
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #FF6B6B 0%, #FF8787 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 0;
-            overflow-x: hidden;
-        }
-
-        .main-header {
-            width: 100%;
-            text-align: center;
-            padding: 40px 20px 30px;
-            background: rgba(0, 0, 0, 0.1);
-        }
-
-        .main-header h1 {
-            color: var(--text-white);
-            font-size: 2.8em;
-            font-weight: 700;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .main-header .tagline {
-            color: var(--text-light);
-            font-size: 1.1em;
-            font-weight: 300;
-            opacity: 0.95;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            padding: 20px;
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero-section {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 20px;
-        }
-
-        .hero-section h2 {
-            color: var(--text-white);
-            font-size: 2.2em;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .hero-section p {
-            color: var(--text-light);
-            font-size: 1.15em;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .features-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 40px;
-            box-shadow: var(--shadow-card);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .features-card h3 {
-            color: var(--text-white);
-            font-size: 1.6em;
-            margin-bottom: 20px;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .features-card .subtitle {
-            text-align: center;
-            color: var(--text-light);
-            margin-bottom: 25px;
-            font-size: 1.05em;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .feature-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--text-light);
-            font-size: 0.95em;
-        }
-
-        .feature-item .icon {
-            font-size: 1.3em;
-        }
-
-        .timer-section {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 20px auto;
-            max-width: 1200px;
-            padding: 0 20px;
-            flex-wrap: wrap;
-        }
-
-        .timer-box {
-            flex: 1;
-            min-width: 180px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
-
-        .timer-label {
-            color: var(--text-light);
-            font-size: 0.9em;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .timer-value {
-            color: var(--text-white);
-            font-size: 2em;
-            font-weight: bold;
-            font-feature-settings: "tnum";
-        }
-
-        .pace-indicator {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: bold;
-            color: white;
-            font-size: 0.85em;
-            margin-top: 8px;
-            display: inline-block;
-        }
-
-        .pace-on-track { background: var(--success); }
-        .pace-behind { background: var(--warning); }
-        .pace-danger { background: var(--danger); }
-
-        .mode-selection {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-
-        .mode-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 20px;
-            padding: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow-card);
-        }
-
-        .mode-card:hover {
-            transform: translateY(-8px);
-            background: var(--card-hover);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-        }
-
-        .mode-icon {
-            font-size: 3em;
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .mode-title {
-            color: var(--text-white);
-            font-size: 1.5em;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .mode-desc {
-            color: var(--text-light);
-            font-size: 0.95em;
-            line-height: 1.5;
-            margin-bottom: 20px;
-        }
-
-        .mode-features {
-            list-style: none;
-            text-align: left;
-        }
-
-        .mode-features li {
-            color: var(--text-light);
-            font-size: 0.9em;
-            padding: 6px 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .mode-features li:before {
-            content: '✓';
-            color: var(--text-white);
-            font-weight: bold;
-        }
-
-        .install-banner {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px;
-            display: none;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: var(--shadow-card);
-            animation: slideDown 0.5s ease;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .install-banner .content {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            color: var(--text-white);
-        }
-
-        .install-banner .icon {
-            font-size: 2em;
-        }
-
-        .install-banner .text h4 {
-            font-size: 1.1em;
-            margin-bottom: 3px;
-        }
-
-        .install-banner .text p {
-            font-size: 0.9em;
-            opacity: 0.9;
-        }
-
-        .install-banner .actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .install-btn {
-            background: white;
-            color: var(--primary);
-            border: none;
-            padding: 10px 25px;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .install-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(255,255,255,0.3);
-        }
-
-        .install-btn.secondary {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-        }
-
-        .question-container {
-            background: rgba(255, 255, 255, 0.98);
-            border-radius: 20px;
-            padding: 30px;
-            margin: 20px auto;
-            max-width: 1000px;
-            color: #333;
-            display: none;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-        }
-
-        .question-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .question-info {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .badge {
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
-        }
-
-        .badge-domain {
-            background: var(--primary);
-            color: white;
-        }
-
-        .badge-difficulty-easy {
-            background: var(--success);
-            color: white;
-        }
-
-        .badge-difficulty-medium {
-            background: var(--warning);
-            color: white;
-        }
-
-        .badge-difficulty-hard {
-            background: var(--danger);
-            color: white;
-        }
-
-        .question-actions {
-            display: flex;
-            gap: 12px;
-        }
-
-        .action-btn {
-            padding: 8px 18px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            font-size: 0.9em;
-        }
-
-        .flag-btn {
-            background: var(--warning);
-            color: white;
-        }
-
-        .flag-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(255,185,0,0.3);
-        }
-
-        .flag-btn.flagged {
-            background: var(--danger);
-        }
-
-        .skip-btn {
-            background: var(--primary);
-            color: white;
-        }
-
-        .skip-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(255,107,107,0.3);
-        }
-
-        .scenario {
-            background: #fff5f5;
-            border-left: 4px solid var(--primary);
-            padding: 18px;
-            margin-bottom: 25px;
-            border-radius: 10px;
-            line-height: 1.6;
-            color: #444;
-        }
-
-        .question-text {
-            font-size: 1.15em;
-            font-weight: 600;
-            margin-bottom: 20px;
-            line-height: 1.5;
-            color: #232F3E;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .option {
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            line-height: 1.5;
-        }
-
-        .option:hover {
-            border-color: var(--aws-orange);
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .option.selected {
-            background: #FFF3E0;
-            border-color: var(--aws-orange);
-        }
-
-        .option.correct {
-            background: #E8F5E9;
-            border-color: var(--success);
-        }
-
-        .option.incorrect {
-            background: #FFEBEE;
-            border-color: var(--danger);
-        }
-
-        .option-letter {
-            min-width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: var(--aws-blue);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        .option-text {
-            flex: 1;
-        }
-
-        .explanation {
-            background: linear-gradient(135deg, #f0f8ff, #f5faff);
-            border-radius: 12px;
-            padding: 25px;
-            margin-top: 25px;
-            display: none;
-            animation: fadeIn 0.5s ease;
-            border: 1px solid #d1e7ff;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .explanation h3 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            font-size: 1.3em;
-        }
-
-        .explanation-section {
-            margin-bottom: 18px;
-        }
-
-        .explanation-section h4 {
-            color: #555;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-        }
-
-        .strategy-tip {
-            background: #FFF5F5;
-            border-left: 4px solid var(--primary);
-            padding: 15px;
-            margin-top: 15px;
-            border-radius: 8px;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            margin-top: 25px;
-        }
-
-        .controls .btn {
-            flex: 1;
-        }
-
-        .btn {
-            padding: 12px 32px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: white;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255,107,107,0.4);
-        }
-
-        .btn-secondary {
-            background: linear-gradient(135deg, #6c757d, #5a6268);
-        }
-
-        .btn-secondary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(108,117,125,0.4);
-        }
-
-        .results-container {
-            background: rgba(255, 255, 255, 0.98);
-            border-radius: 20px;
-            padding: 35px;
-            color: #333;
-            display: none;
-            max-width: 1000px;
-            margin: 20px auto;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-        }
-
-        .results-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .score-circle {
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3em;
-            font-weight: bold;
-            color: white;
-            position: relative;
-            background: conic-gradient(var(--primary) 0deg, var(--primary) var(--score-deg), #e0e0e0 var(--score-deg));
-        }
-
-        .score-text {
-            background: white;
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #333;
-        }
-
-        .pass-fail {
-            font-size: 1.5em;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .pass { color: var(--success); }
-        .fail { color: var(--danger); }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .stat-card {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .stat-label {
-            color: #666;
-            font-size: 0.9em;
-            margin-bottom: 5px;
-        }
-
-        .stat-value {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: var(--aws-blue);
-        }
-
-        .domain-breakdown {
-            margin-top: 30px;
-        }
-
-        .domain-item {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .domain-name {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .domain-score {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .progress-bar {
-            width: 100px;
-            height: 8px;
-            background: #e0e0e0;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--primary);
-            transition: width 0.5s ease;
-        }
-
-        .loading {
-            text-align: center;
-            color: white;
-            font-size: 1.2em;
-            padding: 40px;
-        }
-
-        .spinner {
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top: 4px solid white;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 768px) {
-            .main-header h1 {
-                font-size: 2em;
-            }
-
-            .hero-section h2 {
-                font-size: 1.8em;
-            }
-
-            .mode-selection {
-                grid-template-columns: 1fr;
-            }
-
-            .controls {
-                flex-direction: column;
-            }
-
-            .controls .btn {
-                width: 100%;
-            }
-
-            .timer-section {
-                flex-direction: column;
-            }
-
-            .timer-box {
-                min-width: 100%;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .review-mode {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px auto;
-            max-width: 1000px;
-            display: none;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
-
-        .review-mode h3 {
-            color: var(--text-white);
-            margin-bottom: 15px;
-        }
-
-        .review-navigation {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .review-btn {
-            width: 45px;
-            height: 45px;
-            border: 2px solid rgba(255,255,255,0.4);
-            background: rgba(255,255,255,0.15);
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            color: white;
-        }
-
-        .review-btn.answered {
-            background: var(--success);
-            color: white;
-            border-color: var(--success);
-        }
-
-        .review-btn.flagged {
-            background: var(--warning);
-            color: white;
-            border-color: var(--warning);
-        }
-
-        .review-btn.current {
-            background: var(--primary);
-            color: white;
-            transform: scale(1.1);
-            border-color: var(--primary);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="description" content="Strategic AWS Certified Developer Associate DVA-C02 Exam Trainer - Master timing and pass the exam">
+  <meta name="theme-color" content="#FF9900">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#FF9900">
+  <title>AWS DVA-C02 Strategic Exam Trainer</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #FF6B6B;
+      --primary-dark: #EE5A5A;
+      --primary-light: #FF8787;
+      --card-bg: rgba(255, 255, 255, 0.15);
+      --card-hover: rgba(255, 255, 255, 0.25);
+      --text-white: #FFFF;
+      --text-light: rgba(255, 255, 255, 0.95);
+      --success: #48C774;
+      --danger: #FF3860;
+      --warning: #FFB900;
+      --shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.15);
+      --aws-orange: #ff9900;
+      --aws-blue: #0073bb;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #FF6B6B 0%, #FF8787 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .main-header { width: 100%; text-align: center; padding: 40px 20px 30px; background: rgba(0, 0, 0, 0.1); }
+    .main-header h1 { color: var(--text-white); font-size: 2.8em; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 15px; }
+    .main-header .tagline { color: var(--text-light); font-size: 1.1em; font-weight: 300; opacity: 0.95; }
+
+    .container { width: 100%; max-width: 1200px; padding: 20px; animation: fadeIn 0.6s ease-out; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    .hero-section { text-align: center; margin-bottom: 40px; padding: 20px; }
+    .hero-section h2 { color: var(--text-white); font-size: 2.2em; font-weight: 600; margin-bottom: 15px; }
+    .hero-section p { color: var(--text-light); font-size: 1.15em; max-width: 700px; margin: 0 auto; }
+
+    .features-card { background: var(--card-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 20px; padding: 30px; margin-bottom: 40px; box-shadow: var(--shadow-card); border: 1px solid rgba(255, 255, 255, 0.2); }
+    .features-card h3 { color: var(--text-white); font-size: 1.6em; margin-bottom: 20px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .features-card .subtitle { text-align: center; color: var(--text-light); margin-bottom: 25px; font-size: 1.05em; }
+
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+    .feature-item { display: flex; align-items: center; gap: 12px; color: var(--text-light); font-size: 0.95em; }
+    .feature-item .icon { font-size: 1.3em; }
+
+    .timer-section { display: flex; justify-content: center; gap: 20px; margin: 20px auto; max-width: 1200px; padding: 0 20px; flex-wrap: wrap; }
+    .timer-box { flex: 1; min-width: 180px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+    .timer-label { color: var(--text-light); font-size: 0.9em; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+    .timer-value { color: var(--text-white); font-size: 2em; font-weight: bold; font-feature-settings: "tnum"; }
+
+    .pace-indicator { padding: 6px 12px; border-radius: 20px; font-weight: bold; color: white; font-size: 0.85em; margin-top: 8px; display: inline-block; }
+    .pace-on-track { background: var(--success); }
+    .pace-behind { background: var(--warning); }
+    .pace-danger { background: var(--danger); }
+
+    .mode-selection { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px; }
+    .mode-card { background: var(--card-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 20px; padding: 30px; cursor: pointer; transition: all 0.3s ease; box-shadow: var(--shadow-card); }
+    .mode-card:hover { transform: translateY(-8px); background: var(--card-hover); box-shadow: 0 15px 40px rgba(0,0,0,0.25); }
+
+    .mode-icon { font-size: 3em; margin-bottom: 15px; display: block; }
+    .mode-title { color: var(--text-white); font-size: 1.5em; font-weight: 600; margin-bottom: 10px; }
+    .mode-desc { color: var(--text-light); font-size: 0.95em; line-height: 1.5; margin-bottom: 20px; }
+
+    .mode-features { list-style: none; text-align: left; }
+    .mode-features li { color: var(--text-light); font-size: 0.9em; padding: 6px 0; display: flex; align-items: center; gap: 8px; }
+    .mode-features li:before { content: '✓'; color: var(--text-white); font-weight: bold; }
+
+    .install-banner { background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; margin: 20px; display: none; align-items: center; justify-content: space-between; box-shadow: var(--shadow-card); animation: slideDown 0.5s ease; }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    .install-banner .content { display: flex; align-items: center; gap: 15px; color: var(--text-white); }
+    .install-banner .icon { font-size: 2em; }
+    .install-banner .text h4 { font-size: 1.1em; margin-bottom: 3px; }
+    .install-banner .text p { font-size: 0.9em; opacity: 0.9; }
+    .install-banner .actions { display: flex; gap: 10px; }
+    .install-btn { background: white; color: var(--primary); border: none; padding: 10px 25px; border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+    .install-btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(255,255,255,0.3); }
+    .install-btn.secondary { background: transparent; color: white; border: 2px solid white; }
+
+    .question-container { background: rgba(255, 255, 255, 0.98); border-radius: 20px; padding: 30px; margin: 20px auto; max-width: 1000px; color: #333; display: none; box-shadow: 0 10px 40px rgba(0,0,0,0.15); }
+    .question-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
+    .question-info { display: flex; gap: 12px; flex-wrap: wrap; }
+    .badge { padding: 6px 14px; border-radius: 20px; font-size: 0.85em; font-weight: 600; }
+    .badge-domain { background: var(--primary); color: white; }
+    .badge-difficulty-easy { background: var(--success); color: white; }
+    .badge-difficulty-medium { background: var(--warning); color: white; }
+    .badge-difficulty-hard { background: var(--danger); color: white; }
+
+    .question-actions { display: flex; gap: 12px; }
+    .action-btn { padding: 8px 18px; border: none; border-radius: 20px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; font-size: 0.9em; }
+    .flag-btn { background: var(--warning); color: white; }
+    .flag-btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(255,185,0,0.3); }
+    .flag-btn.flagged { background: var(--danger); }
+    .skip-btn { background: var(--primary); color: white; }
+    .skip-btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(255,107,107,0.3); }
+
+    .scenario { background: #fff5f5; border-left: 4px solid var(--primary); padding: 18px; margin-bottom: 25px; border-radius: 10px; line-height: 1.6; color: #444; }
+    .question-text { font-size: 1.15em; font-weight: 600; margin-bottom: 20px; line-height: 1.5; color: #232F3E; }
+
+    .options { display: flex; flex-direction: column; gap: 12px; }
+    .option { background: white; border: 2px solid #e0e0e0; border-radius: 10px; padding: 15px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: flex-start; gap: 12px; line-height: 1.5; }
+    .option:hover { border-color: var(--aws-orange); transform: translateX(5px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .option.selected { background: #FFF3E0; border-color: var(--aws-orange); }
+    .option.correct { background: #E8F5E9; border-color: var(--success); }
+    .option.incorrect { background: #FFEBEE; border-color: var(--danger); }
+    .option-letter { min-width: 30px; height: 30px; border-radius: 50%; background: var(--aws-blue); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    .option-text { flex: 1; }
+
+    .explanation { background: linear-gradient(135deg, #f0f8ff, #f5faff); border-radius: 12px; padding: 25px; margin-top: 25px; display: none; animation: fadeIn 0.5s ease; border: 1px solid #d1e7ff; }
+    .explanation h3 { color: var(--primary); margin-bottom: 15px; font-size: 1.3em; }
+    .explanation-section { margin-bottom: 18px; }
+    .explanation-section h4 { color: #555; margin-bottom: 10px; font-size: 1.1em; }
+    .strategy-tip { background: #FFF5F5; border-left: 4px solid var(--primary); padding: 15px; margin-top: 15px; border-radius: 8px; }
+
+    .controls { display: flex; justify-content: space-between; gap: 15px; margin-top: 25px; }
+    .controls .btn { flex: 1; }
+
+    .btn { padding: 12px 32px; border: none; border-radius: 25px; font-size: 1em; font-weight: 600; cursor: pointer; transition: all 0.3s ease; color: white; text-transform: uppercase; letter-spacing: 0.5px; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,107,107,0.4); }
+    .btn-secondary { background: linear-gradient(135deg, #6c757d, #5a6268); }
+    .btn-secondary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(108,117,125,0.4); }
+
+    .results-container { background: rgba(255, 255, 255, 0.98); border-radius: 20px; padding: 35px; color: #333; display: none; max-width: 1000px; margin: 20px auto; box-shadow: 0 10px 40px rgba(0,0,0,0.15); }
+    .results-header { text-align: center; margin-bottom: 30px; }
+    .score-circle { width: 150px; height: 150px; margin: 0 auto 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3em; font-weight: bold; color: white; position: relative; background: conic-gradient(var(--primary) 0deg, var(--primary) var(--score-deg), #e0e0e0 var(--score-deg)); }
+    .score-text { background: white; width: 130px; height: 130px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #333; }
+    .pass-fail { font-size: 1.5em; font-weight: bold; margin-bottom: 10px; }
+    .pass { color: var(--success); }
+    .fail { color: var(--danger); }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 30px 0; }
+    .stat-card { background: #f8f9fa; border-radius: 10px; padding: 20px; text-align: center; }
+    .stat-label { color: #666; font-size: 0.9em; margin-bottom: 5px; }
+    .stat-value { font-size: 1.8em; font-weight: bold; color: var(--aws-blue); }
+
+    .domain-breakdown { margin-top: 30px; }
+    .domain-item { background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+    .domain-name { font-weight: 600; color: #333; }
+    .domain-score { display: flex; align-items: center; gap: 10px; }
+    .progress-bar { width: 100px; height: 8px; background: #e0e0e0; border-radius: 4px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--primary); transition: width 0.5s ease; }
+
+    .loading { text-align: center; color: white; font-size: 1.2em; padding: 40px; }
+    .spinner { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid white; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 20px auto; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    @media (max-width: 768px) {
+      .main-header h1 { font-size: 2em; }
+      .hero-section h2 { font-size: 1.8em; }
+      .mode-selection { grid-template-columns: 1fr; }
+      .controls { flex-direction: column; }
+      .controls .btn { width: 100%; }
+      .timer-section { flex-direction: column; }
+      .timer-box { min-width: 100%; }
+      .features-grid { grid-template-columns: 1fr; }
+    }
+
+    .review-mode { background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; margin: 20px auto; max-width: 1000px; display: none; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+    .review-mode h3 { color: var(--text-white); margin-bottom: 15px; }
+    .review-navigation { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
+    .review-btn { width: 45px; height: 45px; border: 2px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.15); border-radius: 10px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; color: white; }
+    .review-btn.answered { background: var(--success); color: white; border-color: var(--success); }
+    .review-btn.flagged { background: var(--warning); color: white; border-color: var(--warning); }
+    .review-btn.current { background: var(--primary); color: white; transform: scale(1.1); border-color: var(--primary); }
+  </style>
 </head>
 <body>
-// Fixed resetQuiz function
-window.resetQuiz = function() {
-    console.log('🔄 Fixed resetQuiz running...');
-    
-    // Clear all timers
-    for (let i = 1; i < 9999; i++) {
-        window.clearInterval(i);
-        window.clearTimeout(i);
-    }
-    
-    // Reset trainer state WITHOUT calling resetQuiz again
-    if (window.trainer) {
-        window.trainer.currentQuestionIndex = 0;
-        window.trainer.userAnswers = [];
-        window.trainer.score = 0;
-        window.trainer.quizStartTime = null;
-        window.trainer.questionStartTime = null;
-        window.trainer.timePerQuestion = [];
-        window.trainer.flaggedQuestions.clear();
-        window.trainer.skippedQuestions.clear();
-        window.trainer.shuffledAnswers.clear();
-    }
-    
-    // Clear storage
-    localStorage.clear();
-    sessionStorage.clear();
-    
-    // Hide ALL screens first
-    document.getElementById('resultsScreen').style.display = 'none';
-    document.getElementById('quizContainer').style.display = 'none';
-    document.querySelectorAll('.performance-analysis, [class*="Performance"]').forEach(el => {
-        el.style.display = 'none';
-    });
-    
-    // Show welcome screen
-    const welcomeScreen = document.getElementById('welcomeScreen');
-    if (welcomeScreen) {
-        welcomeScreen.style.display = 'block';
-    }
-    
-    // Scroll to top
-    window.scrollTo(0, 0);
-    
-    console.log('✅ Quiz reset complete - ready for new quiz');
-};
-    
-    <div class="main-header">
-        <h1>🎯 AWS DVA-C02 Strategic Exam Trainer</h1>
-        <p class="tagline">Master exam timing and strategy with 500+ realistic scenarios · Turn 72% fails into 85+ passes</p>
+  <div class="main-header">
+    <h1>🎯 AWS DVA-C02 Strategic Exam Trainer</h1>
+    <p class="tagline">Master exam timing and strategy with 500+ realistic scenarios · Turn 72% fails into 85+ passes</p>
+  </div>
+
+  <div class="install-banner" id="installBanner">
+    <div class="content">
+      <span class="icon">📱</span>
+      <div class="text">
+        <h4>Install for Offline Practice</h4>
+        <p>Practice anytime, anywhere - even without internet</p>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="install-btn" onclick="installPWA()">Install App</button>
+      <button class="install-btn secondary" onclick="dismissInstall()">Later</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="hero-section">
+      <h2>Strategic Exam Training</h2>
+      <p>Failed by 2 questions? Time management, not knowledge, was the issue. Master the strategy.</p>
     </div>
 
-    <div class="install-banner" id="installBanner">
-        <div class="content">
-            <span class="icon">📱</span>
-            <div class="text">
-                <h4>Install for Offline Practice</h4>
-                <p>Practice anytime, anywhere - even without internet</p>
-            </div>
-        </div>
-        <div class="actions">
-            <button class="install-btn" onclick="installPWA()">Install App</button>
-            <button class="install-btn secondary" onclick="dismissInstall()">Later</button>
-        </div>
+    <div class="features-card">
+      <h3>🎯 Professional Question Bank</h3>
+      <p class="subtitle"><strong>500+ Questions</strong> covering all DVA-C02 services per official exam guide</p>
+      <div class="features-grid">
+        <div class="feature-item"><span class="icon">🔒</span><span>150+ Security questions</span></div>
+        <div class="feature-item"><span class="icon">🚀</span><span>130+ Deployment scenarios</span></div>
+        <div class="feature-item"><span class="icon">⚡</span><span>120+ Performance cases</span></div>
+        <div class="feature-item"><span class="icon">💰</span><span>100+ Cost optimization</span></div>
+        <div class="feature-item"><span class="icon">🔄</span><span>Smart question rotation</span></div>
+        <div class="feature-item"><span class="icon">🧠</span><span>Anti-memorization system</span></div>
+      </div>
     </div>
 
-    <div class="container">
-        <div class="hero-section">
-            <h2>Strategic Exam Training</h2>
-            <p>Failed by 2 questions? Time management, not knowledge, was the issue. Master the strategy.</p>
-        </div>
+    <div class="mode-selection" id="modeSelection">
+      <div class="mode-card" onclick="startMode('triage')">
+        <span class="mode-icon">⚡</span>
+        <div class="mode-title">Triage Training</div>
+        <p class="mode-desc">Learn to identify quick wins vs time sinks in under 30 seconds</p>
+        <ul class="mode-features">
+          <li>Question difficulty recognition</li>
+          <li>30-second decision drills</li>
+          <li>Strategic skip/answer patterns</li>
+        </ul>
+      </div>
 
-        <div class="features-card">
-            <h3>🎯 Professional Question Bank</h3>
-            <p class="subtitle"><strong>500+ Questions</strong> covering all DVA-C02 services per official exam guide</p>
-            <div class="features-grid">
-                <div class="feature-item">
-                    <span class="icon">🔒</span>
-                    <span>150+ Security questions</span>
-                </div>
-                <div class="feature-item">
-                    <span class="icon">🚀</span>
-                    <span>130+ Deployment scenarios</span>
-                </div>
-                <div class="feature-item">
-                    <span class="icon">⚡</span>
-                    <span>120+ Performance cases</span>
-                </div>
-                <div class="feature-item">
-                    <span class="icon">💰</span>
-                    <span>100+ Cost optimization</span>
-                </div>
-                <div class="feature-item">
-                    <span class="icon">🔄</span>
-                    <span>Smart question rotation</span>
-                </div>
-                <div class="feature-item">
-                    <span class="icon">🧠</span>
-                    <span>Anti-memorization system</span>
-                </div>
-            </div>
-        </div>
+      <div class="mode-card" onclick="startMode('speed')">
+        <span class="mode-icon">🔥</span>
+        <div class="mode-title">Speed Rounds</div>
+        <p class="mode-desc">90-second maximum per question - build exam pace muscle memory</p>
+        <ul class="mode-features">
+          <li>Hard 90-second time limits</li>
+          <li>Automatic progression</li>
+          <li>Pace analytics</li>
+        </ul>
+      </div>
 
-        <div class="mode-selection" id="modeSelection">
-            <div class="mode-card" onclick="startMode('triage')">
-                <span class="mode-icon">⚡</span>
-                <div class="mode-title">Triage Training</div>
-                <p class="mode-desc">Learn to identify quick wins vs time sinks in under 30 seconds</p>
-                <ul class="mode-features">
-                    <li>Question difficulty recognition</li>
-                    <li>30-second decision drills</li>
-                    <li>Strategic skip/answer patterns</li>
-                </ul>
-            </div>
+      <div class="mode-card" onclick="startMode('exam')">
+        <span class="mode-icon">🎯</span>
+        <div class="mode-title">Full Exam Simulation</div>
+        <p class="mode-desc">Real 130-minute, 65-question exam with strategic coaching</p>
+        <ul class="mode-features">
+          <li>Authentic time pressure</li>
+          <li>Real exam difficulty</li>
+          <li>Strategic alerts & guidance</li>
+        </ul>
+      </div>
 
-            <div class="mode-card" onclick="startMode('speed')">
-                <span class="mode-icon">🔥</span>
-                <div class="mode-title">Speed Rounds</div>
-                <p class="mode-desc">90-second maximum per question - build exam pace muscle memory</p>
-                <ul class="mode-features">
-                    <li>Hard 90-second time limits</li>
-                    <li>Automatic progression</li>
-                    <li>Pace analytics</li>
-                </ul>
-            </div>
-
-            <div class="mode-card" onclick="startMode('exam')">
-                <span class="mode-icon">🎯</span>
-                <div class="mode-title">Full Exam Simulation</div>
-                <p class="mode-desc">Real 130-minute, 65-question exam with strategic coaching</p>
-                <ul class="mode-features">
-                    <li>Authentic time pressure</li>
-                    <li>Real exam difficulty</li>
-                    <li>Strategic alerts & guidance</li>
-                </ul>
-            </div>
-
-            <div class="mode-card" onclick="startMode('strategic')">
-                <span class="mode-icon">🧠</span>
-                <div class="mode-title">Strategic Practice</div>
-                <p class="mode-desc">Learn mark/skip/return workflow with complex scenarios</p>
-                <ul class="mode-features">
-                    <li>Flag & review system</li>
-                    <li>Time allocation practice</li>
-                    <li>Decision tree training</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="timer-section" id="timerSection" style="display: none;">
-            <div class="timer-box">
-                <div class="timer-label">Global Timer</div>
-                <div class="timer-value" id="globalTimer">00:00</div>
-            </div>
-            <div class="timer-box">
-                <div class="timer-label">Question Time</div>
-                <div class="timer-value" id="questionTimer">00:00</div>
-            </div>
-            <div class="timer-box">
-                <div class="timer-label">Pace Status</div>
-                <div class="timer-value" id="paceValue">--</div>
-                <div class="pace-indicator pace-on-track" id="paceIndicator">ON TRACK</div>
-            </div>
-        </div>
-
-        <div class="review-mode" id="reviewMode">
-            <h3>📋 Review Navigation</h3>
-            <div class="review-navigation" id="reviewNavigation"></div>
-        </div>
-
-        <div class="question-container" id="questionContainer">
-            <div class="question-header">
-                <div class="question-info">
-                    <span class="badge badge-domain" id="domainBadge">Domain 1</span>
-                    <span class="badge badge-difficulty-medium" id="difficultyBadge">Medium</span>
-                    <span class="badge" id="questionNumber">Q1 of 65</span>
-                </div>
-                <div class="question-actions">
-                    <button class="action-btn flag-btn" id="flagBtn" onclick="toggleFlag()">🚩 Flag</button>
-                    <button class="action-btn skip-btn" onclick="skipQuestion()">⏭️ Skip</button>
-                </div>
-            </div>
-            
-            <div class="scenario" id="scenario"></div>
-            <div class="question-text" id="questionText"></div>
-            
-            <div class="options" id="options"></div>
-            
-            <div class="explanation" id="explanation">
-                <h3>📚 Explanation</h3>
-                <div class="explanation-section">
-                    <h4>✅ Correct Answer:</h4>
-                    <p id="correctExplanation"></p>
-                </div>
-                <div class="explanation-section">
-                    <h4>❌ Why Other Options Are Wrong:</h4>
-                    <div id="wrongExplanations"></div>
-                </div>
-                <div class="strategy-tip">
-                    <h4>💡 Exam Strategy Tip:</h4>
-                    <p id="strategyTip"></p>
-                </div>
-            </div>
-            
-            <div class="controls">
-                <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()">Previous</button>
-                <button class="btn btn-primary" id="submitBtn" onclick="submitAnswer()">Submit Answer</button>
-                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" style="display: none;">Next Question</button>
-            </div>
-        </div>
-
-        <div class="results-container" id="resultsContainer">
-            <div class="results-header">
-                <h2>📊 Exam Results</h2>
-                <div class="score-circle" style="--score-deg: 0deg;">
-                    <div class="score-text" id="scoreText">0%</div>
-                </div>
-                <div class="pass-fail" id="passFail">CALCULATING...</div>
-                <p id="resultMessage"></p>
-            </div>
-            
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-label">Questions Correct</div>
-                    <div class="stat-value" id="correctCount">0/0</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Time Used</div>
-                    <div class="stat-value" id="timeUsed">00:00</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Avg Time/Question</div>
-                    <div class="stat-value" id="avgTime">0s</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Questions Flagged</div>
-                    <div class="stat-value" id="flaggedCount">0</div>
-                </div>
-            </div>
-            
-            <div class="domain-breakdown">
-                <h3>Domain Performance</h3>
-                <div id="domainResults"></div>
-            </div>
-            
-            <div class="controls">
-                <button class="btn btn-primary" onclick="reviewAnswers()">Review Answers</button>
-                <button class="btn btn-secondary" onclick="resetQuiz()">Start New Session</button>
-            </div>
-        </div>
-
-        <div class="loading" id="loading" style="display: none;">
-            <div class="spinner"></div>
-            <p>Loading questions...</p>
-        </div>
+      <div class="mode-card" onclick="startMode('strategic')">
+        <span class="mode-icon">🧠</span>
+        <div class="mode-title">Strategic Practice</div>
+        <p class="mode-desc">Learn mark/skip/return workflow with complex scenarios</p>
+        <ul class="mode-features">
+          <li>Flag & review system</li>
+          <li>Time allocation practice</li>
+          <li>Decision tree training</li>
+        </ul>
+      </div>
     </div>
 
-    <script>
+    <div class="timer-section" id="timerSection" style="display: none;">
+      <div class="timer-box">
+        <div class="timer-label">Global Timer</div>
+        <div class="timer-value" id="globalTimer">00:00</div>
+      </div>
+      <div class="timer-box">
+        <div class="timer-label">Question Time</div>
+        <div class="timer-value" id="questionTimer">00:00</div>
+      </div>
+      <div class="timer-box">
+        <div class="timer-label">Pace Status</div>
+        <div class="timer-value" id="paceValue">--</div>
+        <div class="pace-indicator pace-on-track" id="paceIndicator">ON TRACK</div>
+      </div>
+    </div>
 
-// ULTRA AGGRESSIVE WALLET KILLER - Must be FIRST script in file
-(function() {
-    'use strict';
-    
-    // Freeze the window object to prevent modifications
-    const criticalProps = ['ethereum', 'tronWeb', 'solana', 'walletRouter'];
-    criticalProps.forEach(prop => {
-        Object.defineProperty(window, prop, {
-            get: () => undefined,
-            set: () => {},
-            configurable: false,
-            enumerable: false
-        });
-    });
-    
-    // Override Object.defineProperty itself
-    const original = Object.defineProperty;
-    Object.defineProperty = new Proxy(original, {
+    <div class="review-mode" id="reviewMode">
+      <h3>📋 Review Navigation</h3>
+      <div class="review-navigation" id="reviewNavigation"></div>
+    </div>
+
+    <div class="question-container" id="questionContainer">
+      <div class="question-header">
+        <div class="question-info">
+          <span class="badge badge-domain" id="domainBadge">Domain 1</span>
+          <span class="badge badge-difficulty-medium" id="difficultyBadge">Medium</span>
+          <span class="badge" id="questionNumber">Q1 of 65</span>
+        </div>
+        <div class="question-actions">
+          <button class="action-btn flag-btn" id="flagBtn" onclick="toggleFlag()">🚩 Flag</button>
+          <button class="action-btn skip-btn" onclick="skipQuestion()">⏭️ Skip</button>
+        </div>
+      </div>
+
+      <div class="scenario" id="scenario"></div>
+      <div class="question-text" id="questionText"></div>
+      <div class="options" id="options"></div>
+
+      <div class="explanation" id="explanation">
+        <h3>📚 Explanation</h3>
+        <div class="explanation-section">
+          <h4>✅ Correct Answer:</h4>
+          <p id="correctExplanation"></p>
+        </div>
+        <div class="explanation-section">
+          <h4>❌ Why Other Options Are Wrong:</h4>
+          <div id="wrongExplanations"></div>
+        </div>
+        <div class="strategy-tip">
+          <h4>💡 Exam Strategy Tip:</h4>
+          <p id="strategyTip"></p>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()">Previous</button>
+        <button class="btn btn-primary" id="submitBtn" onclick="submitAnswer()">Submit Answer</button>
+        <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" style="display: none;">Next Question</button>
+      </div>
+    </div>
+
+    <div class="results-container" id="resultsContainer">
+      <div class="results-header">
+        <h2>📊 Exam Results</h2>
+        <div class="score-circle" style="--score-deg: 0deg;">
+          <div class="score-text" id="scoreText">0%</div>
+        </div>
+        <div class="pass-fail" id="passFail">CALCULATING...</div>
+        <p id="resultMessage"></p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Questions Correct</div><div class="stat-value" id="correctCount">0/0</div></div>
+        <div class="stat-card"><div class="stat-label">Time Used</div><div class="stat-value" id="timeUsed">00:00</div></div>
+        <div class="stat-card"><div class="stat-label">Avg Time/Question</div><div class="stat-value" id="avgTime">0s</div></div>
+        <div class="stat-card"><div class="stat-label">Questions Flagged</div><div class="stat-value" id="flaggedCount">0</div></div>
+      </div>
+
+      <div class="domain-breakdown">
+        <h3>Domain Performance</h3>
+        <div id="domainResults"></div>
+      </div>
+
+      <div class="controls">
+        <button class="btn btn-primary" onclick="reviewAnswers()">Review Answers</button>
+        <button class="btn btn-secondary" onclick="resetQuiz()">Start New Session</button>
+        <button class="btn btn-primary" onclick="(resetQuiz(), startMode('exam'))">Take Another Exam</button>
+      </div>
+    </div>
+
+    <div class="loading" id="loading" style="display: none;">
+      <div class="spinner"></div>
+      <p>Loading questions...</p>
+    </div>
+  </div>
+
+  <script>
+    // ULTRA AGGRESSIVE WALLET KILLER - Must be FIRST script in file
+    (function() {
+      'use strict';
+      const criticalProps = ['ethereum', 'tronWeb', 'solana', 'walletRouter'];
+      criticalProps.forEach(prop => {
+        Object.defineProperty(window, prop, { get: () => undefined, set: () => {}, configurable: false, enumerable: false });
+      });
+      const original = Object.defineProperty;
+      Object.defineProperty = new Proxy(original, {
         apply(target, thisArg, args) {
-            const [obj, prop] = args;
-            if (obj === window && criticalProps.includes(prop)) {
-                return obj;
-            }
-            return Reflect.apply(target, thisArg, args);
+          const [obj, prop] = args;
+          if (obj === window && criticalProps.includes(prop)) { return obj; }
+          return Reflect.apply(target, thisArg, args);
         }
-    });
-    
-    // Block all chrome-extension URLs
-    const originalCreateElement = document.createElement;
-    document.createElement = function(tagName) {
+      });
+      const originalCreateElement = document.createElement;
+      document.createElement = function(tagName) {
         const element = originalCreateElement.call(document, tagName);
         if (tagName.toLowerCase() === 'script') {
-            const originalSetAttribute = element.setAttribute;
-            element.setAttribute = function(name, value) {
-                if (name === 'src' && value.includes('chrome-extension://')) {
-                    console.log('🚫 Blocked:', value);
-                    return;
-                }
-                return originalSetAttribute.call(this, name, value);
-            };
+          const originalSetAttribute = element.setAttribute;
+          element.setAttribute = function(name, value) {
+            if (name === 'src' && value && value.includes('chrome-extension://')) { console.log('🚫 Blocked:', value); return; }
+            return originalSetAttribute.call(this, name, value);
+          }
         }
         return element;
-    };
-    
-    console.log('🛡️ ULTRA WALLET KILLER ACTIVE');
-})();
+      }
+      console.log('🛡️ ULTRA WALLET KILLER ACTIVE');
+    })();
+  </script>
 
-
-
-
-
-
-        // Map questionBank to questions array
-if (typeof questionBank !== 'undefined') {
-    // If questionBank is an object with categories
-    if (typeof questionBank === 'object' && !Array.isArray(questionBank)) {
-        // Combine all questions from all categories into one array
-        window.questions = [];
-        for (let category in questionBank) {
-            if (Array.isArray(questionBank[category])) {
-                window.questions = window.questions.concat(questionBank[category]);
-                console.log(`Added ${questionBank[category].length} questions from ${category}`);
-            }
-        }
-        console.log(`Total questions loaded: ${window.questions.length}`);
-    } else if (Array.isArray(questionBank)) {
-        // If it's already an array
-        window.questions = questionBank;
-    }
-} else {
-    console.error('No question bank found!');
-    // Create fallback questions
-    window.questions = [
-        {
-            question: "Sample question for testing",
-            options: ["Option A", "Option B", "Option C", "Option D"],
-            correct: 0,
-            explanation: "This is a test question"
-        }
-    ];
-}
-
-// Verify questions are loaded
-console.log('Questions ready:', window.questions?.length || 0);
-        // Question Bank - AWS DVA-C02 Specific Questions
+  <script>
+    // Define the question bank FIRST
+      // Question Bank - AWS DVA-C02 Specific Questions
         const questionBank = [
             // Domain 1: Development with AWS Services (32%)
 {
@@ -13285,593 +12524,93 @@ console.log('Questions ready:', window.questions?.length || 0);
     }
 }
 ]; // Close the questions array
-// Find the exact line where questionBank array closes
-fetch(window.location.href)
-    .then(response => response.text())
-    .then(html => {
-        const lines = html.split('\n');
-        
-        // Find where questionBank ends
-        for(let i = 0; i < lines.length; i++) {
-            if (lines[i].includes('const questionBank = [')) {
-                console.log(`✅ questionBank starts at line ${i + 1}`);
-            }
-            
-            // Look for the closing of questionBank
-            if (lines[i].trim() === '];' && i > 1000) {  // After line 1000 to skip early code
-                console.log(`📍 Possible questionBank end at line ${i + 1}`);
-                console.log("Previous line:", lines[i-1].substring(0, 100));
-                console.log("This line:", lines[i]);
-                console.log("Next line:", lines[i+1].substring(0, 100));
-                
-                // Check if this is really the end of questionBank
-                if (lines[i-1].includes('}')) {
-                    console.log(`✅ This looks like the END of questionBank array at line ${i + 1}`);
-                    console.log("\n⚠️ ADD THE startMode FUNCTION AFTER LINE", i + 1);
-                    break;
-                }
-            }
+    
+  </script>
+
+  <script>
+    function initializeQuestions() {
+      if (typeof questionBank === 'object' && !Array.isArray(questionBank)) {
+        window.questions = [];
+        for (const cat in questionBank) {
+          if (Array.isArray(questionBank[cat])) {
+            window.questions = window.questions.concat(questionBank[cat]);
+          }
         }
-    });        
-
-// PASTE ALL OF THIS AFTER THE LINE ABOVE:
-
-// Make questions available
-const questions = questionBank;
-console.log("Questions loaded:", questions.length);
-
-// Quiz state variables
-let currentQuestionIndex = 0;
-let score = 0;
-let userAnswers = [];
-let currentMode = 'practice';
-let modeQuestions = [];
-
-// Define mode configurations
-const modeConfigs = {
-    triage: { name: 'Triage Training', questionCount: 20 },
-    speed: { name: 'Speed Round', questionCount: 30 },
-    exam: { name: 'Full Exam', questionCount: 65 },
-    strategic: { name: 'Strategic Practice', questionCount: 40 },
-    practice: { name: 'Practice Mode', questionCount: 50 }
-};
-
-// Enhanced quiz functionality
-let currentQuiz = {
-    mode: null,
-    questions: [],
-    currentIndex: 0,
-    answers: [],
-    startTime: null,
-    questionTimes: [],
-    flagged: [],
-    score: 0
-};
-
-function startMode(mode) {
-    console.log("Starting quiz mode:", mode);
-    
-    // Get mode configuration
-    const config = modeConfigs[mode] || modeConfigs.practice;
-    
-    // Reset quiz data
-    currentQuiz = {
-        mode: mode,
-        questions: [],
-        currentIndex: 0,
-        answers: [],
-        startTime: Date.now(),
-        questionTimes: [],
-        flagged: [],
-        score: 0
-    };
-    
-    // Select random questions for this mode
-    const shuffled = [...questions].sort(() => Math.random() - 0.5);
-    currentQuiz.questions = shuffled.slice(0, config.questionCount);
-    
-    // Hide welcome screen
-    const welcomeScreen = document.querySelector('.welcome-container, .home-screen, #welcome');
-    if (welcomeScreen) welcomeScreen.style.display = 'none';
-    
-    // Create or show quiz container
-    showQuizScreen();
-    
-    // Load first question
-    loadQuestion(0);
-    
-    // Start timer
-    startQuizTimer();
-}
-
-function showQuizScreen() {
-    let quizContainer = document.getElementById('quiz-container');
-    
-    if (!quizContainer) {
-        quizContainer = document.createElement('div');
-        quizContainer.id = 'quiz-container';
-        quizContainer.innerHTML = `
-            <div class="quiz-header">
-                <h2 id="mode-title">${modeConfigs[currentQuiz.mode]?.name || 'Practice Mode'}</h2>
-                <div class="quiz-progress">
-                    <span id="question-counter">Question 1 of ${currentQuiz.questions.length}</span>
-                    <span id="timer">00:00</span>
-                </div>
-            </div>
-            
-            <div class="question-section">
-                <h3 id="question-text"></h3>
-                <div id="options-list" class="options-container"></div>
-            </div>
-            
-            <div class="quiz-navigation">
-                <button onclick="previousQuestion()" id="prev-btn">Previous</button>
-                <button onclick="flagQuestion()" id="flag-btn">Flag</button>
-                <button onclick="nextQuestion()" id="next-btn">Next</button>
-                <button onclick="finishQuiz()" id="finish-btn" style="display:none;">Finish</button>
-            </div>
-        `;
-        document.body.appendChild(quizContainer);
+      } else if (Array.isArray(questionBank)) {
+        window.questions = questionBank.slice();
+      } else {
+        console.error('No valid question bank found, using fallback');
+        window.questions = [{
+          question: "Sample question for testing",
+          options: ["Option A", "Option B", "Option C", "Option D"],
+          correct: 0,
+          explanation: "This is a test question"
+        }];
+      }
+      console.log('Questions ready:', window.questions?.length || 0);
+	  
     }
-    
-    quizContainer.style.display = 'block';
-}
 
-function loadQuestion(index) {
-    if (index >= currentQuiz.questions.length || index < 0) return;
-    
-    const question = currentQuiz.questions[index];
-    currentQuiz.currentIndex = index;
-    
-    // Update question text
-    document.getElementById('question-text').textContent = question.question;
-    document.getElementById('question-counter').textContent = 
-        `Question ${index + 1} of ${currentQuiz.questions.length}`;
-    
-    // Update options
-    const optionsList = document.getElementById('options-list');
-    optionsList.innerHTML = '';
-    
-    question.options.forEach((option, i) => {
-        const optionEl = document.createElement('div');
-        optionEl.className = 'option-item';
-        optionEl.innerHTML = `
-            <input type="radio" id="option-${i}" name="answer" value="${i}">
-            <label for="option-${i}">${option}</label>
-        `;
-        optionEl.onclick = () => selectOption(i);
-        optionsList.appendChild(optionEl);
-    });
-    
-    // Restore previous answer if exists
-    if (currentQuiz.answers[index] !== undefined) {
-        const radio = document.getElementById(`option-${currentQuiz.answers[index]}`);
-        if (radio) radio.checked = true;
-    }
-    
-    // Update navigation buttons
-    document.getElementById('prev-btn').disabled = (index === 0);
-    document.getElementById('next-btn').style.display = 
-        (index === currentQuiz.questions.length - 1) ? 'none' : 'inline-block';
-    document.getElementById('finish-btn').style.display = 
-        (index === currentQuiz.questions.length - 1) ? 'inline-block' : 'none';
-}
-
-function selectOption(optionIndex) {
-    currentQuiz.answers[currentQuiz.currentIndex] = optionIndex;
-}
-
-function nextQuestion() {
-    saveCurrentAnswer();
-    if (currentQuiz.currentIndex < currentQuiz.questions.length - 1) {
-        loadQuestion(currentQuiz.currentIndex + 1);
-    }
-}
-
-function previousQuestion() {
-    saveCurrentAnswer();
-    if (currentQuiz.currentIndex > 0) {
-        loadQuestion(currentQuiz.currentIndex - 1);
-    }
-}
-
-function flagQuestion() {
-    const index = currentQuiz.currentIndex;
-    if (currentQuiz.flagged.includes(index)) {
-        currentQuiz.flagged = currentQuiz.flagged.filter(i => i !== index);
-        document.getElementById('flag-btn').textContent = 'Flag';
-    } else {
-        currentQuiz.flagged.push(index);
-        document.getElementById('flag-btn').textContent = 'Unflag';
-    }
-}
-
-function saveCurrentAnswer() {
-    const selected = document.querySelector('input[name="answer"]:checked');
-    if (selected) {
-        currentQuiz.answers[currentQuiz.currentIndex] = parseInt(selected.value);
-    }
-}
-
-function finishQuiz() {
-    saveCurrentAnswer();
-    calculateResults();
-}
-
-function calculateResults() {
-    let correct = 0;
-    
-    currentQuiz.questions.forEach((question, i) => {
-        if (currentQuiz.answers[i] === question.correct) {
-            correct++;
-        }
-    });
-    
-    const totalTime = Math.round((Date.now() - currentQuiz.startTime) / 1000);
-    const score = Math.round((correct / currentQuiz.questions.length) * 100);
-    
-    const results = {
-        score: score,
-        correct: correct,
-        total: currentQuiz.questions.length,
-        time: totalTime,
-        flagged: currentQuiz.flagged.length,
-        mode: currentQuiz.mode,
-        date: new Date().toISOString()
-    };
-    
-    // Save results
-    localStorage.setItem('lastQuizResults', JSON.stringify(results));
-    
-    // Show results screen
-    showResultsScreen(results);
-}
-
-function showResultsScreen(results) {
-    // Hide quiz container
-    document.getElementById('quiz-container').style.display = 'none';
-    
-    // Create or update results screen
-    let resultsScreen = document.getElementById('results-screen');
-    if (!resultsScreen) {
-        resultsScreen = document.createElement('div');
-        resultsScreen.id = 'results-screen';
-        document.body.appendChild(resultsScreen);
-    }
-    
-    resultsScreen.innerHTML = `
-        <h2>📊 Performance Analysis</h2>
-        <div class="results-stats">
-            <div class="stat-box">
-                <div class="stat-value">${results.score}%</div>
-                <div class="stat-label">Final Score</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-value">${results.correct}/${results.total}</div>
-                <div class="stat-label">Correct Answers</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-value">${Math.floor(results.time / 60)}</div>
-                <div class="stat-label">Total Minutes</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-value">${results.score >= 70 ? 'PASS ✅' : 'FAIL ❌'}</div>
-                <div class="stat-label">Result</div>
-            </div>
-        </div>
-        <div class="results-actions">
-            <button onclick="location.reload()">Take Another Exam</button>
-            <button onclick="reviewQuiz()">Review Answers</button>
-        </div>
-    `;
-    
-    resultsScreen.style.display = 'block';
-}
-
-function startQuizTimer() {
-    setInterval(() => {
-        if (currentQuiz.startTime) {
-            const elapsed = Math.floor((Date.now() - currentQuiz.startTime) / 1000);
-            const minutes = Math.floor(elapsed / 60);
-            const seconds = elapsed % 60;
-            const timerEl = document.getElementById('timer');
-            if (timerEl) {
-                timerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            }
-        }
-    }, 1000);
-}
-
-// Make functions globally available
-window.startMode = startMode;
-window.nextQuestion = nextQuestion;
-window.previousQuestion = previousQuestion;
-window.flagQuestion = flagQuestion;
-window.finishQuiz = finishQuiz;
-window.reviewQuiz = function() {
-    alert('Review feature coming soon!');
-};
-
-console.log("Quiz system initialized!");
-
-// KEEP ALL YOUR SERVICE WORKER CODE BELOW THIS LINE
-// Don't delete anything below here!
-
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-            .then(registration => {
-                console.log('ServiceWorker registration successful');
-                
-                // Listen for updates
-                registration.addEventListener('updatefound', () => {
-                    console.log('New service worker available');
-                });
-            })
-            .catch(err => console.log('ServiceWorker registration failed: ', err));
-    });
-}
-      
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent Chrome 67 and earlier from automatically showing the prompt
-    e.preventDefault();
-    // Stash the event so it can be triggered later
-    deferredPrompt = e;
-    console.log('Install prompt ready');
-    
-    // You could show a custom install button here if you want
-// ============= DVA QUIZ COMPLETE FIX =============
-// Add this at the END of your script, right before </script>
-
-// Fix 1: Map questionBank to questions if needed
-if (typeof questions === 'undefined' && typeof questionBank !== 'undefined') {
-    window.questions = [];
-    for (let category in questionBank) {
-        if (Array.isArray(questionBank[category])) {
-            window.questions = window.questions.concat(questionBank[category]);
-        }
-    }
-    console.log('Questions loaded:', window.questions.length);
-}
-
-// Fix 2: Override broken startMode
-window.startMode = function(mode) {
-    console.log('Starting DVA Quiz - Mode:', mode);
-    
-    // Hide all screens
-    document.querySelectorAll('.welcome-container, .mode-selection, .container, #welcomeContainer').forEach(el => {
-        if (el) el.style.display = 'none';
-    });
-    
-    // Show quiz container
-    const quizContainer = document.getElementById('quizContainer');
-    if (quizContainer) {
-        quizContainer.style.display = 'block';
-        quizContainer.style.opacity = '1';
-        quizContainer.style.filter = 'none';
-        
-        // Remove any modal overlays
-        document.querySelectorAll('.modal, .modal-backdrop, .overlay').forEach(el => {
-            el.style.display = 'none';
-        });
-        
-        // If using trainer object
-        if (typeof trainer !== 'undefined') {
-            trainer.currentMode = mode;
-            trainer.selectedQuestions = questions.slice(0, 10); // Start with 10 questions
-            trainer.currentQuestionIndex = 0;
-            trainer.userAnswers = [];
-            trainer.showQuestion();
-        }
-    } else {
-        // Create simple quiz if container doesn't exist
-        createSimpleQuiz(mode);
-    }
-};
-
-// Fix 3: Create simple quiz UI if needed
-function createSimpleQuiz(mode) {
-    const quizHTML = `
-        <div id="simpleQuiz" style="
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 800px;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-            z-index: 9999;
-        ">
-            <h2>DVA Practice Quiz - ${mode}</h2>
-            <div id="questionArea">Loading questions...</div>
-            <div id="quizControls" style="margin-top: 20px;">
-                <button onclick="nextQuestion()" style="
-                    padding: 10px 30px;
-                    background: #007bff;
-                    color: white;
-                    border: none;
-                    border-radius: 5px;
-                    cursor: pointer;
-                ">Next Question</button>
-            </div>
-        </div>
-    `;
-    
-    document.body.insertAdjacentHTML('beforeend', quizHTML);
-    
-    // Initialize quiz
-    window.currentQuizState = {
-        mode: mode,
-        questions: questions.slice(0, 20),
-        currentIndex: 0,
-        answers: [],
-        score: 0
-    };
-    
-    showQuestion();
-}
-
-// Override resetQuiz WITHOUT the loop
-window.resetQuiz = function() {
-    console.log('🔄 Fixed resetQuiz running...');
-    
-    // Clear all timers
-    for (let i = 1; i < 9999; i++) {
-        window.clearInterval(i);
-        window.clearTimeout(i);
-    }
-    
-    // Reset trainer state WITHOUT calling resetQuiz again
-    if (window.trainer) {
+    window.resetQuiz = function() {
+      console.log('🔄 resetQuiz running...');
+      for (let i = 1; i < 9999; i++) { window.clearInterval(i); window.clearTimeout(i); }
+      if (window.trainer) {
         window.trainer.currentQuestionIndex = 0;
         window.trainer.userAnswers = [];
         window.trainer.score = 0;
         window.trainer.quizStartTime = null;
         window.trainer.questionStartTime = null;
         window.trainer.timePerQuestion = [];
-        window.trainer.flaggedQuestions.clear();
-        window.trainer.skippedQuestions.clear();
-        window.trainer.shuffledAnswers.clear();
+        window.trainer.flaggedQuestions?.clear?.();
+        window.trainer.skippedQuestions?.clear?.();
+        window.trainer.shuffledAnswers?.clear?.();
+      }
+      localStorage.clear();
+      sessionStorage.clear();
+      initializeQuestions();
+      const hide = id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; };
+      hide('resultsContainer');
+      hide('questionContainer');
+      hide('reviewMode');
+      hide('timerSection');
+      const mode = document.getElementById('modeSelection');
+      if (mode) mode.style.display = 'grid';
+      const paceIndicator = document.getElementById('paceIndicator');
+      if (paceIndicator) { paceIndicator.className = 'pace-indicator pace-on-track'; paceIndicator.textContent = 'ON TRACK'; }
+      const globalTimer = document.getElementById('globalTimer');
+      if (globalTimer) globalTimer.textContent = '00:00';
+      const questionTimer = document.getElementById('questionTimer');
+      if (questionTimer) questionTimer.textContent = '00:00';
+      window.scrollTo(0, 0);
+      console.log('✅ Reset complete - ready for a new quiz');
     }
-    
-    // Clear storage
-    localStorage.clear();
-    sessionStorage.clear();
-    
-    // Hide ALL screens first
-    document.getElementById('resultsScreen').style.display = 'none';
-    document.getElementById('quizContainer').style.display = 'none';
-    document.querySelectorAll('.performance-analysis, [class*="Performance"]').forEach(el => {
-        el.style.display = 'none';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeQuestions();
     });
-    
-    // Show welcome screen
-    const welcomeScreen = document.getElementById('welcomeScreen');
-    if (welcomeScreen) {
-        welcomeScreen.style.display = 'block';
-        console.log('✅ Welcome screen shown');
+  </script>
+
+  <script>
+    // Stub functions to avoid runtime errors. Replace with your real implementations.
+    function startMode(mode) {
+      // Hide mode selection and show timers & question container as appropriate
+      const modeSel = document.getElementById('modeSelection');
+      if (modeSel) modeSel.style.display = 'none';
+      const timer = document.getElementById('timerSection');
+      if (timer) timer.style.display = 'flex';
+      const q = document.getElementById('questionContainer');
+      if (q) q.style.display = 'block';
+      console.log('Starting mode:', mode);
+      // TODO: Load first question, start timers, etc.
     }
-    
-    // Scroll to top
-    window.scrollTo(0, 0);
-    
-    console.log('✅ Quiz reset complete - ready for new quiz');
-};
-
-console.log('Fixed version installed');
-  
-        // AGGRESSIVE FIX for Performance Analysis "Take Another Exam" button
-(function() {
-    // Fix the button every second to combat wallet interference
-    setInterval(() => {
-        // Find all "Take Another Exam" buttons
-        const buttons = Array.from(document.querySelectorAll('button')).filter(btn => 
-            btn.textContent.includes('Take Another Exam') || 
-            btn.innerText.includes('Take Another Exam')
-        );
-        
-        buttons.forEach(button => {
-            // Remove all existing click handlers
-            const newButton = button.cloneNode(true);
-            button.parentNode.replaceChild(newButton, button);
-            
-            // Add our working click handler
-            newButton.onclick = function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                console.log('🔧 Forcing quiz reset from Performance Analysis...');
-                
-                // Nuclear option - clear EVERYTHING
-                try {
-                    // Clear all storage
-                    localStorage.clear();
-                    sessionStorage.clear();
-                    
-                    // Clear IndexedDB
-                    if (window.indexedDB) {
-                        indexedDB.databases().then(dbs => {
-                            dbs.forEach(db => indexedDB.deleteDatabase(db.name));
-                        });
-                    }
-                    
-                    // Clear all caches
-                    if ('caches' in window) {
-                        caches.keys().then(names => {
-                            names.forEach(name => caches.delete(name));
-                        });
-                    }
-                    
-                    // Kill service workers
-                    if ('serviceWorker' in navigator) {
-                        navigator.serviceWorker.getRegistrations().then(regs => {
-                            regs.forEach(reg => reg.unregister());
-                        });
-                    }
-                    
-                    // Clean wallet junk
-                    delete window.ethereum;
-                    delete window.tronWeb;
-                    delete window.solana;
-                    delete window.walletRouter;
-                    
-                    // Try multiple navigation methods
-                    setTimeout(() => {
-                        // Method 1: Go to base URL with timestamp
-                        const baseUrl = 'https://jb24000.github.io/PracticeDVAQuiz/'
-                        const cleanUrl = baseUrl.split('?')[0].split('#')[0];
-                        window.location.href = cleanUrl + '?reset=' + Date.now();
-                    }, 100);
-                    
-                } catch (err) {
-                    console.error('Reset error:', err);
-                    // Fallback: hard reload
-                    window.location.href = 'https://jb24000.github.io/PracticeDVAQuiz/?reset=' + Date.now();
-                }
-                
-                return false;
-            };
-            
-            // Also add a backup double-click handler
-            newButton.ondblclick = function() {
-                window.location.href = 'https://jb24000.github.io/PracticeDVAQuiz/';
-            };
-        });
-    }, 1000); // Check every second
-    
-    // Also intercept any navigation to Performance Analysis and reset it
-    const observer = new MutationObserver((mutations) => {
-        const performanceSection = document.querySelector('[class*="Performance Analysis"], h1:contains("Performance Analysis"), h2:contains("Performance Analysis")');
-        if (performanceSection) {
-            // If we see NaN values, the state is corrupted
-            const hasNaN = document.body.innerHTML.includes('NaN%') || document.body.innerHTML.includes('NaNs');
-            if (hasNaN) {
-                console.log('📊 Detected corrupted Performance Analysis - fixing...');
-                
-                // Hide the broken display
-                const cards = document.querySelectorAll('[class*="card"], [class*="metric"], [class*="score"]');
-                cards.forEach(card => {
-                    if (card.textContent.includes('NaN')) {
-                        card.textContent = card.textContent.replace(/NaN%?s?/g, '0');
-                    }
-                });
-            }
-        }
-    });
-    
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
-    });
-    
-    console.log('💪 Aggressive Performance Analysis fix active');
-})();
-
-</script>
+    function toggleFlag() { console.log('toggleFlag'); }
+    function skipQuestion() { console.log('skipQuestion'); }
+    function previousQuestion() { console.log('previousQuestion'); }
+    function submitAnswer() { console.log('submitAnswer'); }
+    function nextQuestion() { console.log('nextQuestion'); }
+    function reviewAnswers() { console.log('reviewAnswers'); }
+    function installPWA() { console.log('installPWA'); }
+    function dismissInstall() { const el = document.getElementById('installBanner'); if (el) el.style.display = 'none'; }
+  </script>
 </body>
 </html>
-        
