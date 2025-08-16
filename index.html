@@ -13679,184 +13679,106 @@ function createSimpleQuiz(mode) {
     }, 2000);
 })();
 
-// Fix 4: Show question function
-window.showQuestion = function() {
-    if (!window.currentQuizState) return;
-    
-    const state = window.currentQuizState;
-    const question = state.questions[state.currentIndex];
-    
-    if (!question) {
-        showResults();
-        return;
-    }
-    
-    const questionHTML = `
-        <h3>Question ${state.currentIndex + 1} of ${state.questions.length}</h3>
-        <p style="font-size: 18px; margin: 20px 0;">${question.question}</p>
-        <div>
-            ${question.options.map((opt, i) => `
-                <div style="
-                    margin: 10px 0;
-                    padding: 15px;
-                    background: #f8f9fa;
-                    border: 2px solid #dee2e6;
-                    border-radius: 5px;
-                    cursor: pointer;
-                " onclick="selectAnswer(${i}, this)" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
-                    <input type="radio" name="answer" value="${i}" id="opt${i}">
-                    <label for="opt${i}" style="cursor: pointer;">
-                        ${String.fromCharCode(65 + i)}. ${opt}
-                    </label>
-                </div>
-            `).join('')}
-        </div>
-    `;
-    
-    const questionArea = document.getElementById('questionArea');
-    if (questionArea) {
-        questionArea.innerHTML = questionHTML;
-    }
-};
-
-// Fix 5: Answer selection
-window.selectAnswer = function(index, element) {
-    window.currentQuizState.answers[window.currentQuizState.currentIndex] = index;
-    document.getElementById(`opt${index}`).checked = true;
-    
-    // Visual feedback
-    document.querySelectorAll('[name="answer"]').forEach(el => {
-        el.parentElement.style.background = '#f8f9fa';
-    });
-    element.style.background = '#d1ecf1';
-};
-
-// Fix 6: Next question
-window.nextQuestion = function() {
-    if (!window.currentQuizState) return;
-    
-    window.currentQuizState.currentIndex++;
-    
-    if (window.currentQuizState.currentIndex >= window.currentQuizState.questions.length) {
-        showResults();
-    } else {
-        showQuestion();
-    }
-};
-
-// Fix 7: Show results without NaN - IMPROVED VERSION
-window.showResults = function() {
-    if (!window.currentQuizState) return;
-    
-    const state = window.currentQuizState;
-    let correct = 0;
-    
-    state.questions.forEach((q, i) => {
-        if (state.answers[i] === q.correct) correct++;
-    });
-    
-    const total = state.questions.length || 1;
-    const score = Math.round((correct / total) * 100) || 0;
-    
-    const resultsHTML = `
-        <div style="text-align: center;">
-            <h2>Quiz Complete!</h2>
-            <div style="font-size: 48px; font-weight: bold; color: ${score >= 70 ? '#28a745' : '#dc3545'};">
-                ${score}%
-            </div>
-            <p style="font-size: 20px;">You got ${correct} out of ${total} questions correct</p>
-            <div style="margin-top: 30px;">
-                <button onclick="takeAnotherQuiz()" style="
-                    padding: 15px 40px;
-                    background: #28a745;
-                    color: white;
-                    border: none;
-                    border-radius: 5px;
-                    font-size: 18px;
-                    cursor: pointer;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-                " onmouseover="this.style.background='#218838'" onmouseout="this.style.background='#28a745'">Take Another Quiz</button>
-            </div>
-        </div>
-    `;
-    
-    const container = document.getElementById('simpleQuiz') || document.getElementById('questionArea');
-    if (container) {
-        container.innerHTML = resultsHTML;
-    }
-};
-
-// NEW FUNCTION: Properly reset quiz with wallet cleanup
+// CRITICAL FIX: Override the "Take Another Exam" button behavior
 window.takeAnotherQuiz = function() {
-    console.log('🔄 Resetting quiz and cleaning wallet interference...');
+    console.log('🔄 Resetting quiz state properly...');
     
-    // Clean wallet interference
-    if (window.ethereum) delete window.ethereum;
-    if (window.tronWeb) delete window.tronWeb;
-    if (window.solana) delete window.solana;
-    if (window.walletRouter) delete window.walletRouter;
+    // Stop any running timers (like your working PWA does)
+    if (window.globalTimer) clearInterval(window.globalTimer);
+    if (window.questionTimer) clearInterval(window.questionTimer);
+    if (window.quizTimer) clearInterval(window.quizTimer);
     
-    // Clear all quiz state
+    // Clear all intervals just to be safe
+    for (let i = 1; i < 99999; i++) {
+        window.clearInterval(i);
+    }
+    
+    // Reset all quiz state variables
+    window.currentQuizState = null;
+    window.currentQuestionIndex = 0;
+    window.userAnswers = [];
+    window.score = 0;
+    window.quizStartTime = null;
+    window.questionStartTime = null;
+    window.timePerQuestion = [];
+    
+    // Clear storage
     localStorage.clear();
     sessionStorage.clear();
     
-    // Reset quiz state
-    window.currentQuizState = null;
+    // Hide results screen, show welcome/mode selection screen
+    const resultsScreen = document.querySelector('[id*="result"], [class*="result"], [id*="performance"], [class*="performance"]');
+    const welcomeScreen = document.querySelector('[id*="welcome"], [id*="mode"], [id*="start"], #simpleQuiz');
+    const quizContainer = document.querySelector('[id*="quiz"], [id*="question"]');
     
-    // Clean service worker cache
-    if ('caches' in window) {
-        caches.keys().then(names => {
-            names.forEach(name => {
-                if (name.includes('quiz') || name.includes('exam')) {
-                    caches.delete(name);
-                }
-            });
-        });
-    }
+    if (resultsScreen) resultsScreen.style.display = 'none';
+    if (welcomeScreen) welcomeScreen.style.display = 'block';
+    if (quizContainer && quizContainer !== welcomeScreen) quizContainer.style.display = 'none';
     
-    // Unregister corrupted service workers
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(function(registrations) {
-            for(let registration of registrations) {
-                registration.unregister();
-            }
-        });
-    }
+    // Reset any NaN displays
+    document.querySelectorAll('*').forEach(el => {
+        if (el.textContent && el.textContent.includes('NaN')) {
+            el.textContent = el.textContent.replace(/NaN%?s?/g, '0');
+        }
+    });
     
-    // Force reload with cache bypass
-    setTimeout(() => {
-       window.location.href = 'https://jb24000.github.io/PracticeDVAQuiz/?reset=' + Date.now();
-    }, 100);
+    // If there's a startMode or similar function, call it
+    if (window.startMode) window.startMode('exam');
+    else if (window.startQuiz) window.startQuiz();
+    else if (window.initializeQuiz) window.initializeQuiz();
+    
+    console.log('✅ Quiz reset complete - ready for new quiz');
 };
 
-// Fix 8: Remove grey overlay on page load
-document.addEventListener('DOMContentLoaded', function() {
-    // Remove any blocking overlays
-    setTimeout(() => {
-        document.querySelectorAll('.modal, .modal-backdrop, .overlay').forEach(el => {
-            if (el.style.display !== 'none') {
-                console.log('Removing overlay:', el.className);
-                el.style.display = 'none';
-            }
-        });
-    }, 100);
-    
-    // Additional: Fix "Take Another Exam" button if it exists on the page
-    document.addEventListener('click', function(e) {
-        const target = e.target;
-        const buttonText = target.textContent || target.innerText || '';
-        
-        if (buttonText.includes('Take Another Exam') || buttonText.includes('Take Another Quiz')) {
-            e.preventDefault();
-            e.stopPropagation();
-            takeAnotherQuiz();
+// Fix ALL buttons that say "Take Another Exam"
+setInterval(() => {
+    document.querySelectorAll('button').forEach(btn => {
+        if ((btn.textContent.includes('Take Another Exam') || 
+             btn.textContent.includes('Take Another Quiz')) && 
+            !btn.hasAttribute('data-fixed')) {
+            
+            btn.setAttribute('data-fixed', 'true');
+            
+            // Remove all existing handlers
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+            
+            // Add our working handler
+            newBtn.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                window.takeAnotherQuiz();
+                return false;
+            };
         }
-    }, true);
+    });
+}, 500);
 
-    console.log('✅ DVA Quiz Fix Loaded with Wallet Interference Protection - Click any mode to start!');
+// Also intercept the Performance Analysis screen specifically
+document.addEventListener('DOMContentLoaded', function() {
+    // Watch for Performance Analysis screen
+    const observer = new MutationObserver(() => {
+        const perfScreen = document.querySelector('.performance-analysis, #resultsScreen, [class*="Performance Analysis"]');
+        if (perfScreen && perfScreen.style.display !== 'none') {
+            // Fix any Take Another Exam button on this screen
+            const buttons = perfScreen.querySelectorAll('button');
+            buttons.forEach(btn => {
+                if (btn.textContent.includes('Take Another')) {
+                    btn.onclick = window.takeAnotherQuiz;
+                }
+            });
+        }
+    });
+    
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
 });
 
-    // AGGRESSIVE FIX for Performance Analysis "Take Another Exam" button
+console.log('✅ DVA Quiz Fix Loaded - Based on working PWA pattern');
+  
+        // AGGRESSIVE FIX for Performance Analysis "Take Another Exam" button
 (function() {
     // Fix the button every second to combat wallet interference
     setInterval(() => {
