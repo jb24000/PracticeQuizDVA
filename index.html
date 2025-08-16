@@ -1025,6 +1025,59 @@
     </div>
 
     <script>
+
+// ULTRA AGGRESSIVE WALLET KILLER - Must be FIRST script in file
+(function() {
+    'use strict';
+    
+    // Freeze the window object to prevent modifications
+    const criticalProps = ['ethereum', 'tronWeb', 'solana', 'walletRouter'];
+    criticalProps.forEach(prop => {
+        Object.defineProperty(window, prop, {
+            get: () => undefined,
+            set: () => {},
+            configurable: false,
+            enumerable: false
+        });
+    });
+    
+    // Override Object.defineProperty itself
+    const original = Object.defineProperty;
+    Object.defineProperty = new Proxy(original, {
+        apply(target, thisArg, args) {
+            const [obj, prop] = args;
+            if (obj === window && criticalProps.includes(prop)) {
+                return obj;
+            }
+            return Reflect.apply(target, thisArg, args);
+        }
+    });
+    
+    // Block all chrome-extension URLs
+    const originalCreateElement = document.createElement;
+    document.createElement = function(tagName) {
+        const element = originalCreateElement.call(document, tagName);
+        if (tagName.toLowerCase() === 'script') {
+            const originalSetAttribute = element.setAttribute;
+            element.setAttribute = function(name, value) {
+                if (name === 'src' && value.includes('chrome-extension://')) {
+                    console.log('🚫 Blocked:', value);
+                    return;
+                }
+                return originalSetAttribute.call(this, name, value);
+            };
+        }
+        return element;
+    };
+    
+    console.log('🛡️ ULTRA WALLET KILLER ACTIVE');
+})();
+
+
+
+
+
+
         // Map questionBank to questions array
 if (typeof questionBank !== 'undefined') {
     // If questionBank is an object with categories
