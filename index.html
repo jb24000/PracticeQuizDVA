@@ -13616,6 +13616,16 @@ function createSimpleQuiz(mode) {
     showQuestion();
 }
 
+// Clean wallet pollution on load and continuously
+(function() {
+    setInterval(() => {
+        if (window.ethereum && window.ethereum.isTally) delete window.ethereum;
+        if (window.tronWeb) delete window.tronWeb;
+        if (window.solana) delete window.solana;
+        if (window.walletRouter) delete window.walletRouter;
+    }, 2000);
+})();
+
 // Fix 4: Show question function
 window.showQuestion = function() {
     if (!window.currentQuizState) return;
@@ -13681,7 +13691,7 @@ window.nextQuestion = function() {
     }
 };
 
-// Fix 7: Show results without NaN
+// Fix 7: Show results without NaN - IMPROVED VERSION
 window.showResults = function() {
     if (!window.currentQuizState) return;
     
@@ -13692,8 +13702,8 @@ window.showResults = function() {
         if (state.answers[i] === q.correct) correct++;
     });
     
-    const total = state.questions.length || 1; // Prevent division by zero
-    const score = Math.round((correct / total) * 100) || 0; // Prevent NaN
+    const total = state.questions.length || 1;
+    const score = Math.round((correct / total) * 100) || 0;
     
     const resultsHTML = `
         <div style="text-align: center;">
@@ -13703,7 +13713,7 @@ window.showResults = function() {
             </div>
             <p style="font-size: 20px;">You got ${correct} out of ${total} questions correct</p>
             <div style="margin-top: 30px;">
-                <button onclick="location.reload()" style="
+                <button onclick="takeAnotherQuiz()" style="
                     padding: 15px 40px;
                     background: #28a745;
                     color: white;
@@ -13711,7 +13721,8 @@ window.showResults = function() {
                     border-radius: 5px;
                     font-size: 18px;
                     cursor: pointer;
-                ">Take Another Quiz</button>
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                " onmouseover="this.style.background='#218838'" onmouseout="this.style.background='#28a745'">Take Another Quiz</button>
             </div>
         </div>
     `;
@@ -13720,6 +13731,49 @@ window.showResults = function() {
     if (container) {
         container.innerHTML = resultsHTML;
     }
+};
+
+// NEW FUNCTION: Properly reset quiz with wallet cleanup
+window.takeAnotherQuiz = function() {
+    console.log('🔄 Resetting quiz and cleaning wallet interference...');
+    
+    // Clean wallet interference
+    if (window.ethereum) delete window.ethereum;
+    if (window.tronWeb) delete window.tronWeb;
+    if (window.solana) delete window.solana;
+    if (window.walletRouter) delete window.walletRouter;
+    
+    // Clear all quiz state
+    localStorage.clear();
+    sessionStorage.clear();
+    
+    // Reset quiz state
+    window.currentQuizState = null;
+    
+    // Clean service worker cache
+    if ('caches' in window) {
+        caches.keys().then(names => {
+            names.forEach(name => {
+                if (name.includes('quiz') || name.includes('exam')) {
+                    caches.delete(name);
+                }
+            });
+        });
+    }
+    
+    // Unregister corrupted service workers
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for(let registration of registrations) {
+                registration.unregister();
+            }
+        });
+    }
+    
+    // Force reload with cache bypass
+    setTimeout(() => {
+        window.location.href = window.location.origin + window.location.pathname + '?t=' + Date.now();
+    }, 100);
 };
 
 // Fix 8: Remove grey overlay on page load
@@ -13733,9 +13787,20 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }, 100);
-
-console.log('✅ DVA Quiz Fix Loaded - Click any mode to start!');
     
+    // Additional: Fix "Take Another Exam" button if it exists on the page
+    document.addEventListener('click', function(e) {
+        const target = e.target;
+        const buttonText = target.textContent || target.innerText || '';
+        
+        if (buttonText.includes('Take Another Exam') || buttonText.includes('Take Another Quiz')) {
+            e.preventDefault();
+            e.stopPropagation();
+            takeAnotherQuiz();
+        }
+    }, true);
+
+    console.log('✅ DVA Quiz Fix Loaded with Wallet Interference Protection - Click any mode to start!');
 });
 
 </script>
