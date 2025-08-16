@@ -13772,7 +13772,7 @@ window.takeAnotherQuiz = function() {
     
     // Force reload with cache bypass
     setTimeout(() => {
-        window.location.href = window.location.origin + window.location.pathname + '?t=' + Date.now();
+       window.location.href = 'https://jb24000.github.io/PracticeDVAQuiz/?reset=' + Date.now();
     }, 100);
 };
 
@@ -13861,7 +13861,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Try multiple navigation methods
                     setTimeout(() => {
                         // Method 1: Go to base URL with timestamp
-                        const baseUrl = window.location.origin + window.location.pathname;
+                        const baseUrl = 'https://jb24000.github.io/PracticeDVAQuiz/'
                         const cleanUrl = baseUrl.split('?')[0].split('#')[0];
                         window.location.href = cleanUrl + '?reset=' + Date.now();
                     }, 100);
@@ -13869,7 +13869,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 } catch (err) {
                     console.error('Reset error:', err);
                     // Fallback: hard reload
-                    window.location.href = window.location.origin + '?t=' + Date.now();
+                    window.location.href = 'https://jb24000.github.io/PracticeDVAQuiz/?reset=' + Date.now();
                 }
                 
                 return false;
@@ -13877,7 +13877,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Also add a backup double-click handler
             newButton.ondblclick = function() {
-                window.location.href = window.location.origin;
+                window.location.href = 'https://jb24000.github.io/PracticeDVAQuiz/';
             };
         });
     }, 1000); // Check every second
