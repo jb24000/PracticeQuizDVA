@@ -12532,6 +12532,7 @@
     }
 }
 ];
+
     // Quiz State Management
     class QuizTrainer {
       constructor() {
@@ -13041,7 +13042,18 @@
       }
 
       finishQuiz() {
+        console.log('📊 Finishing quiz...');
+        
+        // Stop all timers first
         this.stopTimers();
+        
+        // Clear any lingering intervals
+        for (let i = 1; i < 9999; i++) { 
+          window.clearInterval(i); 
+          window.clearTimeout(i); 
+        }
+        
+        // Calculate and show results
         this.calculateResults();
         this.showResults();
       }
@@ -13163,25 +13175,53 @@
 
     // Main functions
     function startMode(mode) {
+      console.log('🚀 Starting mode:', mode);
+      
+      // Force clear any existing trainer
+      if (trainer) {
+        trainer.stopTimers();
+        trainer = null;
+      }
+      
+      // Clear any stuck intervals
+      for (let i = 1; i < 9999; i++) { 
+        window.clearInterval(i); 
+        window.clearTimeout(i); 
+      }
+      
       // Hide mode selection
       document.getElementById('modeSelection').style.display = 'none';
+      
+      // Reset any previous content
+      document.getElementById('options').innerHTML = '';
+      document.getElementById('explanation').style.display = 'none';
+      document.getElementById('scenario').innerHTML = '';
+      document.getElementById('questionText').innerHTML = '';
       
       // Show loading
       document.getElementById('loading').style.display = 'block';
       
-      // Initialize trainer
+      // Create fresh trainer instance
       setTimeout(() => {
-        trainer = new QuizTrainer();
-        trainer.init(mode);
-        
-        // Hide loading, show quiz
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('questionContainer').style.display = 'block';
-        document.getElementById('timerSection').style.display = 'flex';
-        
-        if (mode === 'strategic' || mode === 'exam') {
-          document.getElementById('reviewMode').style.display = 'block';
-          trainer.updateReviewNavigation();
+        try {
+          trainer = new QuizTrainer();
+          trainer.init(mode);
+          
+          // Hide loading, show quiz
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('questionContainer').style.display = 'block';
+          document.getElementById('timerSection').style.display = 'flex';
+          
+          if (mode === 'strategic' || mode === 'exam') {
+            document.getElementById('reviewMode').style.display = 'block';
+            trainer.updateReviewNavigation();
+          }
+          
+          console.log('✅ Mode started successfully:', mode);
+        } catch (error) {
+          console.error('❌ Error starting mode:', error);
+          document.getElementById('loading').style.display = 'none';
+          alert('Error starting quiz. Please refresh the page.');
         }
       }, 500);
     }
@@ -13211,43 +13251,174 @@
     }
 
     function resetQuiz() {
-      // Stop all timers
-      if (trainer) trainer.stopTimers();
+      console.log('🔄 Full reset starting...');
       
-      // Reset trainer
-      trainer = null;
+      // 1. Stop ALL timers and intervals
+      for (let i = 1; i < 9999; i++) { 
+        window.clearInterval(i); 
+        window.clearTimeout(i); 
+      }
       
-      // Hide all sections
-      document.getElementById('resultsContainer').style.display = 'none';
-      document.getElementById('questionContainer').style.display = 'none';
-      document.getElementById('reviewMode').style.display = 'none';
-      document.getElementById('timerSection').style.display = 'none';
-      document.getElementById('loading').style.display = 'none';
+      // 2. Completely destroy old trainer instance
+      if (trainer) {
+        trainer.stopTimers();
+        trainer.questions = [];
+        trainer.currentQuestionIndex = 0;
+        trainer.userAnswers = [];
+        trainer.score = 0;
+        trainer.flaggedQuestions.clear();
+        trainer.skippedQuestions.clear();
+        trainer.currentSelectedOption = null;
+        trainer = null; // Fully nullify the old instance
+      }
       
-      // Show mode selection
-      document.getElementById('modeSelection').style.display = 'grid';
+      // 3. Clear ALL storage
+      try {
+        localStorage.clear();
+        sessionStorage.clear();
+      } catch (e) {
+        console.log('Storage clear error:', e);
+      }
       
-      // Reset timers display
-      document.getElementById('globalTimer').textContent = '00:00';
-      document.getElementById('questionTimer').textContent = '00:00';
-      document.getElementById('paceValue').textContent = '--';
-      document.getElementById('paceValue').style.color = '#FFFFFF';
-      document.getElementById('paceValue').style.fontSize = '2em';
-      document.getElementById('paceValue').style.fontWeight = 'normal';
-      document.getElementById('paceIndicator').className = 'pace-indicator pace-on-track';
-      document.getElementById('paceIndicator').textContent = 'ON PACE';
+      // 4. Reset all UI elements to initial state
+      const elements = {
+        'resultsContainer': 'none',
+        'questionContainer': 'none',
+        'reviewMode': 'none',
+        'timerSection': 'none',
+        'loading': 'none',
+        'modeSelection': 'grid',
+        'explanation': 'none',
+        'submitBtn': 'block',
+        'nextBtn': 'none'
+      };
+      
+      for (const [id, display] of Object.entries(elements)) {
+        const el = document.getElementById(id);
+        if (el) el.style.display = display;
+      }
+      
+      // 5. Reset all dynamic content
+      const resets = {
+        'globalTimer': '00:00',
+        'questionTimer': '00:00',
+        'paceValue': '--',
+        'paceIndicator': 'ON PACE',
+        'questionText': '',
+        'scenario': '',
+        'options': '',
+        'correctExplanation': '',
+        'wrongExplanations': '',
+        'strategyTip': '',
+        'reviewNavigation': ''
+      };
+      
+      for (const [id, value] of Object.entries(resets)) {
+        const el = document.getElementById(id);
+        if (el) {
+          if (typeof value === 'string') {
+            if (el.tagName === 'DIV' || el.tagName === 'SPAN') {
+              el.innerHTML = value;
+            } else {
+              el.textContent = value;
+            }
+          }
+        }
+      }
+      
+      // 6. Reset pace indicator styles
+      const paceValue = document.getElementById('paceValue');
+      if (paceValue) {
+        paceValue.style.color = '#FFFFFF';
+        paceValue.style.fontSize = '2em';
+        paceValue.style.fontWeight = 'normal';
+      }
+      
+      const paceIndicator = document.getElementById('paceIndicator');
+      if (paceIndicator) {
+        paceIndicator.className = 'pace-indicator pace-on-track';
+      }
+      
       const paceLabel = document.getElementById('paceLabel');
-      if (paceLabel) paceLabel.textContent = 'Question Pace';
-      const paceBox = document.getElementById('paceValue')?.closest('.timer-box');
-      if (paceBox) paceBox.classList.remove('over-time');
+      if (paceLabel) {
+        paceLabel.textContent = 'Question Pace';
+      }
       
+      const paceBox = document.getElementById('paceValue')?.closest('.timer-box');
+      if (paceBox) {
+        paceBox.classList.remove('over-time');
+        paceBox.style.animation = '';
+      }
+      
+      // 7. Clear any animations
+      document.querySelectorAll('.timer-box').forEach(box => {
+        box.style.animation = '';
+        box.classList.remove('over-time');
+      });
+      
+      // 8. Remove all event listeners from options
+      const oldOptions = document.querySelectorAll('.option');
+      oldOptions.forEach(option => {
+        const newOption = option.cloneNode(true);
+        option.parentNode.replaceChild(newOption, option);
+      });
+      
+      // 9. Reset flag button
+      const flagBtn = document.getElementById('flagBtn');
+      if (flagBtn) {
+        flagBtn.classList.remove('flagged');
+        flagBtn.innerHTML = '🚩 Flag';
+      }
+      
+      // 10. Scroll to top
       window.scrollTo(0, 0);
+      
+      // 11. Force garbage collection hint
+      if (window.gc) {
+        window.gc();
+      }
+      
+      console.log('✅ Full reset complete - ready for new quiz');
     }
 
     function startNewExam() {
+      console.log('🎯 Starting new exam...');
+      
+      // Do a complete reset first
       resetQuiz();
-      setTimeout(() => startMode('exam'), 100);
+      
+      // Small delay to ensure DOM updates
+      setTimeout(() => {
+        startMode('exam');
+      }, 100);
     }
+
+    // App version for cache busting
+    const APP_VERSION = '2.0.1';
+    
+    // Check for version mismatch
+    function checkVersion() {
+      const storedVersion = localStorage.getItem('appVersion');
+      if (storedVersion && storedVersion !== APP_VERSION) {
+        console.log('Version mismatch, clearing cache...');
+        forceClearCache();
+      }
+      localStorage.setItem('appVersion', APP_VERSION);
+    }
+    
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('🎮 AWS DVA-C02 Trainer v' + APP_VERSION);
+      checkVersion();
+      
+      // Ensure clean state on page load
+      resetQuiz();
+      
+      // Check if we have questions
+      if (!window.questionBank || window.questionBank.length === 0) {
+        console.warn('⚠️ No questions loaded. Add questions to questionBank array.');
+      }
+    });
 
     // PWA Installation
     let deferredPrompt;
@@ -13274,15 +13445,142 @@
     function dismissInstall() {
       document.getElementById('installBanner').style.display = 'none';
     }
+    
+    // Debugging function for troubleshooting
+    window.debugQuizState = function() {
+      console.log('=== Quiz State Debug ===');
+      console.log('Trainer exists:', !!trainer);
+      if (trainer) {
+        console.log('Mode:', trainer.mode);
+        console.log('Current Question:', trainer.currentQuestionIndex);
+        console.log('Questions loaded:', trainer.questions.length);
+        console.log('Answers given:', trainer.userAnswers.filter(a => a !== null).length);
+        console.log('Timer intervals:', {
+          global: trainer.globalTimerInterval,
+          question: trainer.questionTimerInterval,
+          speed: trainer.speedTimerTimeout
+        });
+      }
+      console.log('localStorage items:', Object.keys(localStorage));
+      console.log('sessionStorage items:', Object.keys(sessionStorage));
+      console.log('Service Worker:', navigator.serviceWorker?.controller?.state);
+      console.log('App Version:', APP_VERSION);
+      console.log('======================');
+    };
+    
+    // Emergency reset function
+    window.emergencyReset = async function() {
+      console.log('🚨 EMERGENCY RESET INITIATED');
+      
+      // Stop everything
+      for (let i = 1; i < 9999; i++) { 
+        window.clearInterval(i); 
+        window.clearTimeout(i); 
+      }
+      
+      // Clear all caches
+      await forceClearCache();
+      
+      // Unregister service worker
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        for (let registration of registrations) {
+          await registration.unregister();
+        }
+      }
+      
+      // Clear all storage
+      localStorage.clear();
+      sessionStorage.clear();
+      
+      // Reset trainer
+      trainer = null;
+      
+      // Reload page
+      location.reload(true);
+    };
 
-    // Service Worker Registration
+    // Service Worker Registration with cache control
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-          .then(registration => console.log('SW registered:', registration))
+        // First, try to unregister old service worker
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+          registrations.forEach(registration => {
+            if (registration.active && !registration.active.scriptURL.includes('v=2')) {
+              registration.unregister();
+              console.log('Old service worker unregistered');
+            }
+          });
+        });
+        
+        // Register new service worker with version query string
+        navigator.serviceWorker.register('/sw.js?v=2')
+          .then(registration => {
+            console.log('SW registered:', registration);
+            
+            // Force update check
+            registration.update();
+            
+            // Listen for updates
+            registration.addEventListener('updatefound', () => {
+              const newWorker = registration.installing;
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'activated') {
+                  // New service worker activated, clear caches
+                  if (caches) {
+                    caches.keys().then(names => {
+                      names.forEach(name => caches.delete(name));
+                    });
+                  }
+                  console.log('New service worker activated, caches cleared');
+                }
+              });
+            });
+          })
           .catch(err => console.log('SW registration failed:', err));
       });
     }
+    
+    // Force clear service worker cache when needed
+    async function forceClearCache() {
+      console.log('🧹 Force clearing all caches...');
+      
+      // Clear service worker caches
+      if ('caches' in window) {
+        const cacheNames = await caches.keys();
+        await Promise.all(cacheNames.map(name => caches.delete(name)));
+        console.log('✅ Service worker caches cleared');
+      }
+      
+      // Send message to service worker to clear its cache
+      if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({ type: 'CLEAR_CACHE' });
+      }
+      
+      // Clear all storage
+      localStorage.clear();
+      sessionStorage.clear();
+      
+      console.log('✅ All caches and storage cleared');
+    }
+    
+    // Add cache clearing to problem scenarios
+    window.addEventListener('beforeunload', () => {
+      // Clear any pending timers
+      for (let i = 1; i < 9999; i++) { 
+        window.clearInterval(i); 
+        window.clearTimeout(i); 
+      }
+    });
+    
+    // Prevent back button issues
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted) {
+        // Page was restored from cache
+        console.log('Page restored from cache, resetting...');
+        resetQuiz();
+      }
+    });
   </script>
 </body>
 </html>
