@@ -1,15 +1,15 @@
-// sw.js - Service Worker for DVA Quiz (Corrected)
-const CACHE_NAME = 'dva-quiz-v1';
+// sw.js - Service Worker for DVA Quiz (Fixed)
+const CACHE_NAME = 'dva-quiz-v2'; // Increment version to force update
+const RUNTIME_CACHE = 'dva-runtime-v2';
 
-// Only cache files that actually exist in your repository
-const urlsToCache = [
-  './',                    // Current directory
-  './index.html',          // Main page
-  './offline.html',        // Offline fallback
-  './manifest.json'        // PWA manifest
+// Only cache truly static assets
+const STATIC_ASSETS = [
+  './offline.html',
+  './manifest.json'
+  // Do NOT cache index.html or root path to avoid state issues
 ];
 
-// Install event - cache essential files
+// Install event - cache only essential static files
 self.addEventListener('install', (event) => {
   console.log('Service Worker installing...');
   
@@ -17,14 +17,14 @@ self.addEventListener('install', (event) => {
     caches.open(CACHE_NAME)
       .then((cache) => {
         console.log('Opened cache');
-        return cache.addAll(urlsToCache);
+        return cache.addAll(STATIC_ASSETS);
       })
       .catch((error) => {
         console.error('Cache installation failed:', error);
       })
   );
   
-  // Force the waiting service worker to become the active service worker
+  // Force the waiting service worker to become active immediately
   self.skipWaiting();
 });
 
@@ -32,132 +32,113 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   console.log('Service Worker activating...');
   
-  const cacheWhitelist = [CACHE_NAME];
-  
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (!cacheWhitelist.includes(cacheName)) {
+          // Delete old caches
+          if (cacheName !== CACHE_NAME && cacheName !== RUNTIME_CACHE) {
             console.log('Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
     }).then(() => {
-      // Claim all clients
+      // Take control of all pages immediately
       return self.clients.claim();
     })
   );
 });
 
-// Fetch event - serve from cache or network
+// Fetch event - Network First for HTML, Cache First for assets
 self.addEventListener('fetch', (event) => {
-    // Ignore non-HTTP(S) requests
-    if (!event.request.url.startsWith('http')) {
-        return;
-    }
+  // Skip non-HTTP(S) requests (like chrome-extension://)
+  if (!event.request.url.startsWith('http')) {
+    return;
+  }
+
+  // Parse the request URL
+  const requestUrl = new URL(event.request.url);
+  
+  // Handle navigation requests (HTML pages) - NETWORK FIRST
+  if (event.request.mode === 'navigate' || 
+      event.request.headers.get('accept')?.includes('text/html') ||
+      requestUrl.pathname === '/' || 
+      requestUrl.pathname.endsWith('.html')) {
     
     event.respondWith(
-        caches.match(event.request)
-            .then((response) => {
-                if (response) {
-                    return response;
-                }
-                
-                return fetch(event.request).then((response) => {
-                    // Check if valid response
-                    if (!response || response.status !== 200 || response.type !== 'basic') {
-                        return response;
-                    }
-                    
-                    const responseToCache = response.clone();
-                    
-                    caches.open(CACHE_NAME)
-                        .then((cache) => {
-                            // Double-check it's HTTP before caching
-                            if (event.request.url.startsWith('http')) {
-                                cache.put(event.request, responseToCache)
-                                    .catch(err => console.log('Cannot cache:', event.request.url));
-                            }
-                        });
-                    
-                    return response;
-                });
-            })
+      fetch(event.request)
+        .then(response => {
+          // Don't cache HTML to avoid state persistence issues
+          return response;
+        })
+        .catch(error => {
+          console.log('Navigation request failed, serving offline page:', error);
+          return caches.match('./offline.html');
+        })
     );
-});
-  
-  // Ignore cross-origin requests except for CDNs
-  const requestUrl = new URL(event.request.url);
-  const isLocalRequest = requestUrl.origin === location.origin;
-  const isCDNRequest = requestUrl.hostname.includes('cdn') || 
-                        requestUrl.hostname.includes('googleapis') ||
-                        requestUrl.hostname.includes('cloudflare') ||
-                        requestUrl.hostname.includes('jsdelivr');
-  
-  if (!isLocalRequest && !isCDNRequest) {
-    // For external non-CDN requests, just fetch without caching
+    return;
+  }
+
+  // Handle API requests - NETWORK ONLY (never cache)
+  if (requestUrl.pathname.includes('/api/') || 
+      requestUrl.pathname.includes('.json') && !requestUrl.pathname.includes('manifest')) {
     event.respondWith(fetch(event.request));
     return;
   }
-  
+
+  // Handle static assets (CSS, JS, images) - CACHE FIRST
   event.respondWith(
     caches.match(event.request)
-      .then((response) => {
-        // Cache hit - return response
-        if (response) {
-          return response;
+      .then(cachedResponse => {
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+
+        // Not in cache, fetch from network
+        return fetch(event.request).then(networkResponse => {
+          // Check if valid response
+          if (!networkResponse || 
+              networkResponse.status !== 200 || 
+              networkResponse.type !== 'basic') {
+            return networkResponse;
+          }
+
+          // Cache static assets only (images, fonts, etc.)
+          const isStaticAsset = 
+            requestUrl.pathname.match(/\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/i) ||
+            requestUrl.hostname.includes('cdn') ||
+            requestUrl.hostname.includes('googleapis') ||
+            requestUrl.hostname.includes('cloudflare');
+
+          if (isStaticAsset) {
+            const responseToCache = networkResponse.clone();
+            caches.open(RUNTIME_CACHE)
+              .then(cache => {
+                cache.put(event.request, responseToCache)
+                  .catch(err => console.log('Cache put failed:', err));
+              });
+          }
+
+          return networkResponse;
+        });
+      })
+      .catch(error => {
+        console.log('Fetch failed:', error);
+        
+        // Return offline page for navigation requests
+        if (event.request.mode === 'navigate') {
+          return caches.match('./offline.html');
         }
         
-        // Clone the request
-        const fetchRequest = event.request.clone();
-        
-        return fetch(fetchRequest)
-          .then((response) => {
-            // Check if we received a valid response
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              // For navigation requests that failed, show offline page
-              if (event.request.mode === 'navigate') {
-                return caches.match('./offline.html');
-              }
-              return response;
-            }
-            
-            // Clone the response
-            const responseToCache = response.clone();
-            
-            caches.open(CACHE_NAME)
-              .then((cache) => {
-                // Only cache HTTP(S) requests and avoid chrome-extension errors
-                if (event.request.url.startsWith('http')) {
-                  cache.put(event.request, responseToCache)
-                    .catch((error) => {
-                      // Silently fail if we can't cache (e.g., chrome-extension resources)
-                      console.log('Could not cache:', event.request.url);
-                    });
-                }
-              });
-            
-            return response;
+        // Return a basic offline response for other requests
+        return new Response('Resource not available offline', {
+          status: 503,
+          statusText: 'Service Unavailable',
+          headers: new Headers({
+            'Content-Type': 'text/plain'
           })
-          .catch((error) => {
-            console.log('Fetch failed, serving offline page:', error);
-            
-            // If offline and it's a navigation request, show offline page
-            if (event.request.mode === 'navigate') {
-              return caches.match('./offline.html');
-            }
-            
-            // For other requests, return a basic offline response
-            return new Response('Offline - Content not available', {
-              status: 503,
-              statusText: 'Service Unavailable',
-              headers: new Headers({
-                'Content-Type': 'text/plain'
-              })
-            });
-          });
+        });
       })
   );
 });
@@ -173,6 +154,7 @@ self.addEventListener('message', (event) => {
       caches.keys().then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
+            console.log('Clearing cache:', cacheName);
             return caches.delete(cacheName);
           })
         );
@@ -189,4 +171,4 @@ self.addEventListener('message', (event) => {
   }
 });
 
-console.log('Service Worker loaded successfully');
+console.log('Service Worker v2 loaded successfully');
