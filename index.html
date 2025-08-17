@@ -51,6 +51,8 @@
     .container { width: 100%; max-width: 1200px; padding: 20px; animation: fadeIn 0.6s ease-out; }
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+    @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); } }
 
     .hero-section { text-align: center; margin-bottom: 40px; padding: 20px; }
     .hero-section h2 { color: var(--text-white); font-size: 2.2em; font-weight: 600; margin-bottom: 15px; }
@@ -65,14 +67,15 @@
     .feature-item .icon { font-size: 1.3em; }
 
     .timer-section { display: flex; justify-content: center; gap: 20px; margin: 20px auto; max-width: 1200px; padding: 0 20px; flex-wrap: wrap; }
-    .timer-box { flex: 1; min-width: 180px; background: var(--glass-bg); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; text-align: center; border: 1px solid var(--glass-border); box-shadow: var(--shadow); }
+    .timer-box { flex: 1; min-width: 180px; background: var(--glass-bg); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; text-align: center; border: 1px solid var(--glass-border); box-shadow: var(--shadow); transition: all 0.3s ease; }
+    .timer-box.over-time { border-color: var(--danger); animation: pulseRed 2s infinite; }
     .timer-label { color: var(--text-light); font-size: 0.9em; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-    .timer-value { color: var(--text-white); font-size: 2em; font-weight: bold; font-feature-settings: "tnum"; }
+    .timer-value { color: var(--text-white); font-size: 2em; font-weight: bold; font-feature-settings: "tnum"; transition: all 0.3s ease; }
 
-    .pace-indicator { padding: 6px 12px; border-radius: 20px; font-weight: bold; color: white; font-size: 0.85em; margin-top: 8px; display: inline-block; }
+    .pace-indicator { padding: 6px 12px; border-radius: 20px; font-weight: bold; color: white; font-size: 0.85em; margin-top: 8px; display: inline-block; transition: all 0.3s ease; }
     .pace-on-track { background: var(--success); }
     .pace-behind { background: var(--warning); color: #333; }
-    .pace-danger { background: var(--danger); }
+    .pace-danger { background: var(--danger); animation: pulse 1.5s infinite; }
 
     .mode-selection { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px; }
     .mode-card { background: var(--glass-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 30px; cursor: pointer; transition: all 0.3s ease; box-shadow: var(--shadow); }
@@ -283,9 +286,9 @@
         <div class="timer-value" id="questionTimer">00:00</div>
       </div>
       <div class="timer-box">
-        <div class="timer-label">Pace Status</div>
+        <div class="timer-label" id="paceLabel">Question Pace</div>
         <div class="timer-value" id="paceValue">--</div>
-        <div class="pace-indicator pace-on-track" id="paceIndicator">ON TRACK</div>
+        <div class="pace-indicator pace-on-track" id="paceIndicator">ON PACE</div>
       </div>
     </div>
 
@@ -401,7 +404,9 @@
     })();
 
     // Question Bank - ADD YOUR QUESTIONS HERE
-         const questionBank = [
+        // Define the question bank FIRST
+      // Question Bank - AWS DVA-C02 Specific Questions
+        const questionBank = [
             // Domain 1: Development with AWS Services (32%)
 {
     id: 'dva_001',
@@ -12546,7 +12551,6 @@
         this.globalTimerInterval = null;
         this.questionTimerInterval = null;
         this.speedTimerTimeout = null;
-        this.examTimerInterval = null;
         this.currentSelectedOption = null;
       }
 
@@ -12555,6 +12559,28 @@
         this.setupQuestions();
         this.quizStartTime = Date.now();
         this.questionStartTime = Date.now();
+        
+        // Set pace label based on mode
+        const paceLabel = document.getElementById('paceLabel');
+        if (paceLabel) {
+          switch(mode) {
+            case 'exam':
+              paceLabel.textContent = 'Pace (2min target)';
+              break;
+            case 'speed':
+              paceLabel.textContent = 'Pace (90s limit)';
+              break;
+            case 'triage':
+              paceLabel.textContent = 'Pace (30s target)';
+              break;
+            case 'strategic':
+              paceLabel.textContent = 'Pace (2.5min target)';
+              break;
+            default:
+              paceLabel.textContent = 'Question Pace';
+          }
+        }
+        
         this.startTimers();
         this.showQuestion();
       }
@@ -12583,22 +12609,21 @@
         // Global timer
         this.globalTimerInterval = setInterval(() => this.updateGlobalTimer(), 1000);
         
-        // Question timer
-        this.questionTimerInterval = setInterval(() => this.updateQuestionTimer(), 1000);
+        // Question timer with pace tracking
+        this.questionTimerInterval = setInterval(() => {
+          this.updateQuestionTimer();
+          this.updatePaceIndicator(); // Update pace every second for all modes
+        }, 1000);
         
         // Mode-specific timers
         if (this.mode === 'speed') {
           this.startSpeedTimer();
-        } else if (this.mode === 'exam') {
-          this.updatePaceIndicator();
-          this.examTimerInterval = setInterval(() => this.updatePaceIndicator(), 10000);
         }
       }
 
       stopTimers() {
         if (this.globalTimerInterval) clearInterval(this.globalTimerInterval);
         if (this.questionTimerInterval) clearInterval(this.questionTimerInterval);
-        if (this.examTimerInterval) clearInterval(this.examTimerInterval);
         if (this.speedTimerTimeout) clearTimeout(this.speedTimerTimeout);
       }
 
@@ -12633,28 +12658,96 @@
       }
 
       updatePaceIndicator() {
-        if (this.mode !== 'exam') return;
+        // Calculate recommended time per question based on mode
+        let recommendedTime;
         
-        const elapsed = (Date.now() - this.quizStartTime) / 1000;
-        const questionsAnswered = this.userAnswers.filter(a => a !== null).length;
-        const targetPace = (elapsed / 7800) * 65; // Expected questions at this time
-        const difference = questionsAnswered - targetPace;
+        switch(this.mode) {
+          case 'exam':
+            recommendedTime = 120; // 2 minutes per question (130 min / 65 questions)
+            break;
+          case 'speed':
+            recommendedTime = 90; // 90 seconds max
+            break;
+          case 'triage':
+            recommendedTime = 30; // 30 seconds for triage decisions
+            break;
+          case 'strategic':
+            recommendedTime = 150; // 2.5 minutes for strategic practice
+            break;
+          default:
+            recommendedTime = 120; // Default 2 minutes
+        }
+        
+        // Calculate current question time
+        const currentQuestionTime = Math.floor((Date.now() - this.questionStartTime) / 1000);
+        const timeDifference = currentQuestionTime - recommendedTime;
         
         const paceValue = document.getElementById('paceValue');
         const paceIndicator = document.getElementById('paceIndicator');
+        const paceTimerBox = paceValue.closest('.timer-box');
         
-        if (difference >= 0) {
-          paceValue.textContent = `+${Math.floor(difference)}`;
+        // Format time display
+        function formatTime(seconds) {
+          if (seconds < 60) {
+            return `${seconds}s`;
+          } else {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return secs > 0 ? `${mins}m ${secs}s` : `${mins}m`;
+          }
+        }
+        
+        // Track if we just went over time
+        const wasOnPace = !paceTimerBox.classList.contains('over-time');
+        
+        if (currentQuestionTime <= recommendedTime) {
+          // Still within time limit - show remaining time
+          const remaining = recommendedTime - currentQuestionTime;
+          paceValue.textContent = formatTime(remaining) + ' left';
+          paceValue.style.color = '#FFFFFF';
           paceIndicator.className = 'pace-indicator pace-on-track';
-          paceIndicator.textContent = 'ON TRACK';
-        } else if (difference >= -5) {
-          paceValue.textContent = `${Math.floor(difference)}`;
+          paceIndicator.textContent = 'ON PACE';
+          paceTimerBox.classList.remove('over-time');
+        } else if (timeDifference <= 30) {
+          // Slightly over (up to 30 seconds)
+          paceValue.textContent = `-${formatTime(timeDifference)}`;
+          paceValue.style.color = '#ffc107';
           paceIndicator.className = 'pace-indicator pace-behind';
           paceIndicator.textContent = 'BEHIND';
+          paceTimerBox.classList.remove('over-time');
+          
+          // Flash warning when first going over
+          if (wasOnPace && timeDifference === 1) {
+            paceTimerBox.style.animation = 'pulse 0.5s';
+            setTimeout(() => { paceTimerBox.style.animation = ''; }, 500);
+          }
         } else {
-          paceValue.textContent = `${Math.floor(difference)}`;
+          // Significantly over time
+          paceValue.textContent = `-${formatTime(timeDifference)}`;
+          paceValue.style.color = '#dc3545';
           paceIndicator.className = 'pace-indicator pace-danger';
-          paceIndicator.textContent = 'DANGER';
+          paceIndicator.textContent = 'OVER TIME';
+          paceTimerBox.classList.add('over-time');
+          
+          // Flash when first hitting danger zone
+          if (!paceTimerBox.classList.contains('over-time') && timeDifference === 31) {
+            paceTimerBox.style.animation = 'pulseRed 0.5s';
+            setTimeout(() => { paceTimerBox.style.animation = 'pulseRed 2s infinite'; }, 500);
+          }
+        }
+        
+        // Add visual warning if way over time
+        if (timeDifference > 60) {
+          paceValue.style.fontWeight = 'bold';
+          // Adjust font size based on text length
+          if (paceValue.textContent.length > 10) {
+            paceValue.style.fontSize = '1.8em';
+          } else {
+            paceValue.style.fontSize = '2.2em';
+          }
+        } else {
+          paceValue.style.fontWeight = 'normal';
+          paceValue.style.fontSize = '2em';
         }
       }
 
@@ -12739,6 +12832,9 @@
         
         // Reset question timer
         this.questionStartTime = Date.now();
+        
+        // Immediately update pace indicator for new question
+        this.updatePaceIndicator();
         
         // Restart speed timer if in speed mode
         if (this.mode === 'speed' && !this.reviewMode) {
@@ -12831,6 +12927,10 @@
           this.showQuestion();
           document.getElementById('submitBtn').style.display = 'block';
           document.getElementById('nextBtn').style.display = 'none';
+          
+          // Reset pace for new question
+          this.questionStartTime = Date.now();
+          this.updatePaceIndicator();
         } else {
           this.finishQuiz();
         }
@@ -12848,13 +12948,30 @@
           } else {
             document.getElementById('submitBtn').style.display = 'block';
             document.getElementById('nextBtn').style.display = 'none';
+            
+            // Reset pace for unanswered question
+            this.questionStartTime = Date.now();
+            this.updatePaceIndicator();
           }
         }
       }
 
       skipQuestion() {
         this.skippedQuestions.add(this.currentQuestionIndex);
-        this.nextQuestion();
+        this.currentSelectedOption = null;
+        
+        if (this.currentQuestionIndex < this.questions.length - 1) {
+          this.currentQuestionIndex++;
+          this.showQuestion();
+          document.getElementById('submitBtn').style.display = 'block';
+          document.getElementById('nextBtn').style.display = 'none';
+          
+          // Reset pace for new question
+          this.questionStartTime = Date.now();
+          this.updatePaceIndicator();
+        } else {
+          this.finishQuiz();
+        }
       }
 
       toggleFlag() {
@@ -13116,8 +13233,15 @@
       document.getElementById('globalTimer').textContent = '00:00';
       document.getElementById('questionTimer').textContent = '00:00';
       document.getElementById('paceValue').textContent = '--';
+      document.getElementById('paceValue').style.color = '#FFFFFF';
+      document.getElementById('paceValue').style.fontSize = '2em';
+      document.getElementById('paceValue').style.fontWeight = 'normal';
       document.getElementById('paceIndicator').className = 'pace-indicator pace-on-track';
-      document.getElementById('paceIndicator').textContent = 'ON TRACK';
+      document.getElementById('paceIndicator').textContent = 'ON PACE';
+      const paceLabel = document.getElementById('paceLabel');
+      if (paceLabel) paceLabel.textContent = 'Question Pace';
+      const paceBox = document.getElementById('paceValue')?.closest('.timer-box');
+      if (paceBox) paceBox.classList.remove('over-time');
       
       window.scrollTo(0, 0);
     }
