@@ -1,143 +1,144 @@
-// sw.js - Service Worker for DVA Quiz (Fixed)
-const CACHE_NAME = 'dva-quiz-v2'; // Increment version to force update
-const RUNTIME_CACHE = 'dva-runtime-v2';
+// sw.js - Service Worker for DVA Quiz (Ultra-Fixed v4)
+const CACHE_NAME = 'dva-quiz-v4'; // INCREMENT THIS each time you update!
+const RUNTIME_CACHE = 'dva-runtime-v4';
 
-// Only cache truly static assets
+// Only cache the absolute minimum
 const STATIC_ASSETS = [
-  './offline.html',
-  './manifest.json'
-  // Do NOT cache index.html or root path to avoid state issues
+  './offline.html'
+  // Removed manifest.json - let's be ultra-safe
 ];
 
-// Install event - cache only essential static files
+// Install event - cache only offline page
 self.addEventListener('install', (event) => {
-  console.log('Service Worker installing...');
+  console.log('[SW v4] Installing...');
   
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('Opened cache');
+        console.log('[SW v4] Cache opened');
         return cache.addAll(STATIC_ASSETS);
       })
       .catch((error) => {
-        console.error('Cache installation failed:', error);
+        console.error('[SW v4] Cache installation failed:', error);
       })
   );
   
-  // Force the waiting service worker to become active immediately
+  // Force immediate activation
   self.skipWaiting();
 });
 
-// Activate event - clean up old caches
+// Activate event - aggressively clean ALL old caches
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker activating...');
+  console.log('[SW v4] Activating...');
   
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          // Delete old caches
+          // Delete ALL caches that aren't the current version
           if (cacheName !== CACHE_NAME && cacheName !== RUNTIME_CACHE) {
-            console.log('Deleting old cache:', cacheName);
+            console.log('[SW v4] Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
     }).then(() => {
-      // Take control of all pages immediately
+      console.log('[SW v4] Claiming all clients');
       return self.clients.claim();
     })
   );
 });
 
-// Fetch event - Network First for HTML, Cache First for assets
+// Fetch event - Ultra-conservative caching
 self.addEventListener('fetch', (event) => {
-  // Skip non-HTTP(S) requests (like chrome-extension://)
+  // Skip non-HTTP(S) requests
   if (!event.request.url.startsWith('http')) {
     return;
   }
 
-  // Parse the request URL
   const requestUrl = new URL(event.request.url);
   
-  // Handle navigation requests (HTML pages) - NETWORK FIRST
+  // CRITICAL: Never cache ANY HTML or the root path
   if (event.request.mode === 'navigate' || 
       event.request.headers.get('accept')?.includes('text/html') ||
       requestUrl.pathname === '/' || 
-      requestUrl.pathname.endsWith('.html')) {
+      requestUrl.pathname === '/index.html' ||
+      requestUrl.pathname.endsWith('.html') ||
+      requestUrl.pathname === '') {
     
+    // ALWAYS fetch fresh HTML from network
     event.respondWith(
-      fetch(event.request)
-        .then(response => {
-          // Don't cache HTML to avoid state persistence issues
-          return response;
-        })
-        .catch(error => {
-          console.log('Navigation request failed, serving offline page:', error);
-          return caches.match('./offline.html');
-        })
+      fetch(event.request, {
+        cache: 'no-store', // Force no caching
+        credentials: 'same-origin'
+      })
+      .then(response => {
+        // Add cache-control headers to prevent browser caching
+        const modifiedResponse = new Response(response.body, {
+          status: response.status,
+          statusText: response.statusText,
+          headers: new Headers(response.headers)
+        });
+        
+        modifiedResponse.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+        modifiedResponse.headers.set('Pragma', 'no-cache');
+        modifiedResponse.headers.set('Expires', '0');
+        
+        return modifiedResponse;
+      })
+      .catch(error => {
+        console.log('[SW v4] Network failed, serving offline page:', error);
+        return caches.match('./offline.html');
+      })
     );
     return;
   }
 
-  // Handle API requests - NETWORK ONLY (never cache)
+  // Never cache JSON or API requests
   if (requestUrl.pathname.includes('/api/') || 
-      requestUrl.pathname.includes('.json') && !requestUrl.pathname.includes('manifest')) {
-    event.respondWith(fetch(event.request));
+      requestUrl.pathname.endsWith('.json')) {
+    event.respondWith(
+      fetch(event.request, { cache: 'no-store' })
+    );
     return;
   }
 
-  // Handle static assets (CSS, JS, images) - CACHE FIRST
+  // For static assets, use cache but with version checking
   event.respondWith(
     caches.match(event.request)
       .then(cachedResponse => {
-        if (cachedResponse) {
-          return cachedResponse;
-        }
-
-        // Not in cache, fetch from network
-        return fetch(event.request).then(networkResponse => {
-          // Check if valid response
-          if (!networkResponse || 
-              networkResponse.status !== 200 || 
-              networkResponse.type !== 'basic') {
-            return networkResponse;
-          }
-
-          // Cache static assets only (images, fonts, etc.)
-          const isStaticAsset = 
-            requestUrl.pathname.match(/\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/i) ||
-            requestUrl.hostname.includes('cdn') ||
-            requestUrl.hostname.includes('googleapis') ||
-            requestUrl.hostname.includes('cloudflare');
-
-          if (isStaticAsset) {
-            const responseToCache = networkResponse.clone();
-            caches.open(RUNTIME_CACHE)
-              .then(cache => {
-                cache.put(event.request, responseToCache)
-                  .catch(err => console.log('Cache put failed:', err));
+        // Always fetch in background to check for updates
+        const fetchPromise = fetch(event.request).then(networkResponse => {
+          // Only cache successful responses
+          if (networkResponse && networkResponse.status === 200) {
+            // Only cache truly static assets
+            const isStaticAsset = 
+              requestUrl.pathname.match(/\.(png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/i);
+            
+            // Don't cache JS or CSS to avoid state issues
+            if (isStaticAsset) {
+              const responseToCache = networkResponse.clone();
+              caches.open(RUNTIME_CACHE).then(cache => {
+                cache.put(event.request, responseToCache);
               });
+            }
           }
-
           return networkResponse;
         });
+
+        // Return cached version if available, otherwise wait for network
+        return cachedResponse || fetchPromise;
       })
       .catch(error => {
-        console.log('Fetch failed:', error);
+        console.log('[SW v4] Both cache and network failed:', error);
         
-        // Return offline page for navigation requests
         if (event.request.mode === 'navigate') {
           return caches.match('./offline.html');
         }
         
-        // Return a basic offline response for other requests
-        return new Response('Resource not available offline', {
+        return new Response('Offline', {
           status: 503,
-          statusText: 'Service Unavailable',
-          headers: new Headers({
-            'Content-Type': 'text/plain'
-          })
+          statusText: 'Service Unavailable'
         });
       })
   );
@@ -150,16 +151,16 @@ self.addEventListener('message', (event) => {
   }
   
   if (event.data && event.data.type === 'CLEAR_CACHE') {
+    console.log('[SW v4] Clearing all caches on request');
     event.waitUntil(
       caches.keys().then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
-            console.log('Clearing cache:', cacheName);
+            console.log('[SW v4] Deleting cache:', cacheName);
             return caches.delete(cacheName);
           })
         );
       }).then(() => {
-        // Send a message back to the client
         if (event.ports[0]) {
           event.ports[0].postMessage({ 
             type: 'CACHE_CLEARED', 
@@ -171,4 +172,5 @@ self.addEventListener('message', (event) => {
   }
 });
 
-console.log('Service Worker v2 loaded successfully');
+console.log('[SW v4] Service Worker loaded successfully');
+
