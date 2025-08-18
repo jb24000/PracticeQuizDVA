@@ -44,21 +44,19 @@
       overflow-x: hidden;
     }
 
-    .main-header { width: 100%; text-align: center; padding: 40px 20px 30px; background: rgba(0, 0, 0, 0.15); }
+    .main-header { width: 100%; text-align: center; padding: 40px 20px 30px; background: rgba(0, 0, 0, 0.1); }
     .main-header h1 { color: var(--text-white); font-size: 2.8em; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 15px; }
     .main-header .tagline { color: var(--text-light); font-size: 1.1em; font-weight: 300; opacity: 0.95; }
 
     .container { width: 100%; max-width: 1200px; padding: 20px; animation: fadeIn 0.6s ease-out; }
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-    @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); } }
 
     .hero-section { text-align: center; margin-bottom: 40px; padding: 20px; }
     .hero-section h2 { color: var(--text-white); font-size: 2.2em; font-weight: 600; margin-bottom: 15px; }
     .hero-section p { color: var(--text-light); font-size: 1.15em; max-width: 700px; margin: 0 auto; }
 
-    .features-card { background: var(--glass-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 20px; padding: 30px; margin-bottom: 40px; box-shadow: var(--shadow); border: 1px solid var(--glass-border); }
+    .features-card { background: var(--card-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 20px; padding: 30px; margin-bottom: 40px; box-shadow: var(--shadow-card); border: 1px solid rgba(255, 255, 255, 0.2); }
     .features-card h3 { color: var(--text-white); font-size: 1.6em; margin-bottom: 20px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 10px; }
     .features-card .subtitle { text-align: center; color: var(--text-light); margin-bottom: 25px; font-size: 1.05em; }
 
@@ -67,19 +65,18 @@
     .feature-item .icon { font-size: 1.3em; }
 
     .timer-section { display: flex; justify-content: center; gap: 20px; margin: 20px auto; max-width: 1200px; padding: 0 20px; flex-wrap: wrap; }
-    .timer-box { flex: 1; min-width: 180px; background: var(--glass-bg); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; text-align: center; border: 1px solid var(--glass-border); box-shadow: var(--shadow); transition: all 0.3s ease; }
-    .timer-box.over-time { border-color: var(--danger); animation: pulseRed 2s infinite; }
+    .timer-box { flex: 1; min-width: 180px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
     .timer-label { color: var(--text-light); font-size: 0.9em; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-    .timer-value { color: var(--text-white); font-size: 2em; font-weight: bold; font-feature-settings: "tnum"; transition: all 0.3s ease; }
+    .timer-value { color: var(--text-white); font-size: 2em; font-weight: bold; font-feature-settings: "tnum"; }
 
-    .pace-indicator { padding: 6px 12px; border-radius: 20px; font-weight: bold; color: white; font-size: 0.85em; margin-top: 8px; display: inline-block; transition: all 0.3s ease; }
+    .pace-indicator { padding: 6px 12px; border-radius: 20px; font-weight: bold; color: white; font-size: 0.85em; margin-top: 8px; display: inline-block; }
     .pace-on-track { background: var(--success); }
-    .pace-behind { background: var(--warning); color: #333; }
-    .pace-danger { background: var(--danger); animation: pulse 1.5s infinite; }
+    .pace-behind { background: var(--warning); }
+    .pace-danger { background: var(--danger); }
 
     .mode-selection { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px; }
-    .mode-card { background: var(--glass-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 30px; cursor: pointer; transition: all 0.3s ease; box-shadow: var(--shadow); }
-    .mode-card:hover { transform: translateY(-8px); background: var(--card-hover); box-shadow: var(--shadow-hover); }
+    .mode-card { background: var(--card-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 20px; padding: 30px; cursor: pointer; transition: all 0.3s ease; box-shadow: var(--shadow-card); }
+    .mode-card:hover { transform: translateY(-8px); background: var(--card-hover); box-shadow: 0 15px 40px rgba(0,0,0,0.25); }
 
     .mode-icon { font-size: 3em; margin-bottom: 15px; display: block; }
     .mode-title { color: var(--text-white); font-size: 1.5em; font-weight: 600; margin-bottom: 10px; }
@@ -89,7 +86,7 @@
     .mode-features li { color: var(--text-light); font-size: 0.9em; padding: 6px 0; display: flex; align-items: center; gap: 8px; }
     .mode-features li:before { content: '✓'; color: var(--text-white); font-weight: bold; }
 
-    .install-banner { background: var(--glass-border); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; margin: 20px; display: none; align-items: center; justify-content: space-between; box-shadow: var(--shadow); animation: slideDown 0.5s ease; }
+    .install-banner { background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; margin: 20px; display: none; align-items: center; justify-content: space-between; box-shadow: var(--shadow-card); animation: slideDown 0.5s ease; }
     @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
     .install-banner .content { display: flex; align-items: center; gap: 15px; color: var(--text-white); }
     .install-banner .icon { font-size: 2em; }
@@ -100,55 +97,53 @@
     .install-btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(255,255,255,0.3); }
     .install-btn.secondary { background: transparent; color: white; border: 2px solid white; }
 
-    .question-container { background: rgba(255, 255, 255, 0.98); border-radius: 20px; padding: 30px; margin: 20px auto; max-width: 1000px; color: #333; display: none; box-shadow: var(--shadow-hover); }
+    .question-container { background: rgba(255, 255, 255, 0.98); border-radius: 20px; padding: 30px; margin: 20px auto; max-width: 1000px; color: #333; display: none; box-shadow: 0 10px 40px rgba(0,0,0,0.15); }
     .question-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
     .question-info { display: flex; gap: 12px; flex-wrap: wrap; }
     .badge { padding: 6px 14px; border-radius: 20px; font-size: 0.85em; font-weight: 600; }
     .badge-domain { background: var(--primary); color: white; }
     .badge-difficulty-easy { background: var(--success); color: white; }
-    .badge-difficulty-medium { background: var(--warning); color: #333; }
+    .badge-difficulty-medium { background: var(--warning); color: white; }
     .badge-difficulty-hard { background: var(--danger); color: white; }
 
     .question-actions { display: flex; gap: 12px; }
     .action-btn { padding: 8px 18px; border: none; border-radius: 20px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; font-size: 0.9em; }
-    .flag-btn { background: var(--warning); color: #333; }
+    .flag-btn { background: var(--warning); color: white; }
     .flag-btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(255,193,7,0.3); }
-    .flag-btn.flagged { background: var(--danger); color: white; }
+    .flag-btn.flagged { background: var(--danger); }
     .skip-btn { background: var(--primary); color: white; }
     .skip-btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(255,153,0,0.3); }
 
-    .scenario { background: #fff9e6; border-left: 4px solid var(--primary); padding: 18px; margin-bottom: 25px; border-radius: 10px; line-height: 1.6; color: #444; }
+    .scenario { background: #fff8f0; border-left: 4px solid var(--primary); padding: 18px; margin-bottom: 25px; border-radius: 10px; line-height: 1.6; color: #444; }
     .question-text { font-size: 1.15em; font-weight: 600; margin-bottom: 20px; line-height: 1.5; color: #232F3E; }
 
     .options { display: flex; flex-direction: column; gap: 12px; }
     .option { background: white; border: 2px solid #e0e0e0; border-radius: 10px; padding: 15px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: flex-start; gap: 12px; line-height: 1.5; }
     .option:hover { border-color: var(--aws-orange); transform: translateX(5px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    .option.selected { background: #FFF9E6; border-color: var(--aws-orange); }
-    .option.correct { background: #d4edda; border-color: var(--success); pointer-events: none; }
-    .option.incorrect { background: #f8d7da; border-color: var(--danger); pointer-events: none; }
-    .option.disabled { pointer-events: none; opacity: 0.7; }
+    .option.selected { background: #FFF3E0; border-color: var(--aws-orange); }
+    .option.correct { background: #E8F5E9; border-color: var(--success); }
+    .option.incorrect { background: #FFEBEE; border-color: var(--danger); }
     .option-letter { min-width: 30px; height: 30px; border-radius: 50%; background: var(--aws-blue); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; }
     .option-text { flex: 1; }
 
-    .explanation { background: linear-gradient(135deg, #e6f2ff, #f0f8ff); border-radius: 12px; padding: 25px; margin-top: 25px; display: none; animation: fadeIn 0.5s ease; border: 1px solid #b3d9ff; }
+    .explanation { background: linear-gradient(135deg, #f0f8ff, #f5faff); border-radius: 12px; padding: 25px; margin-top: 25px; display: none; animation: fadeIn 0.5s ease; border: 1px solid #d1e7ff; }
     .explanation h3 { color: var(--primary); margin-bottom: 15px; font-size: 1.3em; }
     .explanation-section { margin-bottom: 18px; }
     .explanation-section h4 { color: #555; margin-bottom: 10px; font-size: 1.1em; }
-    .strategy-tip { background: #FFF9E6; border-left: 4px solid var(--primary); padding: 15px; margin-top: 15px; border-radius: 8px; }
+    .strategy-tip { background: #FFF8F0; border-left: 4px solid var(--primary); padding: 15px; margin-top: 15px; border-radius: 8px; }
 
     .controls { display: flex; justify-content: space-between; gap: 15px; margin-top: 25px; }
     .controls .btn { flex: 1; }
 
     .btn { padding: 12px 32px; border: none; border-radius: 25px; font-size: 1em; font-weight: 600; cursor: pointer; transition: all 0.3s ease; color: white; text-transform: uppercase; letter-spacing: 0.5px; }
-    .btn-primary { background: var(--primary-gradient); }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,153,0,0.4); }
     .btn-secondary { background: linear-gradient(135deg, #6c757d, #5a6268); }
     .btn-secondary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(108,117,125,0.4); }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
 
-    .results-container { background: rgba(255, 255, 255, 0.98); border-radius: 20px; padding: 35px; color: #333; display: none; max-width: 1000px; margin: 20px auto; box-shadow: var(--shadow-hover); }
+    .results-container { background: rgba(255, 255, 255, 0.98); border-radius: 20px; padding: 35px; color: #333; display: none; max-width: 1000px; margin: 20px auto; box-shadow: 0 10px 40px rgba(0,0,0,0.15); }
     .results-header { text-align: center; margin-bottom: 30px; }
-    .score-circle { width: 150px; height: 150px; margin: 0 auto 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3em; font-weight: bold; color: white; position: relative; background: conic-gradient(var(--aws-orange) 0deg, var(--aws-orange) var(--score-deg), #e0e0e0 var(--score-deg)); }
+    .score-circle { width: 150px; height: 150px; margin: 0 auto 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3em; font-weight: bold; color: white; position: relative; background: conic-gradient(var(--primary) 0deg, var(--primary) var(--score-deg), #e0e0e0 var(--score-deg)); }
     .score-text { background: white; width: 130px; height: 130px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #333; }
     .pass-fail { font-size: 1.5em; font-weight: bold; margin-bottom: 10px; }
     .pass { color: var(--success); }
@@ -164,7 +159,7 @@
     .domain-name { font-weight: 600; color: #333; }
     .domain-score { display: flex; align-items: center; gap: 10px; }
     .progress-bar { width: 100px; height: 8px; background: #e0e0e0; border-radius: 4px; overflow: hidden; }
-    .progress-fill { height: 100%; background: var(--aws-orange); transition: width 0.5s ease; }
+    .progress-fill { height: 100%; background: var(--primary); transition: width 0.5s ease; }
 
     .loading { text-align: center; color: white; font-size: 1.2em; padding: 40px; }
     .spinner { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid white; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 20px auto; }
@@ -181,14 +176,13 @@
       .features-grid { grid-template-columns: 1fr; }
     }
 
-    .review-mode { background: var(--glass-bg); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; margin: 20px auto; max-width: 1000px; display: none; box-shadow: var(--shadow); }
+    .review-mode { background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; margin: 20px auto; max-width: 1000px; display: none; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
     .review-mode h3 { color: var(--text-white); margin-bottom: 15px; }
     .review-navigation { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
-    .review-btn { width: 45px; height: 45px; border: 2px solid var(--glass-border); background: var(--glass-bg); border-radius: 10px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; color: white; display: flex; align-items: center; justify-content: center; }
+    .review-btn { width: 45px; height: 45px; border: 2px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.15); border-radius: 10px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; color: white; }
     .review-btn.answered { background: var(--success); color: white; border-color: var(--success); }
-    .review-btn.flagged { background: var(--warning); color: #333; border-color: var(--warning); }
+    .review-btn.flagged { background: var(--warning); color: white; border-color: var(--warning); }
     .review-btn.current { background: var(--primary); color: white; transform: scale(1.1); border-color: var(--primary); }
-    .review-btn:hover { transform: scale(1.05); }
   </style>
 </head>
 <body>
@@ -206,8 +200,8 @@
       </div>
     </div>
     <div class="actions">
-      <button class="install-btn" id="installBtn">Install App</button>
-      <button class="install-btn secondary" id="dismissBtn">Later</button>
+      <button class="install-btn" onclick="installPWA()">Install App</button>
+      <button class="install-btn secondary" onclick="dismissInstall()">Later</button>
     </div>
   </div>
 
@@ -231,7 +225,7 @@
     </div>
 
     <div class="mode-selection" id="modeSelection">
-      <div class="mode-card" id="triageMode">
+      <div class="mode-card" onclick="startMode('triage')">
         <span class="mode-icon">⚡</span>
         <div class="mode-title">Triage Training</div>
         <p class="mode-desc">Learn to identify quick wins vs time sinks in under 30 seconds</p>
@@ -242,7 +236,7 @@
         </ul>
       </div>
 
-      <div class="mode-card" id="speedMode">
+      <div class="mode-card" onclick="startMode('speed')">
         <span class="mode-icon">🔥</span>
         <div class="mode-title">Speed Rounds</div>
         <p class="mode-desc">90-second maximum per question - build exam pace muscle memory</p>
@@ -253,7 +247,7 @@
         </ul>
       </div>
 
-      <div class="mode-card" id="examMode">
+      <div class="mode-card" onclick="startMode('exam')">
         <span class="mode-icon">🎯</span>
         <div class="mode-title">Full Exam Simulation</div>
         <p class="mode-desc">Real 130-minute, 65-question exam with strategic coaching</p>
@@ -264,7 +258,7 @@
         </ul>
       </div>
 
-      <div class="mode-card" id="strategicMode">
+      <div class="mode-card" onclick="startMode('strategic')">
         <span class="mode-icon">🧠</span>
         <div class="mode-title">Strategic Practice</div>
         <p class="mode-desc">Learn mark/skip/return workflow with complex scenarios</p>
@@ -286,9 +280,9 @@
         <div class="timer-value" id="questionTimer">00:00</div>
       </div>
       <div class="timer-box">
-        <div class="timer-label" id="paceLabel">Question Pace</div>
+        <div class="timer-label">Pace Status</div>
         <div class="timer-value" id="paceValue">--</div>
-        <div class="pace-indicator pace-on-track" id="paceIndicator">ON PACE</div>
+        <div class="pace-indicator pace-on-track" id="paceIndicator">ON TRACK</div>
       </div>
     </div>
 
@@ -305,12 +299,12 @@
           <span class="badge" id="questionNumber">Q1 of 65</span>
         </div>
         <div class="question-actions">
-          <button class="action-btn flag-btn" id="flagBtn">🚩 Flag</button>
-          <button class="action-btn skip-btn" id="skipBtn">⏭️ Skip</button>
+          <button class="action-btn flag-btn" id="flagBtn" onclick="toggleFlag()">🚩 Flag</button>
+          <button class="action-btn skip-btn" onclick="skipQuestion()">⏭️ Skip</button>
         </div>
       </div>
 
-      <div class="scenario" id="scenario" style="display: none;"></div>
+      <div class="scenario" id="scenario"></div>
       <div class="question-text" id="questionText"></div>
       <div class="options" id="options"></div>
 
@@ -331,9 +325,9 @@
       </div>
 
       <div class="controls">
-        <button class="btn btn-secondary" id="prevBtn">Previous</button>
-        <button class="btn btn-primary" id="submitBtn">Submit Answer</button>
-        <button class="btn btn-primary" id="nextBtn" style="display: none;">Next Question</button>
+        <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()">Previous</button>
+        <button class="btn btn-primary" id="submitBtn" onclick="submitAnswer()">Submit Answer</button>
+        <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" style="display: none;">Next Question</button>
       </div>
     </div>
 
@@ -360,9 +354,9 @@
       </div>
 
       <div class="controls">
-        <button class="btn btn-primary" id="reviewAnswersBtn" onclick="window.reviewAnswers()">Review Answers</button>
-        <button class="btn btn-secondary" id="resetQuizBtn" onclick="window.resetQuiz()">Start New Session</button>
-        <button class="btn btn-primary" id="takeAnotherExamBtn" onclick="window.startNewExam()">Take Another Exam</button>
+        <button class="btn btn-primary" onclick="reviewAnswers()">Review Answers</button>
+        <button class="btn btn-secondary" onclick="resetQuiz()">Start New Session</button>
+        <button class="btn btn-primary" onclick="resetQuiz()">Take Another Exam</button>
       </div>
     </div>
 
@@ -373,105 +367,9 @@
   </div>
 
   <script>
-    // CRITICAL: Define global functions FIRST before anything else
-    window.startNewExam = function() {
-      console.log('🎯 Take Another Exam clicked - Starting new exam...');
-      
-      try {
-        // First, completely kill the old trainer
-        if (window.trainer) {
-          console.log('Destroying old trainer:', window.trainer.instanceId);
-          if (window.trainer.destroy) {
-            window.trainer.destroy();
-          }
-          window.trainer = null;
-        }
-        
-        // Stop ALL timers
-        for (let i = 1; i < 99999; i++) { 
-          window.clearInterval(i); 
-          window.clearTimeout(i); 
-        }
-        
-        // Hide results immediately
-        const resultsContainer = document.getElementById('resultsContainer');
-        if (resultsContainer) {
-          resultsContainer.style.display = 'none';
-        }
-        
-        // Do a complete reset
-        if (window.resetQuiz) {
-          window.resetQuiz();
-        } else {
-          // Fallback if resetQuiz doesn't exist yet
-          location.reload();
-        }
-        
-        // Then start exam mode after a brief delay
-        setTimeout(() => {
-          console.log('🎯 Starting exam mode after reset...');
-          if (typeof startMode === 'function') {
-            startMode('exam');
-          } else {
-            console.error('startMode not defined yet');
-            location.reload();
-          }
-        }, 500);
-      } catch (error) {
-        console.error('Error in startNewExam:', error);
-        location.reload();
-      }
-    };
-    
-    console.log('✅ window.startNewExam defined:', typeof window.startNewExam);
-  </script>
-  
-  <script>
-    // ULTRA AGGRESSIVE WALLET KILLER - Must be FIRST script in file
-    (function() {
-      'use strict';
-      const criticalProps = ['ethereum', 'tronWeb', 'solana', 'walletRouter'];
-      criticalProps.forEach(prop => {
-        try {
-          // Check if property already exists and is configurable
-          const descriptor = Object.getOwnPropertyDescriptor(window, prop);
-          if (!descriptor || descriptor.configurable !== false) {
-            Object.defineProperty(window, prop, { 
-              get: () => undefined, 
-              set: () => {}, 
-              configurable: false, 
-              enumerable: false 
-            });
-          }
-        } catch (e) {
-          // Property already defined as non-configurable, that's fine
-          console.log(`Property ${prop} already protected`);
-        }
-      });
-      const original = Object.defineProperty;
-      Object.defineProperty = new Proxy(original, {
-        apply(target, thisArg, args) {
-          const [obj, prop] = args;
-          if (obj === window && criticalProps.includes(prop)) { return obj; }
-          return Reflect.apply(target, thisArg, args);
-        }
-      });
-      const originalCreateElement = document.createElement;
-      document.createElement = function(tagName) {
-        const element = originalCreateElement.call(document, tagName);
-        if (tagName.toLowerCase() === 'script') {
-          const originalSetAttribute = element.setAttribute;
-          element.setAttribute = function(name, value) {
-            if (name === 'src' && value && value.includes('chrome-extension://')) { console.log('🚫 Blocked:', value); return; }
-            return originalSetAttribute.call(this, name, value);
-          }
-        }
-        return element;
-      }
-      console.log('🛡️ ULTRA WALLET KILLER ACTIVE');
-    })();
-
-    // Question Bank - ADD YOUR QUESTIONS HERE
+    // Define the question bank
+        // Define the question bank FIRST
+      // Question Bank - AWS DVA-C02 Specific Questions
         const questionBank = [
             // Domain 1: Development with AWS Services (32%)
 {
@@ -12600,1204 +12498,36 @@
     }
 }
 ];
+  </script>
 
-    // Quiz State Management
-    class QuizTrainer {
-      constructor() {
-        // Generate unique ID for this instance
-        this.instanceId = Date.now() + '_' + Math.random();
-        console.log('🆕 New QuizTrainer instance:', this.instanceId);
-        
-        this.questions = [];
-        this.currentQuestionIndex = 0;
-        this.userAnswers = [];
-        this.score = 0;
-        this.mode = null;
-        this.flaggedQuestions = new Set();
-        this.skippedQuestions = new Set();
-        this.reviewMode = false;
-        this.quizStartTime = null;
-        this.questionStartTime = null;
-        this.timePerQuestion = [];
-        this.globalTimerInterval = null;
-        this.questionTimerInterval = null;
-        this.speedTimerTimeout = null;
-        this.currentSelectedOption = null;
-        this.isDestroyed = false;
-      }
-      
-      destroy() {
-        console.log('💥 Destroying QuizTrainer instance:', this.instanceId);
-        this.isDestroyed = true;
-        this.stopTimers();
-        
-        // Clear all references
-        this.questions = null;
-        this.userAnswers = null;
-        this.flaggedQuestions = null;
-        this.skippedQuestions = null;
-        this.timePerQuestion = null;
-        
-        // Remove all event listeners by replacing elements
-        const options = document.querySelectorAll('.option');
-        options.forEach(opt => {
-          const newOpt = opt.cloneNode(true);
-          opt.parentNode.replaceChild(newOpt, opt);
-        });
-      }
-
-      init(mode) {
-        if (this.isDestroyed) {
-          console.error('Cannot init destroyed trainer');
-          return;
-        }
-        
-        this.mode = mode;
-        this.setupQuestions();
-        this.quizStartTime = Date.now();
-        this.questionStartTime = Date.now();
-        
-        // Attach event listeners to quiz buttons
-        const submitBtn = document.getElementById('submitBtn');
-        if (submitBtn) {
-          submitBtn.onclick = () => this.submitAnswer();
-        }
-        
-        const nextBtn = document.getElementById('nextBtn');
-        if (nextBtn) {
-          nextBtn.onclick = () => this.nextQuestion();
-        }
-        
-        const prevBtn = document.getElementById('prevBtn');
-        if (prevBtn) {
-          prevBtn.onclick = () => this.previousQuestion();
-        }
-        
-        const flagBtn = document.getElementById('flagBtn');
-        if (flagBtn) {
-          flagBtn.onclick = () => this.toggleFlag();
-        }
-        
-        const skipBtn = document.getElementById('skipBtn');
-        if (skipBtn) {
-          skipBtn.onclick = () => this.skipQuestion();
-        }
-        
-        // Set pace label based on mode
-        const paceLabel = document.getElementById('paceLabel');
-        if (paceLabel) {
-          switch(mode) {
-            case 'exam':
-              paceLabel.textContent = 'Pace (2min target)';
-              break;
-            case 'speed':
-              paceLabel.textContent = 'Pace (90s limit)';
-              break;
-            case 'triage':
-              paceLabel.textContent = 'Pace (30s target)';
-              break;
-            case 'strategic':
-              paceLabel.textContent = 'Pace (2.5min target)';
-              break;
-            default:
-              paceLabel.textContent = 'Question Pace';
-          }
-        }
-        
-        this.startTimers();
-        this.showQuestion();
-      }
-
-      setupQuestions() {
-        const numQuestions = this.mode === 'exam' ? 65 : 
-                           this.mode === 'triage' ? 20 : 
-                           this.mode === 'speed' ? 15 : 25;
-        
-        // Shuffle and select questions
-        const shuffled = [...questionBank].sort(() => Math.random() - 0.5);
-        this.questions = shuffled.slice(0, Math.min(numQuestions, shuffled.length));
-        
-        // If not enough questions, duplicate some
-        while (this.questions.length < numQuestions) {
-          this.questions.push({...shuffled[Math.floor(Math.random() * shuffled.length)]});
-        }
-        
-        this.userAnswers = new Array(this.questions.length).fill(null);
-      }
-
-      startTimers() {
-        // Clear any existing timers
-        this.stopTimers();
-        
-        // Global timer
-        this.globalTimerInterval = setInterval(() => this.updateGlobalTimer(), 1000);
-        
-        // Question timer with pace tracking
-        this.questionTimerInterval = setInterval(() => {
-          this.updateQuestionTimer();
-          this.updatePaceIndicator(); // Update pace every second for all modes
-        }, 1000);
-        
-        // Mode-specific timers
-        if (this.mode === 'speed') {
-          this.startSpeedTimer();
-        }
-      }
-
-      stopTimers() {
-        if (this.globalTimerInterval) clearInterval(this.globalTimerInterval);
-        if (this.questionTimerInterval) clearInterval(this.questionTimerInterval);
-        if (this.speedTimerTimeout) clearTimeout(this.speedTimerTimeout);
-      }
-
-      startSpeedTimer() {
-        if (this.speedTimerTimeout) clearTimeout(this.speedTimerTimeout);
-        this.speedTimerTimeout = setTimeout(() => {
-          if (!this.userAnswers[this.currentQuestionIndex]) {
-            this.skipQuestion();
-          }
-        }, 90000); // 90 seconds
-      }
-
-      updateGlobalTimer() {
-        const elapsed = Math.floor((Date.now() - this.quizStartTime) / 1000);
-        const minutes = Math.floor(elapsed / 60);
-        const seconds = elapsed % 60;
-        document.getElementById('globalTimer').textContent = 
-          `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        
-        // Check exam time limit
-        if (this.mode === 'exam' && elapsed >= 7800) { // 130 minutes
-          this.finishQuiz();
-        }
-      }
-
-      updateQuestionTimer() {
-        const elapsed = Math.floor((Date.now() - this.questionStartTime) / 1000);
-        const minutes = Math.floor(elapsed / 60);
-        const seconds = elapsed % 60;
-        document.getElementById('questionTimer').textContent = 
-          `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-      }
-
-      updatePaceIndicator() {
-        // Calculate recommended time per question based on mode
-        let recommendedTime;
-        
-        switch(this.mode) {
-          case 'exam':
-            recommendedTime = 120; // 2 minutes per question (130 min / 65 questions)
-            break;
-          case 'speed':
-            recommendedTime = 90; // 90 seconds max
-            break;
-          case 'triage':
-            recommendedTime = 30; // 30 seconds for triage decisions
-            break;
-          case 'strategic':
-            recommendedTime = 150; // 2.5 minutes for strategic practice
-            break;
-          default:
-            recommendedTime = 120; // Default 2 minutes
-        }
-        
-        // Calculate current question time
-        const currentQuestionTime = Math.floor((Date.now() - this.questionStartTime) / 1000);
-        const timeDifference = currentQuestionTime - recommendedTime;
-        
-        const paceValue = document.getElementById('paceValue');
-        const paceIndicator = document.getElementById('paceIndicator');
-        const paceTimerBox = paceValue.closest('.timer-box');
-        
-        // Format time display
-        function formatTime(seconds) {
-          if (seconds < 60) {
-            return `${seconds}s`;
-          } else {
-            const mins = Math.floor(seconds / 60);
-            const secs = seconds % 60;
-            return secs > 0 ? `${mins}m ${secs}s` : `${mins}m`;
-          }
-        }
-        
-        // Track if we just went over time
-        const wasOnPace = !paceTimerBox.classList.contains('over-time');
-        
-        if (currentQuestionTime <= recommendedTime) {
-          // Still within time limit - show remaining time
-          const remaining = recommendedTime - currentQuestionTime;
-          paceValue.textContent = formatTime(remaining) + ' left';
-          paceValue.style.color = '#FFFFFF';
-          paceIndicator.className = 'pace-indicator pace-on-track';
-          paceIndicator.textContent = 'ON PACE';
-          paceTimerBox.classList.remove('over-time');
-        } else if (timeDifference <= 30) {
-          // Slightly over (up to 30 seconds)
-          paceValue.textContent = `-${formatTime(timeDifference)}`;
-          paceValue.style.color = '#ffc107';
-          paceIndicator.className = 'pace-indicator pace-behind';
-          paceIndicator.textContent = 'BEHIND';
-          paceTimerBox.classList.remove('over-time');
-          
-          // Flash warning when first going over
-          if (wasOnPace && timeDifference === 1) {
-            paceTimerBox.style.animation = 'pulse 0.5s';
-            setTimeout(() => { paceTimerBox.style.animation = ''; }, 500);
-          }
-        } else {
-          // Significantly over time
-          paceValue.textContent = `-${formatTime(timeDifference)}`;
-          paceValue.style.color = '#dc3545';
-          paceIndicator.className = 'pace-indicator pace-danger';
-          paceIndicator.textContent = 'OVER TIME';
-          paceTimerBox.classList.add('over-time');
-          
-          // Flash when first hitting danger zone
-          if (!paceTimerBox.classList.contains('over-time') && timeDifference === 31) {
-            paceTimerBox.style.animation = 'pulseRed 0.5s';
-            setTimeout(() => { paceTimerBox.style.animation = 'pulseRed 2s infinite'; }, 500);
-          }
-        }
-        
-        // Add visual warning if way over time
-        if (timeDifference > 60) {
-          paceValue.style.fontWeight = 'bold';
-          // Adjust font size based on text length
-          if (paceValue.textContent.length > 10) {
-            paceValue.style.fontSize = '1.8em';
-          } else {
-            paceValue.style.fontSize = '2.2em';
-          }
-        } else {
-          paceValue.style.fontWeight = 'normal';
-          paceValue.style.fontSize = '2em';
-        }
-      }
-
-      showQuestion() {
-        const question = this.questions[this.currentQuestionIndex];
-        if (!question) return;
-        
-        // CRITICAL: Clear ALL previous content first
-        document.getElementById('options').innerHTML = '';
-        document.getElementById('explanation').style.display = 'none';
-        document.getElementById('scenario').innerHTML = '';
-        document.getElementById('questionText').innerHTML = '';
-        
-        // Update badges
-        document.getElementById('domainBadge').textContent = `Domain ${question.domain || 1}`;
-        document.getElementById('difficultyBadge').textContent = question.difficulty || 'Medium';
-        document.getElementById('difficultyBadge').className = `badge badge-difficulty-${(question.difficulty || 'medium').toLowerCase()}`;
-        document.getElementById('questionNumber').textContent = `Q${this.currentQuestionIndex + 1} of ${this.questions.length}`;
-        
-        // Update flag button
-        const flagBtn = document.getElementById('flagBtn');
-        if (this.flaggedQuestions.has(this.currentQuestionIndex)) {
-          flagBtn.classList.add('flagged');
-          flagBtn.innerHTML = '🚩 Flagged';
-        } else {
-          flagBtn.classList.remove('flagged');
-          flagBtn.innerHTML = '🚩 Flag';
-        }
-        
-        // Show scenario if exists
-        const scenarioEl = document.getElementById('scenario');
-        if (question.scenario) {
-          scenarioEl.textContent = question.scenario;
-          scenarioEl.style.display = 'block';
-        } else {
-          scenarioEl.style.display = 'none';
-        }
-        
-        // Show question
-        document.getElementById('questionText').textContent = question.question;
-        
-        // Show options - CREATE FRESH ELEMENTS
-        const optionsEl = document.getElementById('options');
-        optionsEl.innerHTML = ''; // Clear again to be sure
-        
-        question.options.forEach((option, index) => {
-          const optionEl = document.createElement('div');
-          optionEl.className = 'option';
-          optionEl.innerHTML = `
-            <div class="option-letter">${String.fromCharCode(65 + index)}</div>
-            <div class="option-text">${option}</div>
-          `;
-          
-          // If in review mode and question was answered
-          if (this.reviewMode && this.userAnswers[this.currentQuestionIndex] !== null) {
-            optionEl.classList.add('disabled');
-            if (index === question.correct) {
-              optionEl.classList.add('correct');
-            } else if (index === this.userAnswers[this.currentQuestionIndex]) {
-              optionEl.classList.add('incorrect');
-            }
-          } else {
-            // Create new function for each option to avoid closure issues
-            optionEl.onclick = ((idx) => {
-              return () => {
-                if (!this.reviewMode) {
-                  this.selectOption(idx);
-                }
-              };
-            })(index);
-            
-            // Restore selection if exists
-            if (this.userAnswers[this.currentQuestionIndex] === index) {
-              optionEl.classList.add('selected');
-              this.currentSelectedOption = index;
-            }
-          }
-          
-          optionsEl.appendChild(optionEl);
-        });
-        
-        // Show/hide explanation
-        if (this.reviewMode && this.userAnswers[this.currentQuestionIndex] !== null) {
-          this.showExplanation();
-        } else {
-          document.getElementById('explanation').style.display = 'none';
-        }
-        
-        // Update navigation buttons
-        this.updateNavigationButtons();
-        
-        // Update review navigation if visible
-        this.updateReviewNavigation();
-        
-        // Reset question timer
-        this.questionStartTime = Date.now();
-        
-        // Immediately update pace indicator for new question
-        this.updatePaceIndicator();
-        
-        // Restart speed timer if in speed mode
-        if (this.mode === 'speed' && !this.reviewMode) {
-          this.startSpeedTimer();
-        }
-      }
-
-      selectOption(index) {
-        if (this.reviewMode) return;
-        
-        // Clear previous selection
-        document.querySelectorAll('.option').forEach(opt => {
-          opt.classList.remove('selected');
-        });
-        
-        // Mark new selection
-        document.querySelectorAll('.option')[index].classList.add('selected');
-        this.currentSelectedOption = index;
-      }
-
-      submitAnswer() {
-        if (this.currentSelectedOption === null) {
-          alert('Please select an answer before submitting.');
-          return;
-        }
-        
-        // Save answer
-        this.userAnswers[this.currentQuestionIndex] = this.currentSelectedOption;
-        
-        // Track time
-        const timeSpent = (Date.now() - this.questionStartTime) / 1000;
-        this.timePerQuestion[this.currentQuestionIndex] = timeSpent;
-        
-        // Show feedback
-        this.showExplanation();
-        
-        // Update buttons
-        document.getElementById('submitBtn').style.display = 'none';
-        document.getElementById('nextBtn').style.display = 'block';
-        
-        // Auto-advance in speed mode
-        if (this.mode === 'speed') {
-          setTimeout(() => this.nextQuestion(), 2000);
-        }
-      }
-
-      showExplanation() {
-        const question = this.questions[this.currentQuestionIndex];
-        const userAnswer = this.userAnswers[this.currentQuestionIndex];
-        
-        // Mark correct/incorrect options
-        document.querySelectorAll('.option').forEach((opt, index) => {
-          opt.classList.add('disabled');
-          if (index === question.correct) {
-            opt.classList.add('correct');
-          } else if (index === userAnswer && userAnswer !== question.correct) {
-            opt.classList.add('incorrect');
-          }
-        });
-        
-        // Show explanation
-        const explanationEl = document.getElementById('explanation');
-        explanationEl.style.display = 'block';
-        
-        document.getElementById('correctExplanation').textContent = 
-          question.explanation || 'This is the correct answer.';
-        
-        const wrongExplanationsEl = document.getElementById('wrongExplanations');
-        wrongExplanationsEl.innerHTML = '';
-        
-        if (question.wrongExplanations) {
-          question.wrongExplanations.forEach((exp, index) => {
-            if (index !== question.correct) {
-              const p = document.createElement('p');
-              p.innerHTML = `<strong>Option ${String.fromCharCode(65 + index)}:</strong> ${exp}`;
-              wrongExplanationsEl.appendChild(p);
-            }
-          });
-        }
-        
-        document.getElementById('strategyTip').textContent = 
-          question.strategyTip || 'Review this topic in the AWS documentation.';
-      }
-
-      nextQuestion() {
-        this.currentSelectedOption = null;
-        
-        if (this.currentQuestionIndex < this.questions.length - 1) {
-          this.currentQuestionIndex++;
-          this.showQuestion();
-          document.getElementById('submitBtn').style.display = 'block';
-          document.getElementById('nextBtn').style.display = 'none';
-          
-          // Reset pace for new question
-          this.questionStartTime = Date.now();
-          this.updatePaceIndicator();
-        } else {
-          this.finishQuiz();
-        }
-      }
-
-      previousQuestion() {
-        if (this.currentQuestionIndex > 0) {
-          this.currentQuestionIndex--;
-          this.currentSelectedOption = this.userAnswers[this.currentQuestionIndex];
-          this.showQuestion();
-          
-          if (this.userAnswers[this.currentQuestionIndex] !== null) {
-            document.getElementById('submitBtn').style.display = 'none';
-            document.getElementById('nextBtn').style.display = 'block';
-          } else {
-            document.getElementById('submitBtn').style.display = 'block';
-            document.getElementById('nextBtn').style.display = 'none';
-            
-            // Reset pace for unanswered question
-            this.questionStartTime = Date.now();
-            this.updatePaceIndicator();
-          }
-        }
-      }
-
-      skipQuestion() {
-        this.skippedQuestions.add(this.currentQuestionIndex);
-        this.currentSelectedOption = null;
-        
-        if (this.currentQuestionIndex < this.questions.length - 1) {
-          this.currentQuestionIndex++;
-          this.showQuestion();
-          document.getElementById('submitBtn').style.display = 'block';
-          document.getElementById('nextBtn').style.display = 'none';
-          
-          // Reset pace for new question
-          this.questionStartTime = Date.now();
-          this.updatePaceIndicator();
-        } else {
-          this.finishQuiz();
-        }
-      }
-
-      toggleFlag() {
-        if (this.flaggedQuestions.has(this.currentQuestionIndex)) {
-          this.flaggedQuestions.delete(this.currentQuestionIndex);
-        } else {
-          this.flaggedQuestions.add(this.currentQuestionIndex);
-        }
-        
-        const flagBtn = document.getElementById('flagBtn');
-        if (this.flaggedQuestions.has(this.currentQuestionIndex)) {
-          flagBtn.classList.add('flagged');
-          flagBtn.innerHTML = '🚩 Flagged';
-        } else {
-          flagBtn.classList.remove('flagged');
-          flagBtn.innerHTML = '🚩 Flag';
-        }
-        
-        this.updateReviewNavigation();
-      }
-
-      updateNavigationButtons() {
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const submitBtn = document.getElementById('submitBtn');
-        
-        prevBtn.disabled = this.currentQuestionIndex === 0;
-        
-        if (this.userAnswers[this.currentQuestionIndex] !== null) {
-          submitBtn.style.display = 'none';
-          nextBtn.style.display = 'block';
-          nextBtn.textContent = this.currentQuestionIndex === this.questions.length - 1 ? 
-            'Finish Quiz' : 'Next Question';
-        } else {
-          submitBtn.style.display = 'block';
-          nextBtn.style.display = 'none';
-        }
-      }
-
-      updateReviewNavigation() {
-        const reviewNav = document.getElementById('reviewNavigation');
-        if (!reviewNav || document.getElementById('reviewMode').style.display === 'none') return;
-        
-        reviewNav.innerHTML = '';
-        
-        for (let i = 0; i < this.questions.length; i++) {
-          const btn = document.createElement('button');
-          btn.className = 'review-btn';
-          btn.textContent = i + 1;
-          
-          if (i === this.currentQuestionIndex) {
-            btn.classList.add('current');
-          }
-          if (this.userAnswers[i] !== null) {
-            btn.classList.add('answered');
-          }
-          if (this.flaggedQuestions.has(i)) {
-            btn.classList.add('flagged');
-          }
-          
-          btn.onclick = () => {
-            this.currentQuestionIndex = i;
-            this.currentSelectedOption = this.userAnswers[i];
-            this.showQuestion();
-          };
-          
-          reviewNav.appendChild(btn);
-        }
-      }
-
-      finishQuiz() {
-        console.log('📊 Finishing quiz...');
-        
-        // Stop all timers first
-        this.stopTimers();
-        
-        // Clear any lingering intervals
-        for (let i = 1; i < 9999; i++) { 
-          window.clearInterval(i); 
-          window.clearTimeout(i); 
-        }
-        
-        // Calculate and show results
-        this.calculateResults();
-        this.showResults();
-      }
-
-      calculateResults() {
-        this.score = 0;
-        this.questions.forEach((question, index) => {
-          if (this.userAnswers[index] === question.correct) {
-            this.score++;
-          }
-        });
-      }
-
-      showResults() {
-        // Hide question container
-        document.getElementById('questionContainer').style.display = 'none';
-        document.getElementById('timerSection').style.display = 'none';
-        document.getElementById('reviewMode').style.display = 'none';
-        
-        // Show results
-        const resultsContainer = document.getElementById('resultsContainer');
-        resultsContainer.style.display = 'block';
-        
-        const percentage = Math.round((this.score / this.questions.length) * 100);
-        const passed = percentage >= 72;
-        
-        // Update score circle
-        const scoreCircle = resultsContainer.querySelector('.score-circle');
-        scoreCircle.style.setProperty('--score-deg', `${(percentage / 100) * 360}deg`);
-        document.getElementById('scoreText').textContent = `${percentage}%`;
-        
-        // Update pass/fail
-        const passFailEl = document.getElementById('passFail');
-        passFailEl.textContent = passed ? 'PASSED' : 'FAILED';
-        passFailEl.className = `pass-fail ${passed ? 'pass' : 'fail'}`;
-        
-        // Update message
-        document.getElementById('resultMessage').textContent = 
-          passed ? 'Congratulations! You passed the exam!' : 
-          'Keep practicing! You need 72% to pass.';
-        
-        // Update stats
-        document.getElementById('correctCount').textContent = `${this.score}/${this.questions.length}`;
-        
-        const totalTime = Math.floor((Date.now() - this.quizStartTime) / 1000);
-        const minutes = Math.floor(totalTime / 60);
-        const seconds = totalTime % 60;
-        document.getElementById('timeUsed').textContent = 
-          `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        
-        const avgTime = Math.floor(totalTime / this.questions.length);
-        document.getElementById('avgTime').textContent = `${avgTime}s`;
-        
-        document.getElementById('flaggedCount').textContent = this.flaggedQuestions.size;
-        
-        // Domain breakdown
-        this.showDomainBreakdown();
-        
-        window.scrollTo(0, 0);
-        
-        console.log('Results shown. Buttons should work via inline onclick handlers.');
-      }
-
-      showDomainBreakdown() {
-        const domainResults = {};
-        
-        this.questions.forEach((question, index) => {
-          const domain = question.domain || 1;
-          if (!domainResults[domain]) {
-            domainResults[domain] = { correct: 0, total: 0 };
-          }
-          domainResults[domain].total++;
-          if (this.userAnswers[index] === question.correct) {
-            domainResults[domain].correct++;
-          }
-        });
-        
-        const domainResultsEl = document.getElementById('domainResults');
-        domainResultsEl.innerHTML = '';
-        
-        Object.keys(domainResults).sort().forEach(domain => {
-          const result = domainResults[domain];
-          const percentage = Math.round((result.correct / result.total) * 100);
-          
-          const domainItem = document.createElement('div');
-          domainItem.className = 'domain-item';
-          domainItem.innerHTML = `
-            <div class="domain-name">Domain ${domain}</div>
-            <div class="domain-score">
-              <span>${result.correct}/${result.total}</span>
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: ${percentage}%"></div>
-              </div>
-              <span>${percentage}%</span>
-            </div>
-          `;
-          
-          domainResultsEl.appendChild(domainItem);
-        });
-      }
-
-      startReview() {
-        this.reviewMode = true;
-        this.currentQuestionIndex = 0;
-        
-        // Hide results, show question container
-        document.getElementById('resultsContainer').style.display = 'none';
-        document.getElementById('questionContainer').style.display = 'block';
-        document.getElementById('reviewMode').style.display = 'block';
-        
-        // Hide timers during review
-        document.getElementById('timerSection').style.display = 'none';
-        
-        this.showQuestion();
-        this.updateReviewNavigation();
-      }
-    }
-
-    // Global instance
-    let trainer = null;
-
-    // Main functions  
-    function startMode(mode) {
-      console.log('🚀 Starting mode:', mode, 'at', new Date().toISOString());
-      
-      // CRITICAL: Force destroy any existing trainer
-      if (window.trainer) {
-        console.warn('⚠️ Existing trainer found, destroying it first');
-        if (window.trainer.destroy) {
-          window.trainer.destroy();
-        }
-        window.trainer = null;
-      }
-      trainer = null;
-      
-      // Clear ALL intervals/timeouts
-      for (let i = 1; i < 99999; i++) { 
-        window.clearInterval(i); 
-        window.clearTimeout(i); 
-      }
-      
-      // Hide mode selection
-      document.getElementById('modeSelection').style.display = 'none';
-      
-      // COMPLETELY reset question container
-      const questionContainer = document.getElementById('questionContainer');
-      if (questionContainer) {
-        questionContainer.style.display = 'none';
-        // Clear all content
-        ['options', 'explanation', 'scenario', 'questionText', 
-         'correctExplanation', 'wrongExplanations', 'strategyTip'].forEach(id => {
-          const el = document.getElementById(id);
-          if (el) {
-            el.innerHTML = '';
-            el.style.display = id === 'explanation' ? 'none' : '';
-          }
-        });
-      }
-      
-      // Show loading
-      document.getElementById('loading').style.display = 'block';
-      
-      // Create fresh trainer instance with delay
-      setTimeout(() => {
-        try {
-          // Double-check no trainer exists
-          if (window.trainer) {
-            console.error('❌ Trainer still exists after reset!');
-            window.trainer = null;
-          }
-          
-          // Create new instance
-          window.trainer = new QuizTrainer();
-          trainer = window.trainer; // Set both references
-          
-          console.log('✅ New trainer created:', trainer.instanceId);
-          
-          trainer.init(mode);
-          
-          // Hide loading, show quiz
-          document.getElementById('loading').style.display = 'none';
-          document.getElementById('questionContainer').style.display = 'block';
-          document.getElementById('timerSection').style.display = 'flex';
-          
-          if (mode === 'strategic' || mode === 'exam') {
-            document.getElementById('reviewMode').style.display = 'block';
-            trainer.updateReviewNavigation();
-          }
-          
-          console.log('✅ Mode started successfully:', mode);
-        } catch (error) {
-          console.error('❌ Error starting mode:', error);
-          document.getElementById('loading').style.display = 'none';
-          alert('Error starting quiz. Please refresh the page.');
-        }
-      }, 500);
-    }
-    
-    // Override global functions to use window.trainer
-    window.toggleFlag = function() {
-      if (window.trainer) window.trainer.toggleFlag();
-    }
-
-    window.skipQuestion = function() {
-      if (window.trainer) window.trainer.skipQuestion();
-    }
-
-    window.previousQuestion = function() {
-      if (window.trainer) window.trainer.previousQuestion();
-    }
-
-    window.submitAnswer = function() {
-      if (window.trainer) window.trainer.submitAnswer();
-    }
-
-    window.nextQuestion = function() {
-      if (window.trainer) window.trainer.nextQuestion();
-    }
-
-    window.reviewAnswers = function() {
-      if (window.trainer) window.trainer.startReview();
-    }
-    
-    // Keep local references too
-    function toggleFlag() { window.toggleFlag(); }
-    function skipQuestion() { window.skipQuestion(); }
-    function previousQuestion() { window.previousQuestion(); }
-    function submitAnswer() { window.submitAnswer(); }
-    function nextQuestion() { window.nextQuestion(); }
-    function reviewAnswers() { window.reviewAnswers(); }
-
+  <script>
+    // Simple SAA Fix - Just reload the page
     function resetQuiz() {
-      console.log('🔄 Full reset starting...');
-      
-      // 1. Stop ALL timers and intervals AGGRESSIVELY
-      for (let i = 1; i < 99999; i++) { 
-        window.clearInterval(i); 
-        window.clearTimeout(i); 
-      }
-      
-      // 2. Completely destroy old trainer instance
-      if (window.trainer) {
-        if (window.trainer.destroy) {
-          window.trainer.destroy();
-        }
-        window.trainer = null;
-      }
-      trainer = null;
-      
-      // 3. Force garbage collection hint
-      if (window.gc) {
-        try { window.gc(); } catch(e) {}
-      }
-      
-      // 4. Clear ALL storage
-      try {
-        localStorage.clear();
-        sessionStorage.clear();
-      } catch (e) {
-        console.log('Storage clear error:', e);
-      }
-      
-      // 5. Remove ALL event listeners from buttons
-      ['submitBtn', 'nextBtn', 'prevBtn', 'flagBtn', 'skipBtn', 
-       'reviewAnswersBtn', 'resetQuizBtn', 'takeAnotherExamBtn'].forEach(btnId => {
-        const btn = document.getElementById(btnId);
-        if (btn) {
-          const newBtn = btn.cloneNode(true);
-          btn.parentNode.replaceChild(newBtn, btn);
-        }
-      });
-      
-      // 6. Reset all UI elements to initial state
-      const elements = {
-        'resultsContainer': 'none',
-        'questionContainer': 'none',
-        'reviewMode': 'none',
-        'timerSection': 'none',
-        'loading': 'none',
-        'modeSelection': 'grid',
-        'explanation': 'none',
-        'submitBtn': 'block',
-        'nextBtn': 'none'
-      };
-      
-      for (const [id, display] of Object.entries(elements)) {
-        const el = document.getElementById(id);
-        if (el) el.style.display = display;
-      }
-      
-      // 7. COMPLETELY CLEAR all dynamic content
-      ['questionText', 'scenario', 'options', 'correctExplanation', 
-       'wrongExplanations', 'strategyTip', 'reviewNavigation',
-       'domainResults'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-          el.innerHTML = '';
-          el.textContent = '';
-        }
-      });
-      
-      // 8. Reset all text content
-      const resets = {
-        'globalTimer': '00:00',
-        'questionTimer': '00:00',
-        'paceValue': '--',
-        'paceIndicator': 'ON PACE',
-        'domainBadge': 'Domain 1',
-        'difficultyBadge': 'Medium',
-        'questionNumber': 'Q1 of 65',
-        'scoreText': '0%',
-        'passFail': 'CALCULATING...',
-        'resultMessage': '',
-        'correctCount': '0/0',
-        'timeUsed': '00:00',
-        'avgTime': '0s',
-        'flaggedCount': '0'
-      };
-      
-      for (const [id, value] of Object.entries(resets)) {
-        const el = document.getElementById(id);
-        if (el) el.textContent = value;
-      }
-      
-      // 9. Reset pace indicator styles
-      const paceValue = document.getElementById('paceValue');
-      if (paceValue) {
-        paceValue.style.color = '#FFFFFF';
-        paceValue.style.fontSize = '2em';
-        paceValue.style.fontWeight = 'normal';
-      }
-      
-      const paceIndicator = document.getElementById('paceIndicator');
-      if (paceIndicator) {
-        paceIndicator.className = 'pace-indicator pace-on-track';
-      }
-      
-      const paceLabel = document.getElementById('paceLabel');
-      if (paceLabel) {
-        paceLabel.textContent = 'Question Pace';
-      }
-      
-      const paceBox = document.getElementById('paceValue')?.closest('.timer-box');
-      if (paceBox) {
-        paceBox.classList.remove('over-time');
-        paceBox.style.animation = '';
-      }
-      
-      // 10. Clear any animations
-      document.querySelectorAll('.timer-box').forEach(box => {
-        box.style.animation = '';
-        box.classList.remove('over-time');
-      });
-      
-      // 11. Reset flag button
-      const flagBtn = document.getElementById('flagBtn');
-      if (flagBtn) {
-        flagBtn.classList.remove('flagged');
-        flagBtn.innerHTML = '🚩 Flag';
-      }
-      
-      // 12. Re-attach button handlers with fresh references
-      setTimeout(() => {
-        const submitBtn = document.getElementById('submitBtn');
-        if (submitBtn) {
-          submitBtn.onclick = () => { if (window.trainer) window.trainer.submitAnswer(); };
-        }
-        
-        const nextBtn = document.getElementById('nextBtn');
-        if (nextBtn) {
-          nextBtn.onclick = () => { if (window.trainer) window.trainer.nextQuestion(); };
-        }
-        
-        const prevBtn = document.getElementById('prevBtn');
-        if (prevBtn) {
-          prevBtn.onclick = () => { if (window.trainer) window.trainer.previousQuestion(); };
-        }
-        
-        const flagBtnNew = document.getElementById('flagBtn');
-        if (flagBtnNew) {
-          flagBtnNew.onclick = () => { if (window.trainer) window.trainer.toggleFlag(); };
-        }
-        
-        const skipBtn = document.querySelector('.skip-btn');
-        if (skipBtn) {
-          skipBtn.onclick = () => { if (window.trainer) window.trainer.skipQuestion(); };
-        }
-      }, 100);
-      
-      // 13. Scroll to top
-      window.scrollTo(0, 0);
-      
-      console.log('✅ Full reset complete - ready for new quiz');
+      location.reload();
     }
 
-    // App version for cache busting
-    const APP_VERSION = '2.0.1';
-    
-    // Check for version mismatch
-    function checkVersion() {
-      const storedVersion = localStorage.getItem('appVersion');
-      if (storedVersion && storedVersion !== APP_VERSION) {
-        console.log('Version mismatch, clearing cache...');
-        forceClearCache();
-      }
-      localStorage.setItem('appVersion', APP_VERSION);
+    // Basic stub functions to prevent errors
+    function startMode(mode) {
+      const modeSel = document.getElementById('modeSelection');
+      if (modeSel) modeSel.style.display = 'none';
+      const timer = document.getElementById('timerSection');
+      if (timer) timer.style.display = 'flex';
+      const q = document.getElementById('questionContainer');
+      if (q) q.style.display = 'block';
+      console.log('Starting mode:', mode);
     }
     
-    // Check for version mismatch
-    function checkVersion() {
-      const storedVersion = localStorage.getItem('appVersion');
-      if (storedVersion && storedVersion !== APP_VERSION) {
-        console.log('Version mismatch, clearing cache...');
-        forceClearCache();
-      }
-      localStorage.setItem('appVersion', APP_VERSION);
+    function toggleFlag() { console.log('toggleFlag'); }
+    function skipQuestion() { console.log('skipQuestion'); }
+    function previousQuestion() { console.log('previousQuestion'); }
+    function submitAnswer() { console.log('submitAnswer'); }
+    function nextQuestion() { console.log('nextQuestion'); }
+    function reviewAnswers() { console.log('reviewAnswers'); }
+    function installPWA() { console.log('installPWA'); }
+    function dismissInstall() { 
+      const el = document.getElementById('installBanner'); 
+      if (el) el.style.display = 'none'; 
     }
-    
-    // Initialize on load
-    document.addEventListener('DOMContentLoaded', () => {
-      console.log('🎮 AWS DVA-C02 Trainer v' + APP_VERSION);
-      checkVersion();
-      
-      // Ensure clean state on page load
-      resetQuiz();
-      
-      // Attach event listeners to mode cards
-      document.getElementById('triageMode')?.addEventListener('click', () => startMode('triage'));
-      document.getElementById('speedMode')?.addEventListener('click', () => startMode('speed'));
-      document.getElementById('examMode')?.addEventListener('click', () => startMode('exam'));
-      document.getElementById('strategicMode')?.addEventListener('click', () => startMode('strategic'));
-      
-      // Attach event listeners to result buttons
-      document.getElementById('reviewAnswersBtn')?.addEventListener('click', reviewAnswers);
-      document.getElementById('resetQuizBtn')?.addEventListener('click', resetQuiz);
-      document.getElementById('takeAnotherExamBtn')?.addEventListener('click', startNewExam);
-      
-      // Attach event listeners to install buttons
-      document.getElementById('installBtn')?.addEventListener('click', installPWA);
-      document.getElementById('dismissBtn')?.addEventListener('click', dismissInstall);
-      
-      // Check if we have questions
-      if (!window.questionBank || window.questionBank.length === 0) {
-        console.warn('⚠️ No questions loaded. Add questions to questionBank array.');
-      }
-    });
-
-    // PWA Installation
-    let deferredPrompt;
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      document.getElementById('installBanner').style.display = 'flex';
-    });
-
-    function installPWA() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the install prompt');
-          }
-          deferredPrompt = null;
-          document.getElementById('installBanner').style.display = 'none';
-        });
-      }
-    }
-
-    function dismissInstall() {
-      document.getElementById('installBanner').style.display = 'none';
-    }
-    
-    // Debugging function for troubleshooting
-    window.debugQuizState = function() {
-      console.log('=== Quiz State Debug ===');
-      console.log('Trainer exists:', !!trainer);
-      if (trainer) {
-        console.log('Mode:', trainer.mode);
-        console.log('Current Question:', trainer.currentQuestionIndex);
-        console.log('Questions loaded:', trainer.questions.length);
-        console.log('Answers given:', trainer.userAnswers.filter(a => a !== null).length);
-        console.log('Timer intervals:', {
-          global: trainer.globalTimerInterval,
-          question: trainer.questionTimerInterval,
-          speed: trainer.speedTimerTimeout
-        });
-      }
-      console.log('localStorage items:', Object.keys(localStorage));
-      console.log('sessionStorage items:', Object.keys(sessionStorage));
-      console.log('Service Worker:', navigator.serviceWorker?.controller?.state);
-      console.log('App Version:', APP_VERSION);
-      console.log('======================');
-    };
-    
-    // Emergency reset function
-    window.emergencyReset = async function() {
-      console.log('🚨 EMERGENCY RESET INITIATED');
-      
-      // Stop everything
-      for (let i = 1; i < 9999; i++) { 
-        window.clearInterval(i); 
-        window.clearTimeout(i); 
-      }
-      
-      // Clear all caches
-      await forceClearCache();
-      
-      // Unregister service worker
-      if ('serviceWorker' in navigator) {
-        const registrations = await navigator.serviceWorker.getRegistrations();
-        for (let registration of registrations) {
-          await registration.unregister();
-        }
-      }
-      
-      // Clear all storage
-      localStorage.clear();
-      sessionStorage.clear();
-      
-      // Reset trainer
-      trainer = null;
-      
-      // Reload page
-      location.reload(true);
-    };
-
-    // Service Worker Registration with cache control
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        // First, try to unregister old service worker
-        navigator.serviceWorker.getRegistrations().then(registrations => {
-          registrations.forEach(registration => {
-            if (registration.active && !registration.active.scriptURL.includes('v=2')) {
-              registration.unregister();
-              console.log('Old service worker unregistered');
-            }
-          });
-        });
-        
-        // Register new service worker with version query string
-        navigator.serviceWorker.register('/sw.js?v=2')
-          .then(registration => {
-            console.log('SW registered:', registration);
-            
-            // Force update check
-            registration.update();
-            
-            // Listen for updates
-            registration.addEventListener('updatefound', () => {
-              const newWorker = registration.installing;
-              newWorker.addEventListener('statechange', () => {
-                if (newWorker.state === 'activated') {
-                  // New service worker activated, clear caches
-                  if (caches) {
-                    caches.keys().then(names => {
-                      names.forEach(name => caches.delete(name));
-                    });
-                  }
-                  console.log('New service worker activated, caches cleared');
-                }
-              });
-            });
-          })
-          .catch(err => console.log('SW registration failed:', err));
-      });
-    }
-    
-    // Force clear service worker cache when needed
-    async function forceClearCache() {
-      console.log('🧹 Force clearing all caches...');
-      
-      // Clear service worker caches
-      if ('caches' in window) {
-        const cacheNames = await caches.keys();
-        await Promise.all(cacheNames.map(name => caches.delete(name)));
-        console.log('✅ Service worker caches cleared');
-      }
-      
-      // Send message to service worker to clear its cache
-      if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-        navigator.serviceWorker.controller.postMessage({ type: 'CLEAR_CACHE' });
-      }
-      
-      // Clear all storage
-      localStorage.clear();
-      sessionStorage.clear();
-      
-      console.log('✅ All caches and storage cleared');
-    }
-    
-    // Add cache clearing to problem scenarios
-    window.addEventListener('beforeunload', () => {
-      // Clear any pending timers
-      for (let i = 1; i < 9999; i++) { 
-        window.clearInterval(i); 
-        window.clearTimeout(i); 
-      }
-    });
-    
-    // Prevent back button issues
-    window.addEventListener('pageshow', (event) => {
-      if (event.persisted) {
-        // Page was restored from cache
-        console.log('Page restored from cache, resetting...');
-        resetQuiz();
-      }
-    });
   </script>
 </body>
 </html>
