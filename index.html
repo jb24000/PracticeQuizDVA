@@ -192,6 +192,39 @@
   </style>
 </head>
 <body>
+<script>
+// EMERGENCY FIX - Define this function globally RIGHT NOW
+window.startNewExam = function() {
+  console.log('🎯 Take Another Exam clicked!');
+  
+  // Clear everything
+  if (window.trainer) {
+    window.trainer = null;
+  }
+  
+  // Hide results
+  const resultsContainer = document.getElementById('resultsContainer');
+  if (resultsContainer) {
+    resultsContainer.style.display = 'none';
+  }
+  
+  // Reset and start exam
+  if (typeof resetQuiz === 'function') {
+    resetQuiz();
+  }
+  
+  setTimeout(() => {
+    if (typeof startMode === 'function') {
+      startMode('exam');
+    } else {
+      location.reload(); // Fallback
+    }
+  }, 500);
+};
+
+console.log('✅ Emergency fix applied - startNewExam is:', typeof window.startNewExam);
+</script>
+
   <div class="main-header">
     <h1>🎯 AWS DVA-C02 Strategic Exam Trainer</h1>
     <p class="tagline">Master exam timing and strategy with 500+ realistic scenarios · Turn 72% fails into 85+ passes</p>
