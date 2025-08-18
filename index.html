@@ -192,37 +192,174 @@
   </style>
 </head>
 <body>
+<!-- ADD THIS IMMEDIATELY AFTER YOUR <body> TAG -->
 <script>
-// EMERGENCY FIX - Define this function globally RIGHT NOW
+// EMERGENCY GLOBAL FUNCTION DEFINITIONS - MUST BE FIRST!
+console.log('🚨 Loading emergency functions...');
+
+// Define startNewExam globally
 window.startNewExam = function() {
-  console.log('🎯 Take Another Exam clicked!');
+  console.log('🎯 Take Another Exam clicked - Starting new exam...');
   
-  // Clear everything
+  try {
+    // Kill any existing trainer
+    if (window.trainer) {
+      if (window.trainer.destroy) {
+        window.trainer.destroy();
+      }
+      window.trainer = null;
+    }
+    
+    // Stop all timers
+    for (let i = 1; i < 99999; i++) { 
+      window.clearInterval(i); 
+      window.clearTimeout(i); 
+    }
+    
+    // Hide results
+    const resultsContainer = document.getElementById('resultsContainer');
+    if (resultsContainer) {
+      resultsContainer.style.display = 'none';
+    }
+    
+    // Show mode selection
+    const modeSelection = document.getElementById('modeSelection');
+    if (modeSelection) {
+      modeSelection.style.display = 'grid';
+    }
+    
+    // Hide other containers
+    document.getElementById('questionContainer').style.display = 'none';
+    document.getElementById('timerSection').style.display = 'none';
+    document.getElementById('reviewMode').style.display = 'none';
+    
+    // Clear content
+    ['options', 'explanation', 'scenario', 'questionText'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = '';
+    });
+    
+    // After short delay, start exam mode
+    setTimeout(() => {
+      console.log('Starting exam mode...');
+      // Hide mode selection
+      if (modeSelection) {
+        modeSelection.style.display = 'none';
+      }
+      
+      // Show loading
+      const loading = document.getElementById('loading');
+      if (loading) {
+        loading.style.display = 'block';
+      }
+      
+      // Start exam after loading
+      setTimeout(() => {
+        if (typeof startMode === 'function') {
+          startMode('exam');
+        } else {
+          // If startMode doesn't exist, try to trigger exam mode directly
+          const examCard = document.getElementById('examMode');
+          if (examCard) {
+            examCard.click();
+          } else {
+            // Last resort - reload
+            location.reload();
+          }
+        }
+      }, 500);
+    }, 100);
+    
+  } catch (error) {
+    console.error('Error in startNewExam:', error);
+    location.reload();
+  }
+};
+
+// Define resetQuiz globally
+window.resetQuiz = function() {
+  console.log('🔄 Resetting quiz...');
+  
+  // Stop all timers
+  for (let i = 1; i < 99999; i++) { 
+    window.clearInterval(i); 
+    window.clearTimeout(i); 
+  }
+  
+  // Kill trainer
   if (window.trainer) {
+    if (window.trainer.destroy) {
+      window.trainer.destroy();
+    }
     window.trainer = null;
   }
   
-  // Hide results
-  const resultsContainer = document.getElementById('resultsContainer');
-  if (resultsContainer) {
-    resultsContainer.style.display = 'none';
+  // Hide all containers
+  ['resultsContainer', 'questionContainer', 'reviewMode', 'timerSection', 'loading'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  
+  // Show mode selection
+  const modeSelection = document.getElementById('modeSelection');
+  if (modeSelection) {
+    modeSelection.style.display = 'grid';
   }
   
-  // Reset and start exam
-  if (typeof resetQuiz === 'function') {
-    resetQuiz();
-  }
+  // Clear dynamic content
+  ['options', 'explanation', 'scenario', 'questionText', 'reviewNavigation', 'domainResults'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = '';
+  });
   
-  setTimeout(() => {
-    if (typeof startMode === 'function') {
-      startMode('exam');
-    } else {
-      location.reload(); // Fallback
-    }
-  }, 500);
+  // Reset timer displays
+  document.getElementById('globalTimer').textContent = '00:00';
+  document.getElementById('questionTimer').textContent = '00:00';
+  document.getElementById('paceValue').textContent = '--';
+  
+  window.scrollTo(0, 0);
 };
 
-console.log('✅ Emergency fix applied - startNewExam is:', typeof window.startNewExam);
+// Define reviewAnswers globally
+window.reviewAnswers = function() {
+  console.log('📋 Review Answers clicked');
+  if (window.trainer && window.trainer.startReview) {
+    window.trainer.startReview();
+  } else {
+    console.error('No trainer available for review');
+    alert('Unable to review answers. Please refresh and try again.');
+  }
+};
+
+// Verify functions are defined
+console.log('✅ window.startNewExam:', typeof window.startNewExam);
+console.log('✅ window.resetQuiz:', typeof window.resetQuiz);
+console.log('✅ window.reviewAnswers:', typeof window.reviewAnswers);
+
+// Also ensure onclick handlers work
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('🔧 Checking result buttons...');
+  
+  // Double-check the Take Another Exam button
+  const examBtn = document.getElementById('takeAnotherExamBtn');
+  if (examBtn) {
+    console.log('Found Take Another Exam button, ensuring onclick works');
+    examBtn.onclick = window.startNewExam;
+  }
+  
+  // Check other buttons
+  const resetBtn = document.getElementById('resetQuizBtn');
+  if (resetBtn) {
+    resetBtn.onclick = window.resetQuiz;
+  }
+  
+  const reviewBtn = document.getElementById('reviewAnswersBtn');
+  if (reviewBtn) {
+    reviewBtn.onclick = window.reviewAnswers;
+  }
+});
+
+console.log('🚨 Emergency functions loaded successfully!');
 </script>
 
   <div class="main-header">
