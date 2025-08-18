@@ -206,8 +206,8 @@
       </div>
     </div>
     <div class="actions">
-      <button class="install-btn" onclick="installPWA()">Install App</button>
-      <button class="install-btn secondary" onclick="dismissInstall()">Later</button>
+      <button class="install-btn" id="installBtn">Install App</button>
+      <button class="install-btn secondary" id="dismissBtn">Later</button>
     </div>
   </div>
 
@@ -231,7 +231,7 @@
     </div>
 
     <div class="mode-selection" id="modeSelection">
-      <div class="mode-card" onclick="startMode('triage')">
+      <div class="mode-card" id="triageMode">
         <span class="mode-icon">⚡</span>
         <div class="mode-title">Triage Training</div>
         <p class="mode-desc">Learn to identify quick wins vs time sinks in under 30 seconds</p>
@@ -242,7 +242,7 @@
         </ul>
       </div>
 
-      <div class="mode-card" onclick="startMode('speed')">
+      <div class="mode-card" id="speedMode">
         <span class="mode-icon">🔥</span>
         <div class="mode-title">Speed Rounds</div>
         <p class="mode-desc">90-second maximum per question - build exam pace muscle memory</p>
@@ -253,7 +253,7 @@
         </ul>
       </div>
 
-      <div class="mode-card" onclick="startMode('exam')">
+      <div class="mode-card" id="examMode">
         <span class="mode-icon">🎯</span>
         <div class="mode-title">Full Exam Simulation</div>
         <p class="mode-desc">Real 130-minute, 65-question exam with strategic coaching</p>
@@ -264,7 +264,7 @@
         </ul>
       </div>
 
-      <div class="mode-card" onclick="startMode('strategic')">
+      <div class="mode-card" id="strategicMode">
         <span class="mode-icon">🧠</span>
         <div class="mode-title">Strategic Practice</div>
         <p class="mode-desc">Learn mark/skip/return workflow with complex scenarios</p>
@@ -305,8 +305,8 @@
           <span class="badge" id="questionNumber">Q1 of 65</span>
         </div>
         <div class="question-actions">
-          <button class="action-btn flag-btn" id="flagBtn" onclick="toggleFlag()">🚩 Flag</button>
-          <button class="action-btn skip-btn" onclick="skipQuestion()">⏭️ Skip</button>
+          <button class="action-btn flag-btn" id="flagBtn">🚩 Flag</button>
+          <button class="action-btn skip-btn" id="skipBtn">⏭️ Skip</button>
         </div>
       </div>
 
@@ -331,9 +331,9 @@
       </div>
 
       <div class="controls">
-        <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()">Previous</button>
-        <button class="btn btn-primary" id="submitBtn" onclick="submitAnswer()">Submit Answer</button>
-        <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" style="display: none;">Next Question</button>
+        <button class="btn btn-secondary" id="prevBtn">Previous</button>
+        <button class="btn btn-primary" id="submitBtn">Submit Answer</button>
+        <button class="btn btn-primary" id="nextBtn" style="display: none;">Next Question</button>
       </div>
     </div>
 
@@ -360,9 +360,9 @@
       </div>
 
       <div class="controls">
-        <button class="btn btn-primary" onclick="reviewAnswers()">Review Answers</button>
-        <button class="btn btn-secondary" onclick="resetQuiz()">Start New Session</button>
-        <button class="btn btn-primary" onclick="startNewExam()">Take Another Exam</button>
+        <button class="btn btn-primary" id="reviewAnswersBtn" onclick="window.reviewAnswers()">Review Answers</button>
+        <button class="btn btn-secondary" id="resetQuizBtn" onclick="window.resetQuiz()">Start New Session</button>
+        <button class="btn btn-primary" id="takeAnotherExamBtn" onclick="window.startNewExam()">Take Another Exam</button>
       </div>
     </div>
 
@@ -404,7 +404,7 @@
     })();
 
     // Question Bank - ADD YOUR QUESTIONS HERE
-        const questionBank = [
+         const questionBank = [
             // Domain 1: Development with AWS Services (32%)
 {
     id: 'dva_001',
@@ -12536,6 +12536,10 @@
     // Quiz State Management
     class QuizTrainer {
       constructor() {
+        // Generate unique ID for this instance
+        this.instanceId = Date.now() + '_' + Math.random();
+        console.log('🆕 New QuizTrainer instance:', this.instanceId);
+        
         this.questions = [];
         this.currentQuestionIndex = 0;
         this.userAnswers = [];
@@ -12551,13 +12555,65 @@
         this.questionTimerInterval = null;
         this.speedTimerTimeout = null;
         this.currentSelectedOption = null;
+        this.isDestroyed = false;
+      }
+      
+      destroy() {
+        console.log('💥 Destroying QuizTrainer instance:', this.instanceId);
+        this.isDestroyed = true;
+        this.stopTimers();
+        
+        // Clear all references
+        this.questions = null;
+        this.userAnswers = null;
+        this.flaggedQuestions = null;
+        this.skippedQuestions = null;
+        this.timePerQuestion = null;
+        
+        // Remove all event listeners by replacing elements
+        const options = document.querySelectorAll('.option');
+        options.forEach(opt => {
+          const newOpt = opt.cloneNode(true);
+          opt.parentNode.replaceChild(newOpt, opt);
+        });
       }
 
       init(mode) {
+        if (this.isDestroyed) {
+          console.error('Cannot init destroyed trainer');
+          return;
+        }
+        
         this.mode = mode;
         this.setupQuestions();
         this.quizStartTime = Date.now();
         this.questionStartTime = Date.now();
+        
+        // Attach event listeners to quiz buttons
+        const submitBtn = document.getElementById('submitBtn');
+        if (submitBtn) {
+          submitBtn.onclick = () => this.submitAnswer();
+        }
+        
+        const nextBtn = document.getElementById('nextBtn');
+        if (nextBtn) {
+          nextBtn.onclick = () => this.nextQuestion();
+        }
+        
+        const prevBtn = document.getElementById('prevBtn');
+        if (prevBtn) {
+          prevBtn.onclick = () => this.previousQuestion();
+        }
+        
+        const flagBtn = document.getElementById('flagBtn');
+        if (flagBtn) {
+          flagBtn.onclick = () => this.toggleFlag();
+        }
+        
+        const skipBtn = document.getElementById('skipBtn');
+        if (skipBtn) {
+          skipBtn.onclick = () => this.skipQuestion();
+        }
         
         // Set pace label based on mode
         const paceLabel = document.getElementById('paceLabel');
@@ -12754,6 +12810,12 @@
         const question = this.questions[this.currentQuestionIndex];
         if (!question) return;
         
+        // CRITICAL: Clear ALL previous content first
+        document.getElementById('options').innerHTML = '';
+        document.getElementById('explanation').style.display = 'none';
+        document.getElementById('scenario').innerHTML = '';
+        document.getElementById('questionText').innerHTML = '';
+        
         // Update badges
         document.getElementById('domainBadge').textContent = `Domain ${question.domain || 1}`;
         document.getElementById('difficultyBadge').textContent = question.difficulty || 'Medium';
@@ -12782,9 +12844,9 @@
         // Show question
         document.getElementById('questionText').textContent = question.question;
         
-        // Show options
+        // Show options - CREATE FRESH ELEMENTS
         const optionsEl = document.getElementById('options');
-        optionsEl.innerHTML = '';
+        optionsEl.innerHTML = ''; // Clear again to be sure
         
         question.options.forEach((option, index) => {
           const optionEl = document.createElement('div');
@@ -12803,8 +12865,14 @@
               optionEl.classList.add('incorrect');
             }
           } else {
-            // Add click handler
-            optionEl.onclick = () => this.selectOption(index);
+            // Create new function for each option to avoid closure issues
+            optionEl.onclick = ((idx) => {
+              return () => {
+                if (!this.reviewMode) {
+                  this.selectOption(idx);
+                }
+              };
+            })(index);
             
             // Restore selection if exists
             if (this.userAnswers[this.currentQuestionIndex] === index) {
@@ -13113,6 +13181,8 @@
         this.showDomainBreakdown();
         
         window.scrollTo(0, 0);
+        
+        console.log('Results shown. Buttons should work via inline onclick handlers.');
       }
 
       showDomainBreakdown() {
@@ -13173,18 +13243,22 @@
     // Global instance
     let trainer = null;
 
-    // Main functions
+    // Main functions  
     function startMode(mode) {
-      console.log('🚀 Starting mode:', mode);
+      console.log('🚀 Starting mode:', mode, 'at', new Date().toISOString());
       
-      // Force clear any existing trainer
-      if (trainer) {
-        trainer.stopTimers();
-        trainer = null;
+      // CRITICAL: Force destroy any existing trainer
+      if (window.trainer) {
+        console.warn('⚠️ Existing trainer found, destroying it first');
+        if (window.trainer.destroy) {
+          window.trainer.destroy();
+        }
+        window.trainer = null;
       }
+      trainer = null;
       
-      // Clear any stuck intervals
-      for (let i = 1; i < 9999; i++) { 
+      // Clear ALL intervals/timeouts
+      for (let i = 1; i < 99999; i++) { 
         window.clearInterval(i); 
         window.clearTimeout(i); 
       }
@@ -13192,19 +13266,39 @@
       // Hide mode selection
       document.getElementById('modeSelection').style.display = 'none';
       
-      // Reset any previous content
-      document.getElementById('options').innerHTML = '';
-      document.getElementById('explanation').style.display = 'none';
-      document.getElementById('scenario').innerHTML = '';
-      document.getElementById('questionText').innerHTML = '';
+      // COMPLETELY reset question container
+      const questionContainer = document.getElementById('questionContainer');
+      if (questionContainer) {
+        questionContainer.style.display = 'none';
+        // Clear all content
+        ['options', 'explanation', 'scenario', 'questionText', 
+         'correctExplanation', 'wrongExplanations', 'strategyTip'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.innerHTML = '';
+            el.style.display = id === 'explanation' ? 'none' : '';
+          }
+        });
+      }
       
       // Show loading
       document.getElementById('loading').style.display = 'block';
       
-      // Create fresh trainer instance
+      // Create fresh trainer instance with delay
       setTimeout(() => {
         try {
-          trainer = new QuizTrainer();
+          // Double-check no trainer exists
+          if (window.trainer) {
+            console.error('❌ Trainer still exists after reset!');
+            window.trainer = null;
+          }
+          
+          // Create new instance
+          window.trainer = new QuizTrainer();
+          trainer = window.trainer; // Set both references
+          
+          console.log('✅ New trainer created:', trainer.instanceId);
+          
           trainer.init(mode);
           
           // Hide loading, show quiz
@@ -13225,54 +13319,64 @@
         }
       }, 500);
     }
-
-    function toggleFlag() {
-      if (trainer) trainer.toggleFlag();
+    
+    // Override global functions to use window.trainer
+    window.toggleFlag = function() {
+      if (window.trainer) window.trainer.toggleFlag();
     }
 
-    function skipQuestion() {
-      if (trainer) trainer.skipQuestion();
+    window.skipQuestion = function() {
+      if (window.trainer) window.trainer.skipQuestion();
     }
 
-    function previousQuestion() {
-      if (trainer) trainer.previousQuestion();
+    window.previousQuestion = function() {
+      if (window.trainer) window.trainer.previousQuestion();
     }
 
-    function submitAnswer() {
-      if (trainer) trainer.submitAnswer();
+    window.submitAnswer = function() {
+      if (window.trainer) window.trainer.submitAnswer();
     }
 
-    function nextQuestion() {
-      if (trainer) trainer.nextQuestion();
+    window.nextQuestion = function() {
+      if (window.trainer) window.trainer.nextQuestion();
     }
 
-    function reviewAnswers() {
-      if (trainer) trainer.startReview();
+    window.reviewAnswers = function() {
+      if (window.trainer) window.trainer.startReview();
     }
+    
+    // Keep local references too
+    function toggleFlag() { window.toggleFlag(); }
+    function skipQuestion() { window.skipQuestion(); }
+    function previousQuestion() { window.previousQuestion(); }
+    function submitAnswer() { window.submitAnswer(); }
+    function nextQuestion() { window.nextQuestion(); }
+    function reviewAnswers() { window.reviewAnswers(); }
 
     function resetQuiz() {
       console.log('🔄 Full reset starting...');
       
-      // 1. Stop ALL timers and intervals
-      for (let i = 1; i < 9999; i++) { 
+      // 1. Stop ALL timers and intervals AGGRESSIVELY
+      for (let i = 1; i < 99999; i++) { 
         window.clearInterval(i); 
         window.clearTimeout(i); 
       }
       
       // 2. Completely destroy old trainer instance
-      if (trainer) {
-        trainer.stopTimers();
-        trainer.questions = [];
-        trainer.currentQuestionIndex = 0;
-        trainer.userAnswers = [];
-        trainer.score = 0;
-        trainer.flaggedQuestions.clear();
-        trainer.skippedQuestions.clear();
-        trainer.currentSelectedOption = null;
-        trainer = null; // Fully nullify the old instance
+      if (window.trainer) {
+        if (window.trainer.destroy) {
+          window.trainer.destroy();
+        }
+        window.trainer = null;
+      }
+      trainer = null;
+      
+      // 3. Force garbage collection hint
+      if (window.gc) {
+        try { window.gc(); } catch(e) {}
       }
       
-      // 3. Clear ALL storage
+      // 4. Clear ALL storage
       try {
         localStorage.clear();
         sessionStorage.clear();
@@ -13280,7 +13384,17 @@
         console.log('Storage clear error:', e);
       }
       
-      // 4. Reset all UI elements to initial state
+      // 5. Remove ALL event listeners from buttons
+      ['submitBtn', 'nextBtn', 'prevBtn', 'flagBtn', 'skipBtn', 
+       'reviewAnswersBtn', 'resetQuizBtn', 'takeAnotherExamBtn'].forEach(btnId => {
+        const btn = document.getElementById(btnId);
+        if (btn) {
+          const newBtn = btn.cloneNode(true);
+          btn.parentNode.replaceChild(newBtn, btn);
+        }
+      });
+      
+      // 6. Reset all UI elements to initial state
       const elements = {
         'resultsContainer': 'none',
         'questionContainer': 'none',
@@ -13298,35 +13412,41 @@
         if (el) el.style.display = display;
       }
       
-      // 5. Reset all dynamic content
+      // 7. COMPLETELY CLEAR all dynamic content
+      ['questionText', 'scenario', 'options', 'correctExplanation', 
+       'wrongExplanations', 'strategyTip', 'reviewNavigation',
+       'domainResults'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.innerHTML = '';
+          el.textContent = '';
+        }
+      });
+      
+      // 8. Reset all text content
       const resets = {
         'globalTimer': '00:00',
         'questionTimer': '00:00',
         'paceValue': '--',
         'paceIndicator': 'ON PACE',
-        'questionText': '',
-        'scenario': '',
-        'options': '',
-        'correctExplanation': '',
-        'wrongExplanations': '',
-        'strategyTip': '',
-        'reviewNavigation': ''
+        'domainBadge': 'Domain 1',
+        'difficultyBadge': 'Medium',
+        'questionNumber': 'Q1 of 65',
+        'scoreText': '0%',
+        'passFail': 'CALCULATING...',
+        'resultMessage': '',
+        'correctCount': '0/0',
+        'timeUsed': '00:00',
+        'avgTime': '0s',
+        'flaggedCount': '0'
       };
       
       for (const [id, value] of Object.entries(resets)) {
         const el = document.getElementById(id);
-        if (el) {
-          if (typeof value === 'string') {
-            if (el.tagName === 'DIV' || el.tagName === 'SPAN') {
-              el.innerHTML = value;
-            } else {
-              el.textContent = value;
-            }
-          }
-        }
+        if (el) el.textContent = value;
       }
       
-      // 6. Reset pace indicator styles
+      // 9. Reset pace indicator styles
       const paceValue = document.getElementById('paceValue');
       if (paceValue) {
         paceValue.style.color = '#FFFFFF';
@@ -13350,51 +13470,65 @@
         paceBox.style.animation = '';
       }
       
-      // 7. Clear any animations
+      // 10. Clear any animations
       document.querySelectorAll('.timer-box').forEach(box => {
         box.style.animation = '';
         box.classList.remove('over-time');
       });
       
-      // 8. Remove all event listeners from options
-      const oldOptions = document.querySelectorAll('.option');
-      oldOptions.forEach(option => {
-        const newOption = option.cloneNode(true);
-        option.parentNode.replaceChild(newOption, option);
-      });
-      
-      // 9. Reset flag button
+      // 11. Reset flag button
       const flagBtn = document.getElementById('flagBtn');
       if (flagBtn) {
         flagBtn.classList.remove('flagged');
         flagBtn.innerHTML = '🚩 Flag';
       }
       
-      // 10. Scroll to top
-      window.scrollTo(0, 0);
+      // 12. Re-attach button handlers with fresh references
+      setTimeout(() => {
+        const submitBtn = document.getElementById('submitBtn');
+        if (submitBtn) {
+          submitBtn.onclick = () => { if (window.trainer) window.trainer.submitAnswer(); };
+        }
+        
+        const nextBtn = document.getElementById('nextBtn');
+        if (nextBtn) {
+          nextBtn.onclick = () => { if (window.trainer) window.trainer.nextQuestion(); };
+        }
+        
+        const prevBtn = document.getElementById('prevBtn');
+        if (prevBtn) {
+          prevBtn.onclick = () => { if (window.trainer) window.trainer.previousQuestion(); };
+        }
+        
+        const flagBtnNew = document.getElementById('flagBtn');
+        if (flagBtnNew) {
+          flagBtnNew.onclick = () => { if (window.trainer) window.trainer.toggleFlag(); };
+        }
+        
+        const skipBtn = document.querySelector('.skip-btn');
+        if (skipBtn) {
+          skipBtn.onclick = () => { if (window.trainer) window.trainer.skipQuestion(); };
+        }
+      }, 100);
       
-      // 11. Force garbage collection hint
-      if (window.gc) {
-        window.gc();
-      }
+      // 13. Scroll to top
+      window.scrollTo(0, 0);
       
       console.log('✅ Full reset complete - ready for new quiz');
     }
 
-    function startNewExam() {
-      console.log('🎯 Starting new exam...');
-      
-      // Do a complete reset first
-      resetQuiz();
-      
-      // Small delay to ensure DOM updates
-      setTimeout(() => {
-        startMode('exam');
-      }, 100);
-    }
-
     // App version for cache busting
     const APP_VERSION = '2.0.1';
+    
+    // Check for version mismatch
+    function checkVersion() {
+      const storedVersion = localStorage.getItem('appVersion');
+      if (storedVersion && storedVersion !== APP_VERSION) {
+        console.log('Version mismatch, clearing cache...');
+        forceClearCache();
+      }
+      localStorage.setItem('appVersion', APP_VERSION);
+    }
     
     // Check for version mismatch
     function checkVersion() {
@@ -13413,6 +13547,21 @@
       
       // Ensure clean state on page load
       resetQuiz();
+      
+      // Attach event listeners to mode cards
+      document.getElementById('triageMode')?.addEventListener('click', () => startMode('triage'));
+      document.getElementById('speedMode')?.addEventListener('click', () => startMode('speed'));
+      document.getElementById('examMode')?.addEventListener('click', () => startMode('exam'));
+      document.getElementById('strategicMode')?.addEventListener('click', () => startMode('strategic'));
+      
+      // Attach event listeners to result buttons
+      document.getElementById('reviewAnswersBtn')?.addEventListener('click', reviewAnswers);
+      document.getElementById('resetQuizBtn')?.addEventListener('click', resetQuiz);
+      document.getElementById('takeAnotherExamBtn')?.addEventListener('click', startNewExam);
+      
+      // Attach event listeners to install buttons
+      document.getElementById('installBtn')?.addEventListener('click', installPWA);
+      document.getElementById('dismissBtn')?.addEventListener('click', dismissInstall);
       
       // Check if we have questions
       if (!window.questionBank || window.questionBank.length === 0) {
