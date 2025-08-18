@@ -368,7 +368,7 @@
 
   <script>
     // Define the question bank
-        // Define the question bank FIRST
+       // Define the question bank FIRST
       // Question Bank - AWS DVA-C02 Specific Questions
         const questionBank = [
             // Domain 1: Development with AWS Services (32%)
@@ -12501,9 +12501,14 @@
   </script>
 
   <script>
-    // Simple SAA Fix - Just reload the page
+    // Working DVA Fix - Clear state before reloading
     function resetQuiz() {
-      location.reload();
+      // Clear everything before reloading
+      localStorage.clear();
+      sessionStorage.clear();
+      
+      // Remove any URL parameters or hash
+      window.location.href = window.location.origin + window.location.pathname;
     }
 
     // Basic stub functions to prevent errors
