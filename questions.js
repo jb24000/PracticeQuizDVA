@@ -1,6 +1,6 @@
-window.questionBank =  [            
+window.questionBank = [
   // Domain 1: Development with AWS Services (32%)
-{
+  {
     id: 'dva_001',
     domain: "Domain 1: Development with AWS Services",
     difficulty: "medium",
@@ -12125,5 +12125,4 @@ window.questionBank =  [
         examStrategy: "Cascading failure prevention: Circuit breakers + exponential backoff + auto-scaling + error boundaries + composite alarms."
     }
 }
-];
-
+]; // <-- IMPORTANT: close the array and end with a semicolon
