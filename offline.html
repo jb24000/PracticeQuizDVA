@@ -1,379 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AWS DVA-C02 Trainer - Offline</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #ffa0c9 75%, #FF9900 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 20s ease infinite;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .offline-container {
-            max-width: 600px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-            padding: 40px;
-            text-align: center;
-            animation: slideIn 0.5s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .offline-icon {
-            font-size: 5em;
-            margin-bottom: 20px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        h1 {
-            color: white;
-            font-size: 2em;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        p {
-            color: rgba(255,255,255,0.9);
-            font-size: 1.1em;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-
-        .status-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 10px;
-            animation: blink 1s infinite;
-        }
-
-        .status-offline {
-            background: #FF3860;
-        }
-
-        .status-online {
-            background: #48C774;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .connection-status {
-            background: rgba(255,255,255,0.15);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-        }
-
-        .features-list {
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 25px;
-            text-align: left;
-        }
-
-        .features-list h3 {
-            color: white;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .feature-item {
-            color: rgba(255,255,255,0.9);
-            padding: 8px 0;
-            display: flex;
-            align-items: center;
-        }
-
-        .feature-item::before {
-            content: '✓';
-            color: #48C774;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-
-        .btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: white;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            background: linear-gradient(135deg, #FF9900, #FF6B00);
-            margin: 10px;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255,153,0,0.4);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .tips {
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 25px;
-        }
-
-        .tips h3 {
-            color: white;
-            margin-bottom: 15px;
-        }
-
-        .tip {
-            color: rgba(255,255,255,0.9);
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .tip:last-child {
-            border-bottom: none;
-        }
-
-        .loading-spinner {
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top: 4px solid white;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-            display: none;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 768px) {
-            .offline-container {
-                padding: 30px 20px;
-            }
-
-            h1 {
-                font-size: 1.5em;
-            }
-
-            .offline-icon {
-                font-size: 4em;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AWS DVA-C02 Trainer - Offline</title>
+  <style>/* (same styling as yours, trimmed for brevity) */
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,sans-serif;min-height:100vh;background:linear-gradient(135deg,#667eea 0%,#764ba2 25%,#f093fb 50%,#ffa0c9 75%,#FF9900 100%);background-size:400% 400%;animation:gradientShift 20s ease infinite;display:flex;justify-content:center;align-items:center;padding:20px}
+    @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    .offline-container{max-width:600px;background:rgba(255,255,255,.1);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:20px;border:1px solid rgba(255,255,255,.2);box-shadow:0 8px 32px rgba(31,38,135,.37);padding:40px;text-align:center;animation:slideIn .5s ease-out}
+    @keyframes slideIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+    .offline-icon{font-size:5em;margin-bottom:20px;animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+    h1{color:#fff;font-size:2em;margin-bottom:15px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
+    p{color:rgba(255,255,255,.9);font-size:1.1em;margin-bottom:30px;line-height:1.6}
+    .status-indicator{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:10px;animation:blink 1s infinite}
+    .status-offline{background:#FF3860}.status-online{background:#48C774}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
+    .connection-status{background:rgba(255,255,255,.15);border-radius:10px;padding:15px;margin-bottom:25px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600}
+    .features-list{background:rgba(255,255,255,.1);border-radius:10px;padding:20px;margin-bottom:25px;text-align:left}
+    .features-list h3{color:#fff;margin-bottom:15px;text-align:center}
+    .feature-item{color:rgba(255,255,255,.9);padding:8px 0;display:flex;align-items:center}
+    .feature-item::before{content:'✓';color:#48C774;font-weight:bold;margin-right:10px}
+    .btn{padding:12px 30px;border:none;border-radius:10px;font-size:1em;font-weight:600;cursor:pointer;transition:all .3s ease;color:#fff;text-transform:uppercase;letter-spacing:.5px;background:linear-gradient(135deg,#FF9900,#FF6B00);margin:10px}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,153,0,.4)}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    .tips{background:rgba(255,255,255,.1);border-radius:10px;padding:20px;margin-top:25px}
+    .tips h3{color:#fff;margin-bottom:15px}
+    .tip{color:rgba(255,255,255,.9);padding:8px 0;border-bottom:1px solid rgba(255,255,255,.1)}.tip:last-child{border-bottom:none}
+    .loading-spinner{border:4px solid rgba(255,255,255,.3);border-top:4px solid #fff;border-radius:50%;width:40px;height:40px;animation:spin 1s linear infinite;margin:20px auto;display:none}
+    @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+    @media (max-width:768px){.offline-container{padding:30px 20px}h1{font-size:1.5em}.offline-icon{font-size:4em}}
+  </style>
 </head>
 <body>
-    <div class="offline-container">
-        <div class="offline-icon">📡</div>
-        <h1>You're Currently Offline</h1>
-        
-        <div class="connection-status">
-            <span class="status-indicator status-offline" id="statusIndicator"></span>
-            <span id="statusText">No Internet Connection</span>
-        </div>
+  <div class="offline-container">
+    <div class="offline-icon">📡</div>
+    <h1>You're Currently Offline</h1>
 
-        <p>Don't worry! The AWS DVA-C02 Exam Trainer works offline. Your cached questions and progress are still available.</p>
-
-        <div class="features-list">
-            <h3>Available Offline Features:</h3>
-            <div class="feature-item">Access previously loaded questions</div>
-            <div class="feature-item">Continue practice sessions</div>
-            <div class="feature-item">Review saved progress</div>
-            <div class="feature-item">Study mode with cached content</div>
-        </div>
-
-        <button class="btn" onclick="tryReconnect()">Try to Reconnect</button>
-        <button class="btn" onclick="goToApp()">Continue Offline</button>
-
-        <div class="loading-spinner" id="loadingSpinner"></div>
-
-        <div class="tips">
-            <h3>💡 Offline Study Tips:</h3>
-            <div class="tip">• Use this time to review flagged questions</div>
-            <div class="tip">• Practice timed exercises to improve speed</div>
-            <div class="tip">• Focus on understanding explanations</div>
-            <div class="tip">• Your progress will sync when you're back online</div>
-        </div>
+    <div class="connection-status">
+      <span class="status-indicator status-offline" id="statusIndicator"></span>
+      <span id="statusText">No Internet Connection</span>
     </div>
 
-    <script>
-        // Check connection status
-        function updateConnectionStatus() {
-            const statusIndicator = document.getElementById('statusIndicator');
-            const statusText = document.getElementById('statusText');
-            
-            if (navigator.onLine) {
-                statusIndicator.className = 'status-indicator status-online';
-                statusText.textContent = 'Connection Restored!';
-                
-                // Auto-redirect after connection restored
-                setTimeout(() => {
-                    window.location.href = '/';
-                }, 2000);
-            } else {
-                statusIndicator.className = 'status-indicator status-offline';
-                statusText.textContent = 'No Internet Connection';
-            }
-        }
+    <p>The AWS DVA‑C02 Trainer supports offline practice. Previously loaded questions and progress remain available.</p>
 
-        // Try to reconnect
-        function tryReconnect() {
-            const spinner = document.getElementById('loadingSpinner');
-            spinner.style.display = 'block';
-            
-            // Check connection
-            fetch('/', { method: 'HEAD' })
-                .then(() => {
-                    // Connection successful
-                    window.location.href = '/';
-                })
-                .catch(() => {
-                    // Still offline
-                    spinner.style.display = 'none';
-                    alert('Still offline. Please check your internet connection.');
-                });
-        }
+    <div class="features-list">
+      <h3>Available Offline Features:</h3>
+      <div class="feature-item">Access previously loaded questions</div>
+      <div class="feature-item">Continue practice sessions</div>
+      <div class="feature-item">Review saved progress</div>
+      <div class="feature-item">Study mode with cached content</div>
+    </div>
 
-        // Go to app in offline mode
-        function goToApp() {
-            // Try to load cached version
-            if ('caches' in window) {
-                caches.match('/').then(response => {
-                    if (response) {
-                        window.location.href = '/';
-                    } else {
-                        alert('No cached version available. Please connect to the internet to download the app.');
-                    }
-                });
-            } else {
-                alert('Your browser does not support offline mode.');
-            }
-        }
+    <button class="btn" id="btnReconnect">Try to Reconnect</button>
+    <button class="btn" id="btnContinue">Continue Offline</button>
 
-        // Monitor connection status
-        window.addEventListener('online', updateConnectionStatus);
-        window.addEventListener('offline', updateConnectionStatus);
+    <div class="loading-spinner" id="loadingSpinner"></div>
 
-        // Initial check
-        updateConnectionStatus();
+    <div class="tips">
+      <h3>💡 Offline Study Tips:</h3>
+      <div class="tip">• Review flagged questions</div>
+      <div class="tip">• Practice timed exercises</div>
+      <div class="tip">• Focus on understanding explanations</div>
+      <div class="tip">• Your progress will sync when you're back online</div>
+    </div>
+  </div>
 
-        // Periodic connection check
-        setInterval(() => {
-            if (navigator.onLine) {
-                updateConnectionStatus();
-            }
-        }, 5000);
+  <script>
+    // Use dynamic app index that respects subpaths (GitHub Pages etc.)
+    const APP_INDEX = new URL('./', location.href); // points to current directory (index.html)
+    const STATUS_IND = document.getElementById('statusIndicator');
+    const STATUS_TXT = document.getElementById('statusText');
+    const SPINNER = document.getElementById('loadingSpinner');
+    const $ = (id) => document.getElementById(id);
 
-        // Service Worker communication
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.ready.then(registration => {
-                // Listen for messages from service worker
-                navigator.serviceWorker.addEventListener('message', event => {
-                    if (event.data && event.data.type === 'SYNC_COMPLETE') {
-                        console.log('Progress synchronized');
-                    }
-                });
-            });
-        }
+    function setOnlineUI(isOnline){
+      STATUS_IND.className = 'status-indicator ' + (isOnline ? 'status-online' : 'status-offline');
+      STATUS_TXT.textContent = isOnline ? 'Connection Restored!' : 'No Internet Connection';
+    }
 
-        // Attempt to load cached resources
-        if ('caches' in window) {
-            caches.open('dva-c02-trainer-v1').then(cache => {
-                cache.match('/').then(response => {
-                    if (response) {
-                        console.log('Cached version available');
-                    }
-                });
-            });
-        }
+    async function head(url){
+      try { return await fetch(url, { method:'HEAD', cache:'no-store' }); }
+      catch { return null; }
+    }
 
-        // Add keyboard shortcut to retry connection
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'r' && (e.ctrlKey || e.metaKey)) {
-                e.preventDefault();
-                tryReconnect();
-            }
-        });
+    async function tryReconnect(){
+      SPINNER.style.display = 'block';
+      const res = await head(APP_INDEX);
+      if (res && res.ok){
+        location.href = APP_INDEX.href;
+      } else {
+        SPINNER.style.display = 'none';
+        alert('Still offline. Please check your internet connection.');
+      }
+    }
 
-        // Visual feedback for connection attempts
-        let connectionAttempts = 0;
-        const maxAttempts = 3;
+    async function continueOffline(){
+      if (!('caches' in window)){
+        alert('Your browser does not support offline mode.'); return;
+      }
+      // Try to find any cached index for this scope
+      const cached = await caches.match(APP_INDEX.href) || await caches.match(APP_INDEX.pathname) || await caches.match(APP_INDEX);
+      if (cached){
+        location.href = APP_INDEX.href;
+      } else {
+        alert('No cached version available. Connect once to cache the app.');
+      }
+    }
 
-        function autoReconnect() {
-            if (connectionAttempts < maxAttempts && !navigator.onLine) {
-                connectionAttempts++;
-                console.log(`Auto-reconnect attempt ${connectionAttempts}/${maxAttempts}`);
-                
-                fetch('/', { method: 'HEAD' })
-                    .then(() => {
-                        window.location.href = '/';
-                    })
-                    .catch(() => {
-                        if (connectionAttempts < maxAttempts) {
-                            setTimeout(autoReconnect, 5000);
-                        }
-                    });
-            }
-        }
+    function updateConnectionStatus(){
+      const online = navigator.onLine;
+      setOnlineUI(online);
+      if (online){
+        setTimeout(()=>{ location.href = APP_INDEX.href; }, 1200);
+      }
+    }
 
-        // Start auto-reconnect after 10 seconds
-        setTimeout(autoReconnect, 10000);
-    </script>
+    window.addEventListener('online', updateConnectionStatus);
+    window.addEventListener('offline', updateConnectionStatus);
+    updateConnectionStatus();
+
+    // Buttons
+    $('btnReconnect').addEventListener('click', tryReconnect);
+    $('btnContinue').addEventListener('click', continueOffline);
+
+    // Optional: Clear caches via SW if you add a "Clear App Cache" link here
+    // if ('serviceWorker' in navigator) {
+    //   navigator.serviceWorker.ready.then(async (reg) => {
+    //     const mc = new MessageChannel();
+    //     mc.port1.onmessage = (ev)=>{ if (ev.data?.type==='CACHE_CLEARED'){ location.reload(); } };
+    //     reg.active?.postMessage({type:'CLEAR_CACHE'}, [mc.port2]);
+    //   });
+    // }
+  </script>
 </body>
 </html>
