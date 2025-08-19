@@ -3,347 +3,223 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <meta name="description" content="Strategic AWS Certified Developer Associate DVA-C02 Exam Trainer - Master timing and pass the exam">
-  <meta name="theme-color" content="#FF9900" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#232F3E" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#FF9900" />
   <title>AWS DVA-C02 Strategic Exam Trainer</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
 
     :root{
-      --primary:#FF9900;
-      --primary-dark:#FF6600;
-      --primary-light:#FFB84D;
-      --primary-gradient:linear-gradient(135deg,#FF9900 0%,#FF6600 100%);
-      --success:#28a745;--warning:#ffc107;--danger:#dc3545;--info:#17a2b8;
-      --glass-bg:rgba(255,255,255,.1);--glass-border:rgba(255,255,255,.2);
-      --card-bg:rgba(255,255,255,.1);--card-hover:rgba(255,255,255,.2);
-      --text-white:#fff;--text-light:rgba(255,255,255,.95);
-      --shadow:0 8px 32px rgba(0,0,0,.1);--shadow-hover:0 12px 40px rgba(0,0,0,.15);
-      --shadow-card:0 8px 32px rgba(0,0,0,.15);--aws-orange:#ff9900;--aws-blue:#0073bb
+      --primary:#FF9900; --primary-dark:#FF6600; --primary-light:#FFB84D;
+      --success:#28a745; --warning:#ffc107; --danger:#dc3545; --aws-blue:#0073bb;
+      --card:rgba(255,255,255,.12); --card2:rgba(255,255,255,.18);
+      --text:#fff; --text2:rgba(255,255,255,.95)
     }
 
     body{
       font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,sans-serif;
-      min-height:100vh;background:linear-gradient(135deg,#FF6B6B 0%,#FF8787 100%);
-      display:flex;flex-direction:column;align-items:center;padding:0;overflow-x:hidden
+      min-height:100vh;
+      background:linear-gradient(135deg,#FF6B6B 0%,#FF8787 100%);
+      color:var(--text); display:flex; flex-direction:column; align-items:center
     }
 
-    .main-header{width:100%;text-align:center;padding:40px 20px 30px;background:rgba(0,0,0,.1)}
-    .main-header h1{color:var(--text-white);font-size:2.8em;font-weight:700;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:15px}
-    .main-header .tagline{color:var(--text-light);font-size:1.1em;font-weight:300;opacity:.95}
+    .main-header{width:100%;padding:40px 20px;text-align:center;background:rgba(0,0,0,.1)}
+    .main-header h1{font-size:2.8rem;font-weight:800}
+    .main-header p{opacity:.95}
 
-    .container{width:100%;max-width:1200px;padding:20px;animation:fadeIn .6s ease-out}
+    .container{width:100%;max-width:1100px;padding:0 20px 60px;animation:fadeIn .6s ease-out}
     @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-    .hero-section{text-align:center;margin-bottom:40px;padding:20px}
-    .hero-section h2{color:var(--text-white);font-size:2.2em;font-weight:600;margin-bottom:15px}
-    .hero-section p{color:var(--text-light);font-size:1.15em;max-width:700px;margin:0 auto}
+    .hero{ text-align:center; margin:24px 0 }
+    .hero h2{font-size:2rem}
+    .hero p{opacity:.95}
 
-    .features-card{background:var(--card-bg);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-      border-radius:20px;padding:30px;margin-bottom:40px;box-shadow:var(--shadow-card);
-      border:1px solid rgba(255,255,255,.2)}
-    .features-card h3{color:var(--text-white);font-size:1.6em;margin-bottom:20px;text-align:center;display:flex;align-items:center;justify-content:center;gap:10px}
-    .features-card .subtitle{text-align:center;color:var(--text-light);margin-bottom:25px;font-size:1.05em}
-    .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
-    .feature-item{display:flex;align-items:center;gap:12px;color:var(--text-light);font-size:.95em}
-    .feature-item .icon{font-size:1.3em}
+    .features-card{background:var(--card);border:1px solid rgba(255,255,255,.2);
+      border-radius:20px;padding:26px;margin:18px 0;backdrop-filter:blur(8px)}
+    .features-card h3{font-size:1.5rem;margin-bottom:8px}
+    .subtitle{opacity:.95;margin-bottom:16px}
+    .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .feature-item{background:var(--card2);padding:12px;border-radius:12px}
 
-    .timer-section{display:none;justify-content:center;gap:20px;margin:20px auto;max-width:1200px;padding:0 20px;flex-wrap:wrap}
-    .timer-box{flex:1;min-width:180px;background:rgba(255,255,255,.2);backdrop-filter:blur(10px);border-radius:15px;padding:20px;text-align:center;border:1px solid rgba(255,255,255,.3);box-shadow:0 5px 20px rgba(0,0,0,.1)}
-    .timer-label{color:var(--text-light);font-size:.9em;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px}
-    .timer-value{color:var(--text-white);font-size:2em;font-weight:700;font-feature-settings:"tnum"}
+    .mode-selection{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+    .mode-card{background:var(--card2);border:1px solid rgba(255,255,255,.25);
+      padding:26px;border-radius:18px;cursor:pointer;transition:.2s}
+    .mode-card:hover{transform:translateY(-6px)}
+    .mode-title{font-weight:800;margin:6px 0}
+    .mode-desc{opacity:.95}
 
-    .pace-indicator{padding:6px 12px;border-radius:20px;font-weight:700;color:#fff;font-size:.85em;margin-top:8px;display:inline-block}
-    .pace-on-track{background:var(--success)}.pace-behind{background:var(--warning)}.pace-danger{background:var(--danger)}
+    .timer-section{display:none;gap:16px;margin:20px 0}
+    .timer-box{flex:1;min-width:180px;background:var(--card2);padding:16px;border-radius:14px;text-align:center}
+    .timer-label{opacity:.9;font-size:.9rem}
+    .timer-value{font-size:1.8rem;font-weight:800}
+    .pace-indicator{display:inline-block;margin-top:6px;padding:4px 10px;border-radius:999px;font-weight:700}
+    .pace-on{background:var(--success)}.pace-warn{background:var(--warning)}.pace-bad{background:var(--danger)}
 
-    .mode-selection{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:25px;margin-bottom:40px}
-    .mode-card{background:var(--card-bg);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-      border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:30px;cursor:pointer;transition:.3s;box-shadow:var(--shadow-card)}
-    .mode-card:hover{transform:translateY(-8px);background:var(--card-hover);box-shadow:0 15px 40px rgba(0,0,0,.25)}
-    .mode-icon{font-size:3em;margin-bottom:15px;display:block}
-    .mode-title{color:var(--text-white);font-size:1.5em;font-weight:600;margin-bottom:10px}
-    .mode-desc{color:var(--text-light);font-size:.95em;line-height:1.5;margin-bottom:20px}
-    .mode-features{list-style:none;text-align:left}
-    .mode-features li{color:var(--text-light);font-size:.9em;padding:6px 0;display:flex;align-items:center;gap:8px}
-    .mode-features li:before{content:'✓';color:#fff;font-weight:700}
+    .question-container{display:none;background:#fff;color:#333;border-radius:18px;padding:22px;box-shadow:0 10px 34px rgba(0,0,0,.18)}
+    .question-header{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+    .badge{padding:6px 10px;border-radius:999px;font-weight:700;font-size:.8rem;color:#fff}
+    .bd1{background:var(--primary)}.bdE{background:var(--success)}.bdM{background:var(--warning)}.bdH{background:var(--danger)}
+    .action-btn{border:0;border-radius:999px;padding:8px 14px;color:#fff;font-weight:700;cursor:pointer}
+    .flag{background:var(--warning)}.skip{background:var(--primary)}
 
-    .question-container{background:rgba(255,255,255,.98);border-radius:20px;padding:30px;margin:20px auto;max-width:1000px;color:#333;display:none;box-shadow:0 10px 40px rgba(0,0,0,.15)}
-    .question-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;flex-wrap:wrap;gap:15px}
-    .question-info{display:flex;gap:12px;flex-wrap:wrap}
-    .badge{padding:6px 14px;border-radius:20px;font-size:.85em;font-weight:600}
-    .badge-domain{background:var(--primary);color:#fff}
-    .badge-difficulty-easy{background:var(--success);color:#fff}
-    .badge-difficulty-medium{background:var(--warning);color:#fff}
-    .badge-difficulty-hard{background:var(--danger);color:#fff}
+    .scenario{background:#fff6ec;border-left:4px solid var(--primary);padding:12px;border-radius:10px;margin:10px 0}
+    .question-text{font-size:1.1rem;font-weight:800;margin:10px 0}
 
-    .question-actions{display:flex;gap:12px}
-    .action-btn{padding:8px 18px;border:none;border-radius:20px;cursor:pointer;font-weight:600;transition:.2s;font-size:.9em}
-    .flag-btn{background:var(--warning);color:#fff}
-    .flag-btn.flagged{background:var(--danger)}
-    .skip-btn{background:var(--primary);color:#fff}
+    .meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .meta .chip{background:#eee;border-radius:999px;padding:4px 10px;font-size:.85rem;color:#333}
 
-    .scenario{background:#fff5f5;border-left:4px solid var(--primary);padding:18px;margin-bottom:25px;border-radius:10px;line-height:1.6;color:#444}
-    .question-text{font-size:1.15em;font-weight:600;margin-bottom:20px;line-height:1.5;color:#232F3E}
+    .options{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+    .option{border:2px solid #e5e5e5;border-radius:12px;padding:12px;display:flex;gap:10px;cursor:pointer}
+    .option:hover{border-color:#ffb14d}
+    .option.selected{background:#fff1da;border-color:#ffb14d}
+    .option.correct{background:#e8f9ed;border-color:#28a745}
+    .option.incorrect{background:#ffe8ea;border-color:#dc3545}
+    .letter{width:28px;height:28px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:var(--aws-blue);color:#fff;font-weight:800}
 
-    .options{display:flex;flex-direction:column;gap:12px}
-    .option{background:#fff;border:2px solid #e0e0e0;border-radius:10px;padding:15px;cursor:pointer;transition:.2s;display:flex;align-items:flex-start;gap:12px;line-height:1.5}
-    .option:hover{border-color:var(--aws-orange);transform:translateX(5px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
-    .option.selected{background:#FFF3E0;border-color:var(--aws-orange)}
-    .option.correct{background:#E8F5E9;border-color:var(--success)}
-    .option.incorrect{background:#FFEBEE;border-color:var(--danger)}
-    .option-letter{min-width:30px;height:30px;border-radius:50%;background:var(--aws-blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
-    .option-text{flex:1}
+    .explanation{display:none;background:#f5faff;border:1px solid #d1e7ff;border-radius:12px;padding:14px;margin-top:12px}
+    .explanation h4{margin:6px 0 4px}
 
-    .explanation{background:linear-gradient(135deg,#f0f8ff,#f5faff);border-radius:12px;padding:25px;margin-top:25px;display:none;border:1px solid #d1e7ff}
-    .explanation h3{color:var(--primary);margin-bottom:15px;font-size:1.3em}
+    .controls{display:flex;gap:10px;margin-top:18px}
+    .btn{flex:1;border:0;border-radius:999px;padding:12px 18px;color:#fff;font-weight:800;cursor:pointer}
+    .btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary-dark))}
+    .btn.secondary{background:linear-gradient(135deg,#6c757d,#5a6268)}
 
-    .controls{display:flex;justify-content:space-between;gap:15px;margin-top:25px}
-    .controls .btn{flex:1}
+    .results-container{display:none;background:#fff;color:#333;border-radius:18px;padding:24px;box-shadow:0 10px 34px rgba(0,0,0,.18)}
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:18px 0}
+    .stat-card{background:#f7f7f7;border-radius:12px;padding:16px;text-align:center}
 
-    .btn{padding:12px 32px;border:none;border-radius:25px;font-size:1em;font-weight:600;cursor:pointer;transition:.2s;color:#fff;text-transform:uppercase;letter-spacing:.5px}
-    .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-dark))}
-    .btn-secondary{background:linear-gradient(135deg,#6c757d,#5a6268)}
+    .score-circle{width:150px;height:150px;margin:0 auto 12px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:2.2rem;background:conic-gradient(var(--primary) 0deg,var(--primary) var(--deg),#e0e0e0 var(--deg))}
+    .score-text{width:120px;height:120px;border-radius:50%;background:#fff;color:#333;display:flex;align-items:center;justify-content:center}
+    .pass{color:#28a745;font-weight:900}.fail{color:#dc3545;font-weight:900}
 
-    .results-container{background:rgba(255,255,255,.98);border-radius:20px;padding:35px;color:#333;display:none;max-width:1000px;margin:20px auto;box-shadow:0 10px 40px rgba(0,0,0,.15)}
-    .results-header{text-align:center;margin-bottom:30px}
-    .score-circle{width:150px;height:150px;margin:0 auto 20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:3em;font-weight:700;color:#fff;position:relative;background:conic-gradient(var(--primary) 0deg,var(--primary) var(--score-deg),#e0e0e0 var(--score-deg))}
-    .score-text{background:#fff;width:130px;height:130px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#333}
-    .pass-fail{font-size:1.5em;font-weight:700;margin-bottom:10px}.pass{color:var(--success)}.fail{color:var(--danger)}
-
-    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin:30px 0}
-    .stat-card{background:#f8f9fa;border-radius:10px;padding:20px;text-align:center}
-    .stat-label{color:#666;font-size:.9em;margin-bottom:5px}
-    .stat-value{font-size:1.8em;font-weight:700;color:var(--aws-blue)}
-
-    .review-mode{background:rgba(255,255,255,.2);backdrop-filter:blur(10px);border-radius:15px;padding:20px;margin:20px auto;max-width:1000px;display:none;box-shadow:0 5px 20px rgba(0,0,0,.1)}
-    .review-mode h3{color:var(--text-white);margin-bottom:15px}
-    .review-navigation{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
-    .review-btn{width:45px;height:45px;border:2px solid rgba(255,255,255,.4);background:rgba(255,255,255,.15);border-radius:10px;cursor:pointer;font-weight:600;transition:.2s;color:#fff}
-    .review-btn.answered{background:var(--success);border-color:var(--success)}
-    .review-btn.flagged{background:var(--warning);border-color:var(--warning)}
-    .review-btn.current{background:var(--primary);transform:scale(1.1);border-color:var(--primary)}
-
-    @media (max-width:768px){
-      .main-header h1{font-size:2em}
-      .hero-section h2{font-size:1.8em}
-      .mode-selection{grid-template-columns:1fr}
-      .controls{flex-direction:column}.controls .btn{width:100%}
-      .timer-section{flex-direction:column}.timer-box{min-width:100%}
-      .features-grid{grid-template-columns:1fr}
+    @media(max-width:768px){
+      .controls{flex-direction:column}.btn{width:100%}
+      .timer-section{flex-direction:column}
     }
   </style>
 </head>
 <body>
-  <div class="main-header">
+  <header class="main-header">
     <h1>🎯 AWS DVA-C02 Strategic Exam Trainer</h1>
-    <p class="tagline">Master exam timing and strategy with 500+ realistic scenarios · Turn 72% fails into 85+ passes</p>
-  </div>
+    <p>Master timing & decision-making with realistic scenarios.</p>
+  </header>
 
-  <div class="container">
-    <div class="hero-section">
+  <main class="container">
+    <section class="hero">
       <h2>Strategic Exam Training</h2>
-      <p>Failed by 2 questions? Time management, not knowledge, was the issue. Master the strategy.</p>
-    </div>
+      <p>Failed by 2 questions? Time management—not knowledge—was the issue. Master the strategy.</p>
+    </section>
 
-    <div class="features-card">
-      <h3>🎯 Professional Question Bank</h3>
-      <p class="subtitle"><strong>500+ Questions</strong> covering all DVA-C02 services per official exam guide</p>
+    <section class="features-card">
+      <h3>🎒 Professional Question Bank</h3>
+      <p class="subtitle"><strong>500+ Questions</strong> across security, deployment, performance, and cost.</p>
       <div class="features-grid">
-        <div class="feature-item"><span class="icon">🔒</span><span>150+ Security questions</span></div>
-        <div class="feature-item"><span class="icon">🚀</span><span>130+ Deployment scenarios</span></div>
-        <div class="feature-item"><span class="icon">⚡</span><span>120+ Performance cases</span></div>
-        <div class="feature-item"><span class="icon">💰</span><span>100+ Cost optimization</span></div>
-        <div class="feature-item"><span class="icon">🔄</span><span>Smart question rotation</span></div>
-        <div class="feature-item"><span class="icon">🧠</span><span>Anti-memorization system</span></div>
+        <div class="feature-item">🔒 Security & IAM</div>
+        <div class="feature-item">🚀 CI/CD & Deployments</div>
+        <div class="feature-item">⚡ Performance tuning</div>
+        <div class="feature-item">💰 Cost optimization</div>
       </div>
-    </div>
+    </section>
 
-    <!-- Analysis view -->
-    <div class="mode-selection" id="modeSelection">
+    <!-- Analysis -->
+    <section id="modeSelection" class="mode-selection">
       <div class="mode-card" data-mode="triage">
-        <span class="mode-icon">⚡</span>
-        <div class="mode-title">Triage Training</div>
-        <p class="mode-desc">Learn to identify quick wins vs time sinks in under 30 seconds</p>
-        <ul class="mode-features">
-          <li>Question difficulty recognition</li>
-          <li>30-second decision drills</li>
-          <li>Strategic skip/answer patterns</li>
-        </ul>
+        <div class="mode-title">⚡ Triage Training</div>
+        <p class="mode-desc">Quickly spot easy wins vs time sinks.</p>
       </div>
-
       <div class="mode-card" data-mode="speed">
-        <span class="mode-icon">🔥</span>
-        <div class="mode-title">Speed Rounds</div>
-        <p class="mode-desc">90-second maximum per question - build exam pace muscle memory</p>
-        <ul class="mode-features">
-          <li>Hard 90-second time limits</li>
-          <li>Automatic progression</li>
-          <li>Pace analytics</li>
-        </ul>
+        <div class="mode-title">🔥 Speed Rounds</div>
+        <p class="mode-desc">90-second cap per question. Build pace.</p>
       </div>
-
       <div class="mode-card" data-mode="exam">
-        <span class="mode-icon">🎯</span>
-        <div class="mode-title">Full Exam Simulation</div>
-        <p class="mode-desc">Real 130-minute, 65-question exam with strategic coaching</p>
-        <ul class="mode-features">
-          <li>Authentic time pressure</li>
-          <li>Real exam difficulty</li>
-          <li>Strategic alerts & guidance</li>
-        </ul>
+        <div class="mode-title">🎯 Full Exam Simulation</div>
+        <p class="mode-desc">65 questions · 130 minutes · realistic difficulty.</p>
       </div>
-
       <div class="mode-card" data-mode="strategic">
-        <span class="mode-icon">🧠</span>
-        <div class="mode-title">Strategic Practice</div>
-        <p class="mode-desc">Learn mark/skip/return workflow with complex scenarios</p>
-        <ul class="mode-features">
-          <li>Flag & review system</li>
-          <li>Time allocation practice</li>
-          <li>Decision tree training</li>
-        </ul>
+        <div class="mode-title">🧠 Strategic Practice</div>
+        <p class="mode-desc">Mark/skip/return workflow & decision trees.</p>
       </div>
-    </div>
+    </section>
 
-    <!-- Exam view -->
-    <div class="timer-section" id="timerSection">
-      <div class="timer-box">
-        <div class="timer-label">Global Timer</div>
-        <div class="timer-value" id="globalTimer">00:00</div>
-      </div>
-      <div class="timer-box">
-        <div class="timer-label">Question Time</div>
-        <div class="timer-value" id="questionTimer">00:00</div>
-      </div>
-      <div class="timer-box">
-        <div class="timer-label">Pace Status</div>
-        <div class="timer-value" id="paceValue">--</div>
-        <div class="pace-indicator pace-on-track" id="paceIndicator">ON TRACK</div>
-      </div>
-    </div>
+    <!-- Exam -->
+    <section id="timerSection" class="timer-section">
+      <div class="timer-box"><div class="timer-label">Global</div><div id="globalTimer" class="timer-value">00:00</div></div>
+      <div class="timer-box"><div class="timer-label">Question</div><div id="questionTimer" class="timer-value">00:00</div></div>
+      <div class="timer-box"><div class="timer-label">Pace</div><div id="paceValue" class="timer-value">—</div><span id="paceIndicator" class="pace-indicator pace-on">ON TRACK</span></div>
+    </section>
 
-    <div class="review-mode" id="reviewMode">
-      <h3>📋 Review Navigation</h3>
-      <div class="review-navigation" id="reviewNavigation"></div>
-    </div>
-
-    <div class="question-container" id="questionContainer">
+    <section id="questionContainer" class="question-container">
       <div class="question-header">
-        <div class="question-info">
-          <span class="badge badge-domain" id="domainBadge">Domain 1</span>
-          <span class="badge badge-difficulty-medium" id="difficultyBadge">Medium</span>
-          <span class="badge" id="questionNumber">Q1 of 10</span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span id="domainBadge" class="badge bd1">Domain</span>
+          <span id="difficultyBadge" class="badge bdM">Medium</span>
+          <span id="questionNumber" class="badge" style="background:#333;color:#fff">Q1 of 10</span>
         </div>
-        <div class="question-actions">
-          <button class="action-btn flag-btn" id="flagBtn">🚩 Flag</button>
-          <button class="action-btn skip-btn" id="skipBtn">⏭️ Skip</button>
+        <div style="display:flex;gap:8px">
+          <button id="flagBtn" class="action-btn flag">🚩 Flag</button>
+          <button id="skipBtn" class="action-btn skip">⏭️ Skip</button>
         </div>
       </div>
 
-      <div class="scenario" id="scenario"></div>
-      <div class="question-text" id="questionText"></div>
-      <div class="options" id="options"></div>
+      <div id="scenario" class="scenario"></div>
+      <div class="meta" id="metaRow" style="margin:6px 0"></div>
+      <div id="questionText" class="question-text"></div>
+      <div id="options" class="options"></div>
 
-      <div class="explanation" id="explanation">
-        <h3>📚 Explanation</h3>
-        <div class="explanation-section">
-          <h4>✅ Correct Answer:</h4>
-          <p id="correctExplanation"></p>
-        </div>
-        <div class="explanation-section">
-          <h4>❌ Why Other Options Are Wrong:</h4>
-          <div id="wrongExplanations"></div>
-        </div>
-        <div class="strategy-tip">
-          <h4>💡 Exam Strategy Tip:</h4>
-          <p id="strategyTip"></p>
-        </div>
+      <div id="explanation" class="explanation">
+        <h4>✅ Correct Answer</h4>
+        <p id="correctExplanation"></p>
+        <h4>❌ Why Others Are Wrong</h4>
+        <div id="wrongExplanations"></div>
+        <h4>💡 Strategy Tip</h4>
+        <p id="strategyTip"></p>
       </div>
 
       <div class="controls">
-        <button class="btn btn-secondary" id="prevBtn">Previous</button>
-        <button class="btn btn-primary" id="submitBtn">Submit Answer</button>
-        <button class="btn btn-primary" id="nextBtn" style="display:none;">Next Question</button>
+        <button id="prevBtn" class="btn secondary">Previous</button>
+        <button id="submitBtn" class="btn primary">Submit Answer</button>
+        <button id="nextBtn" class="btn primary" style="display:none">Next Question</button>
       </div>
-    </div>
+    </section>
 
-    <!-- Results view -->
-    <div class="results-container" id="resultsContainer">
-      <div class="results-header">
-        <h2>📊 Performance Analysis</h2>
-        <div class="score-circle" id="scoreCircle" style="--score-deg:0deg;">
-          <div class="score-text" id="scoreText">0%</div>
-        </div>
-        <div class="pass-fail" id="passFail">RESULT</div>
-        <p id="resultMessage"></p>
+    <!-- Results -->
+    <section id="resultsContainer" class="results-container">
+      <div style="text-align:center">
+        <div id="scoreCircle" class="score-circle" style="--deg:0deg"><div id="scoreText" class="score-text">0%</div></div>
+        <div id="passFail" class="fail">RESULT</div>
       </div>
-
       <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-label">Correct Answers</div>
-          <div class="stat-value" id="correctCount">0/0</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Total Minutes</div>
-          <div class="stat-value" id="timeUsed">0</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Avg Time/Question</div>
-          <div class="stat-value" id="avgTime">0s</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Slowest Question</div>
-          <div class="stat-value" id="slowestTime">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Fastest Question</div>
-          <div class="stat-value" id="fastestTime">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Flagged / Skipped</div>
-          <div class="stat-value"><span id="flaggedCount">0</span> / <span id="skippedCount">0</span></div>
-        </div>
+        <div class="stat-card"><div class="stat-label">Correct Answers</div><div id="correctCount" class="stat-value">0/0</div></div>
+        <div class="stat-card"><div class="stat-label">Total Minutes</div><div id="timeUsed" class="stat-value">0</div></div>
+        <div class="stat-card"><div class="stat-label">Avg Time/Question</div><div id="avgTime" class="stat-value">0s</div></div>
+        <div class="stat-card"><div class="stat-label">Slowest</div><div id="slowestTime" class="stat-value">—</div></div>
+        <div class="stat-card"><div class="stat-label">Fastest</div><div id="fastestTime" class="stat-value">—</div></div>
+        <div class="stat-card"><div class="stat-label">Flagged / Skipped</div><div class="stat-value"><span id="flaggedCount">0</span> / <span id="skippedCount">0</span></div></div>
       </div>
-
       <div class="controls">
-        <button class="btn btn-primary" id="reviewBtn">Detailed Review</button>
-        <button class="btn btn-secondary" id="newSessionBtn">Start New Session</button>
-        <button class="btn btn-primary" id="anotherExamBtn">Take Another Exam</button>
+        <button id="reviewBtn" class="btn primary">Detailed Review</button>
+        <button id="newSessionBtn" class="btn secondary">Start New Session</button>
+        <button id="anotherExamBtn" class="btn primary">Take Another Exam</button>
       </div>
-    </div>
-  </div>
+    </section>
+  </main>
 
-  <!-- Soft wallet sanitiser to avoid extension crashes -->
+  <!-- Soft wallet sanitiser (prevents extension redefinition errors) -->
   <script>
     (function(){
-      const props=['ethereum','tronWeb','solana','walletRouter'];
-      props.forEach(p=>{
-        try{
-          if (!(p in window)) {
-            Object.defineProperty(window, p, { get: ()=>undefined, set: v=>v, configurable: true });
-          }
-        }catch(_){}
+      ['ethereum','tronWeb','solana','walletRouter'].forEach(p=>{
+        try{ if(!(p in window)) Object.defineProperty(window,p,{get:()=>undefined,set:v=>v,configurable:true}); }catch(_){}
       });
-      const originalCreate = document.createElement;
-      document.createElement = function(tag){
-        const el = originalCreate.call(document, tag);
-        if (String(tag).toLowerCase()==='script'){
-          const origSet=el.setAttribute;
-          el.setAttribute=function(name,value){
-            if (name==='src' && typeof value==='string' && value.startsWith('chrome-extension://')) {
-              console.log('🚫 Soft-blocked extension script:', value); return;
-            }
-            return origSet.call(this,name,value);
-          }
-        }
+      const orig=document.createElement; document.createElement=function(t){const el=orig.call(document,t);
+        if(String(t).toLowerCase()==='script'){const s=el.setAttribute; el.setAttribute=function(n,v){
+          if(n==='src'&&String(v).startsWith('chrome-extension://')) return;
+          return s.call(this,n,v);
+        }}
         return el;
       };
     })();
   </script>
-
   <script>
-    // Define the question bank FIRST
+        // Define the question bank FIRST
       // Question Bank - AWS DVA-C02 Specific Questions
         const questionBank = [
             // Domain 1: Development with AWS Services (32%)
@@ -12473,257 +12349,186 @@
     }
 }
 ];
+
+
+  </script>  
+  <script>
+    // ---------- Load from your questionBank (supports your explanation shape) ----------
+    function loadQuestionsFromBank() {
+      let qb = (typeof window.questionBank !== 'undefined') ? window.questionBank : null;
+
+      // Flatten category object -> array
+      if (qb && !Array.isArray(qb) && typeof qb === 'object') {
+        const flat=[]; for (const k in qb) if (Array.isArray(qb[k])) flat.push(...qb[k]); qb = flat;
+      }
+      if (!Array.isArray(qb) || qb.length === 0) return null;
+
+      const A='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      return qb
+        .map(q => {
+          const correctIndex = typeof q.correct === 'string'
+            ? A.indexOf((q.correct||'').toUpperCase())
+            : q.correct;
+
+          // Build wrong reasons aligned to options length
+          const whyWrong = (q.explanation && q.explanation.whyWrong) || {};
+          const wrongAligned = Array.isArray(q.options) ? q.options.map((_,i)=>{
+            if (i === correctIndex) return '';
+            // keys may be numbers or strings ("1","2")
+            return whyWrong[i] ?? whyWrong[String(i)] ?? '';
+          }) : [];
+
+          return {
+            id: q.id || '',
+            domain: q.domain || 'General',
+            difficulty: (q.difficulty || 'Medium'),
+            timeRecommendation: q.timeRecommendation || null,
+            scenario: q.scenario || '',
+            question: q.question || '',
+            options: q.options || [],
+            correct: Number.isInteger(correctIndex) ? correctIndex : 0,
+            why: (q.explanation && (q.explanation.correct || q.explanation.right || '')) || q.why || q.explanation || '',
+            wrong: wrongAligned,
+            tip: (q.explanation && q.explanation.examStrategy) || q.tip || ''
+          };
+        })
+        .filter(q => Array.isArray(q.options) && q.options.length >= 2);
+    }
+
+    // Minimal fallback so UI runs even if questionBank missing
+    const demoBank = [
+      {domain:'Deployment',difficulty:'Medium',
+       scenario:'You need zero-downtime Lambda deployments.',
+       question:'Best approach?', options:['In-place update','Versions + alias traffic shifting','Delete & recreate','Change memory size'],
+       correct:1, why:'Use versions + aliases (or CodeDeploy) to shift traffic safely.',
+       wrong:['In-place risks partial rollout','','Deletion causes downtime/perm churn','Memory change doesn’t route traffic'],
+       tip:'Prefer canary/linear with aliases.'}
+    ];
   </script>
 
   <script>
-    // ---------------- Core Trainer Logic ----------------
+    // ---------------------- Trainer Logic ----------------------
     const $ = id => document.getElementById(id);
-
-    const Views = {
-      analysis:['modeSelection'],
-      exam:['timerSection','questionContainer','reviewMode'],
-      results:['resultsContainer']
-    };
+    const Views = { analysis:['modeSelection'], exam:['timerSection','questionContainer'], results:['resultsContainer'] };
 
     const state = {
-      mode:null,
-      questions:[],
-      index:0,
-      answers:[],          // index of selected option or null
-      flagged:new Set(),
-      skipped:new Set(),
-      times:[],            // ms per question
-      startTs:null,
-      qStartTs:null,
-      globalTimerId:null,
-      qTimerId:null
-    };
-
-    // Utilities
-    const fmtMMSS = ms => {
-      if (!Number.isFinite(ms) || ms < 0) ms = 0;
-      const s = Math.round(ms/1000);
-      const m = Math.floor(s/60);
-      const r = s%60;
-      return `${String(m).padStart(2,'0')}:${String(r).padStart(2,'0')}`;
+      mode:null, questions:[], index:0, answers:[], flagged:new Set(), skipped:new Set(),
+      times:[], startTs:null, qStartTs:null, gTimer:null, qTimer:null
     };
 
     function show(view){
-      const ALL = Array.from(new Set(Object.values(Views).flat()));
-      ALL.forEach(id => { const el=$(id); if (el) el.style.display='none'; });
+      Object.values(Views).flat().forEach(id=>$(id).style.display='none');
       (Views[view]||[]).forEach(id=>{
-        const el=$(id); if (!el) return;
-        if (view==='exam' && id==='questionContainer') el.style.display='block';
-        else if (el.tagName==='DIV') el.style.display='flex';
-        else el.style.display='block';
+        const el=$(id); if(!el) return;
+        el.style.display = (id==='timerSection') ? 'flex' : 'block';
       });
       window.scrollTo(0,0);
     }
 
-    function initFromBank(){
-      // clone & (optionally) expand to full bank later
-      state.questions = questionBank.slice(); // no shuffle for demo
+    function startExam(mode='exam'){
+      state.mode=mode;
+      const loaded = loadQuestionsFromBank();
+      state.questions = loaded && loaded.length ? loaded : demoBank.slice();
+
+      state.index=0;
+      state.answers=Array(state.questions.length).fill(null);
+      state.flagged.clear(); state.skipped.clear(); state.times=[];
+      clearInterval(state.gTimer); clearInterval(state.qTimer);
+      state.startTs=Date.now(); state.qStartTs=Date.now();
+      $('globalTimer').textContent='00:00'; $('questionTimer').textContent='00:00';
+      show('exam'); renderQuestion();
+      state.gTimer=setInterval(updateTimers,1000); state.qTimer=setInterval(updateTimers,1000);
     }
 
-    function startMode(mode){
-      state.mode = mode || 'exam';
-      resetSessionOnly();
-      initFromBank();
-      if (state.questions.length === 0) return;
-      show('exam');
-      state.startTs = Date.now();
-      state.qStartTs = Date.now();
-      updateTimers(); // draw 00:00 immediately
-      state.globalTimerId = setInterval(updateTimers, 1000);
-      renderQuestion();
-    }
-
-    function resetSessionOnly(){
-      clearInterval(state.globalTimerId); clearInterval(state.qTimerId);
-      state.index = 0;
-      state.answers = Array(state.questions.length).fill(null);
-      state.flagged.clear(); state.skipped.clear();
-      state.times = [];
-      $('explanation').style.display='none';
-      $('options').innerHTML='';
-      $('paceIndicator').className='pace-indicator pace-on-track';
-      $('paceIndicator').textContent='ON TRACK';
-      $('globalTimer').textContent='00:00';
-      $('questionTimer').textContent='00:00';
-    }
-
-    function resetQuiz(){
-      // Back to analysis landing
-      clearInterval(state.globalTimerId); clearInterval(state.qTimerId);
-      state.mode = null; state.questions=[]; state.index=0;
-      state.answers=[]; state.flagged.clear(); state.skipped.clear();
-      state.times=[]; state.startTs=null; state.qStartTs=null;
+    function resetToAnalysis(){
+      clearInterval(state.gTimer); clearInterval(state.qTimer);
+      state.mode=null; state.questions=[]; state.index=0; state.answers=[]; state.times=[];
       show('analysis');
     }
 
-    function takeAnotherExam(){
-      // Fresh session straight to exam
-      startMode('exam');
-    }
-
+    const mmss = s => `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
     function updateTimers(){
-      const now = Date.now();
-      const g = now - (state.startTs || now);
-      const q = now - (state.qStartTs || now);
-      $('globalTimer').textContent = fmtMMSS(g);
-      $('questionTimer').textContent = fmtMMSS(q);
+      const now=Date.now();
+      const gs=Math.max(0,Math.round((now-(state.startTs||now))/1000));
+      const qs=Math.max(0,Math.round((now-(state.qStartTs||now))/1000));
+      $('globalTimer').textContent=mmss(gs); $('questionTimer').textContent=mmss(qs);
     }
 
-    // ----- Question rendering -----
     function renderQuestion(){
-      const q = state.questions[state.index];
-      if (!q){ finishExam(); return; }
+      const q = state.questions[state.index]; if(!q){ return finishExam(); }
+      $('domainBadge').textContent=q.domain||'Domain';
+      const d=(q.difficulty||'Medium').toLowerCase(); $('difficultyBadge').className='badge '+(d==='easy'?'bdE':d==='hard'?'bdH':'bdM');
+      $('difficultyBadge').textContent=(q.difficulty||'Medium')[0].toUpperCase()+(q.difficulty||'Medium').slice(1);
 
-      $('domainBadge').textContent = q.domain || 'Domain';
-      const diff = (q.difficulty||'Medium').toLowerCase();
-      $('difficultyBadge').className = 'badge ' + (diff==='easy'?'badge-difficulty-easy':diff==='hard'?'badge-difficulty-hard':'badge-difficulty-medium');
-      $('difficultyBadge').textContent = q.difficulty || 'Medium';
-      $('questionNumber').textContent = `Q${state.index+1} of ${state.questions.length}`;
-      $('scenario').textContent = q.scenario || '';
-      $('questionText').textContent = q.question || '';
+      $('questionNumber').textContent=`Q${state.index+1} of ${state.questions.length}`;
+      $('scenario').textContent=q.scenario||'';
+      $('questionText').textContent=q.question||'';
 
-      const opts = $('options'); opts.innerHTML='';
-      q.options.forEach((text,i)=>{
-        const el = document.createElement('div');
-        el.className='option'; if (state.answers[state.index]===i) el.classList.add('selected');
-        el.addEventListener('click',()=>selectOption(i));
-        el.innerHTML = `<div class="option-letter">${String.fromCharCode(65+i)}</div><div class="option-text">${text}</div>`;
-        opts.appendChild(el);
-      });
+      // Meta row: id + timeRecommendation
+      const meta = $('metaRow'); meta.innerHTML='';
+      if (q.id) { const chip=document.createElement('span'); chip.className='chip'; chip.textContent=`ID: ${q.id}`; meta.appendChild(chip); }
+      if (q.timeRecommendation) { const chip=document.createElement('span'); chip.className='chip'; chip.textContent=`⏱ ${q.timeRecommendation}s`; meta.appendChild(chip); }
 
       $('explanation').style.display='none';
-      $('submitBtn').style.display='inline-block';
-      $('nextBtn').style.display='none';
+
+      const optBox=$('options'); optBox.innerHTML='';
+      q.options.forEach((t,i)=>{
+        const d=document.createElement('div'); d.className='option'; if(state.answers[state.index]===i) d.classList.add('selected');
+        d.innerHTML=`<div class="letter">${String.fromCharCode(65+i)}</div><div>${t}</div>`;
+        d.onclick=()=>{ [...optBox.children].forEach(x=>x.classList.remove('selected')); d.classList.add('selected'); state.answers[state.index]=i; };
+        optBox.appendChild(d);
+      });
+
       $('prevBtn').disabled = state.index===0;
-
-      // q timer
-      clearInterval(state.qTimerId);
-      state.qStartTs = Date.now();
-      state.qTimerId = setInterval(updateTimers,1000);
+      state.qStartTs=Date.now();
     }
 
-    function selectOption(i){
-      const options = [...document.querySelectorAll('#options .option')];
-      options.forEach(o=>o.classList.remove('selected'));
-      options[i].classList.add('selected');
-      state.answers[state.index]=i;
-    }
-
-    function toggleFlag(){
-      if (state.flagged.has(state.index)) state.flagged.delete(state.index); else state.flagged.add(state.index);
-      $('flagBtn').classList.toggle('flagged', state.flagged.has(state.index));
-    }
-
-    function skipQuestion(){
-      state.skipped.add(state.index);
-      nextQuestion();
-    }
-
-    function previousQuestion(){
-      saveTimeForQuestion();
-      if (state.index>0){ state.index--; renderQuestion(); }
-    }
-
-    function nextQuestion(){
-      saveTimeForQuestion();
-      if (state.index < state.questions.length-1){ state.index++; renderQuestion(); }
-      else { finishExam(); }
-    }
-
-    function saveTimeForQuestion(){
-      const ms = Math.max(0, Date.now() - (state.qStartTs||Date.now()));
-      state.times[state.index] = (state.times[state.index]||0) + ms;
-      state.qStartTs = Date.now();
-    }
+    function saveTime(){ const ms=Math.max(0,Date.now()-state.qStartTs); state.times[state.index]=(state.times[state.index]||0)+ms; state.qStartTs=Date.now(); }
+    function prevQuestion(){ saveTime(); if(state.index>0){ state.index--; renderQuestion(); } }
+    function nextQuestion(){ saveTime(); if(state.index<state.questions.length-1){ state.index++; renderQuestion(); } else { finishExam(); } }
+    function skipQuestion(){ state.skipped.add(state.index); nextQuestion(); }
+    function toggleFlag(){ state.flagged.has(state.index)?state.flagged.delete(state.index):state.flagged.add(state.index); }
 
     function submitAnswer(){
-      const q = state.questions[state.index];
-      const sel = state.answers[state.index];
-      const options = [...document.querySelectorAll('#options .option')];
-      options.forEach((el,i)=>{
-        el.classList.remove('correct','incorrect');
-        if (i === q.correct) el.classList.add('correct');
-        if (sel!=null && i === sel && sel !== q.correct) el.classList.add('incorrect');
-      });
+      const q = state.questions[state.index]; const sel=state.answers[state.index];
+      const opts=[...$('options').children];
+      opts.forEach((el,i)=>{ el.classList.remove('correct','incorrect'); if(i===q.correct) el.classList.add('correct'); if(sel!=null && i===sel && sel!==q.correct) el.classList.add('incorrect'); });
 
-      $('correctExplanation').textContent = q.why || '';
-      const wrong = $('wrongExplanations'); wrong.innerHTML='';
-      (q.wrong||[]).forEach(t=>{
-        const p = document.createElement('p'); p.textContent = t; wrong.appendChild(p);
+      $('correctExplanation').textContent=q.why||'';
+      const w=$('wrongExplanations'); w.innerHTML='';
+      (q.wrong||[]).forEach((txt,i)=>{
+        if (!txt) return; // skip empty (correct slot shows blank)
+        const p=document.createElement('p'); p.textContent = `${String.fromCharCode(65+i)}: ${txt}`; w.appendChild(p);
       });
-      $('strategyTip').textContent = q.tip || '';
+      $('strategyTip').textContent=q.tip||'';
       $('explanation').style.display='block';
-      $('submitBtn').style.display='none';
-      $('nextBtn').style.display='inline-block';
-    }
-
-    function reviewAnswers(){
-      // Quick demo: jump to first flagged or first question
-      const first = state.flagged.size ? [...state.flagged][0] : 0;
-      state.index = first; show('exam'); renderQuestion();
+      $('submitBtn').style.display='none'; $('nextBtn').style.display='inline-block';
     }
 
     function finishExam(){
-      saveTimeForQuestion();
-      clearInterval(state.globalTimerId); clearInterval(state.qTimerId);
-
-      const total = state.questions.length || 1;
-      let correct = 0;
-      state.questions.forEach((q,i)=>{ if (state.answers[i]===q.correct) correct++; });
-
-      const pct = Math.round((correct/total)*100);
-      const deg = Math.round((pct/100)*360);
-
-      $('scoreCircle').style.setProperty('--score-deg', `${deg}deg`);
-      $('scoreText').textContent = `${pct}%`;
-      $('passFail').textContent = pct>=72 ? 'PASS' : 'FAIL';
-      $('passFail').className = 'pass-fail ' + (pct>=72?'pass':'fail');
-      $('correctCount').textContent = `${correct}/${total}`;
-
-      const totalMs = Math.max(0, state.times.reduce((a,b)=>a+(b||0),0));
-      const totalMin = Math.round(totalMs/60000);
-      $('timeUsed').textContent = String(totalMin);
-
-      const answeredCount = state.answers.filter(a=>a!==null).length;
-      const avgMs = answeredCount? Math.round(totalMs/answeredCount) : 0;
-      $('avgTime').textContent = `${Math.round(avgMs/1000)}s`;
-
-      const finiteTimes = state.times.filter(v=>Number.isFinite(v) && v>0);
-      const slow = finiteTimes.length? Math.max(...finiteTimes) : 0;
-      const fast = finiteTimes.length? Math.min(...finiteTimes) : 0;
-      $('slowestTime').textContent = slow? `${Math.round(slow/1000)}s` : '—';
-      $('fastestTime').textContent = fast? `${Math.round(fast/1000)}s` : '—';
-
-      $('flaggedCount').textContent = state.flagged.size;
-      $('skippedCount').textContent = state.skipped.size;
-
+      saveTime(); clearInterval(state.gTimer); clearInterval(state.qTimer);
+      const total=state.questions.length||1; let correct=0; state.questions.forEach((q,i)=>{ if(state.answers[i]===q.correct) correct++; });
+      const pct=Math.round((correct/total)*100); const deg=Math.round(pct*3.6);
+      $('scoreCircle').style.setProperty('--deg',`${deg}deg`); $('scoreText').textContent=`${pct}%`;
+      const pass=pct>=72; $('passFail').textContent=pass?'PASS':'FAIL'; $('passFail').className=pass?'pass':'fail';
+      $('correctCount').textContent=`${correct}/${total}`;
+      const totalMs=state.times.reduce((a,b)=>a+(b||0),0); $('timeUsed').textContent=String(Math.round(totalMs/60000));
+      const answered=state.answers.filter(a=>a!=null).length; const avg=answered?Math.round((totalMs/answered)/1000):0; $('avgTime').textContent=`${avg}s`;
+      const times=state.times.filter(x=>Number.isFinite(x)&&x>0); $('slowestTime').textContent=times.length?`${Math.round(Math.max(...times)/1000)}s`:'—'; $('fastestTime').textContent=times.length?`${Math.round(Math.min(...times)/1000)}s`:'—';
+      $('flaggedCount').textContent=state.flagged.size; $('skippedCount').textContent=state.skipped.size;
       show('results');
     }
 
-    // ---- Wire UI events ----
-    document.addEventListener('DOMContentLoaded', ()=>{
-      // mode cards
-      document.querySelectorAll('.mode-card').forEach(card=>{
-        card.addEventListener('click', ()=> startMode(card.getAttribute('data-mode')||'exam'));
-      });
+    function reviewAnswers(){ show('exam'); state.index = state.flagged.size?[...state.flagged][0]:0; renderQuestion(); }
 
-      $('flagBtn').addEventListener('click', toggleFlag);
-      $('skipBtn').addEventListener('click', skipQuestion);
-      $('prevBtn').addEventListener('click', previousQuestion);
-      $('submitBtn').addEventListener('click', submitAnswer);
-      $('nextBtn').addEventListener('click', nextQuestion);
-
-      $('reviewBtn').addEventListener('click', reviewAnswers);
-      $('newSessionBtn').addEventListener('click', resetQuiz);
-      $('anotherExamBtn').addEventListener('click', takeAnotherExam);
-
-      // Initial view
+    // Wire UI
+    document.addEventListener('DOMContentLoaded',()=>{
+      document.querySelectorAll('.mode-card').forEach(c=>c.addEventListener('click',()=>startExam(c.dataset.mode||'exam')));
+      $('flagBtn').onclick=toggleFlag; $('skipBtn').onclick=skipQuestion;
+      $('prevBtn').onclick=prevQuestion; $('submitBtn').onclick=submitAnswer; $('nextBtn').onclick=nextQuestion;
+      $('reviewBtn').onclick=reviewAnswers; $('newSessionBtn').onclick=resetToAnalysis; $('anotherExamBtn').onclick=()=>startExam('exam');
       show('analysis');
+      console.log('[DVA] Loaded count:', (loadQuestionsFromBank()||demoBank).length);
     });
   </script>
 </body>
