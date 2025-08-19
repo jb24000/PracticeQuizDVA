@@ -292,7 +292,8 @@
       <div class="controls">
         <button class="btn btn-primary" onclick="reviewAnswers()">Review Answers</button>
         <button class="btn btn-secondary" onclick="resetQuiz()">Start New Session</button>
-        <button class="btn btn-primary" onclick="(resetQuiz(), startMode('exam'))">Take Another Exam</button>
+        <button class="btn btn-primary" onclick="takeAnotherExam()">Take Another Exam</button>
+
       </div>
     </div>
 
@@ -12675,5 +12676,57 @@
       else boot();
     })();
   </script>
+<script>
+/* Fix “Take Another Exam” snapping back to Analysis
+   - Guards resetQuiz so it doesn't leave you on Analysis in this flow
+   - Forces the correct sections visible (even if other code flips them later)
+*/
+(function () {
+  let anotherExamFlow = false;
+
+  function showExamView() {
+    const $ = id => document.getElementById(id);
+    $('#modeSelection')?.style.setProperty('display', 'none', 'important');
+    $('#resultsContainer')?.style.setProperty('display', 'none', 'important');
+    $('#reviewMode')?.style.setProperty('display', 'none', 'important');
+    $('#timerSection')?.style.setProperty('display', 'flex', 'important');
+    $('#questionContainer')?.style.setProperty('display', 'block', 'important');
+    window.scrollTo(0, 0);
+  }
+
+  // Wrap your existing resetQuiz without changing its internals
+  const _resetQuiz = window.resetQuiz;
+  window.resetQuiz = function () {
+    _resetQuiz && _resetQuiz();
+    if (anotherExamFlow) {
+      // If we're in the “another exam” flow, immediately restore the exam view
+      showExamView();
+    }
+  };
+
+  // One-shot flow for the button
+  window.takeAnotherExam = function () {
+    anotherExamFlow = true;
+    try { window.resetQuiz && window.resetQuiz(); }
+    finally { anotherExamFlow = false; }
+
+    // Start the new exam and hard-set the view
+    window.startMode && window.startMode('exam');
+    // Belt & suspenders: enforce again after paint in case other code toggles UI
+    requestAnimationFrame(showExamView);
+    setTimeout(showExamView, 120);
+  };
+
+  // Safety net: auto-wire any inline buttons/links that say “Take Another Exam”
+  document.addEventListener('click', function (e) {
+    const el = e.target.closest('button,a');
+    if (!el) return;
+    if (/take another exam/i.test(el.textContent || '')) {
+      e.preventDefault();
+      window.takeAnotherExam();
+    }
+  });
+})();
+</script>
 </body>
 </html>
