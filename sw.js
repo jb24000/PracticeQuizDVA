@@ -1,49 +1,32 @@
-// sw.js — DVA Ultra-Fixed v4 (patched)
-/*
-Fixes:
-• Robust HTML detection on subpaths (GitHub Pages, e.g. /YourRepo/).
-• Network-first for HTML (fresh shell after each deploy), cache-first for static binaries.
-• Safer offline fallback path.
-• Navigation Preload for quicker responses.
-• CLEAR_CACHE message ACK + clients.claim().
-• Never cache JS/CSS/JSON to avoid stale logic.
-*/
-const CACHE_NAME    = 'dva-quiz-v4p2';   // bump on each deploy
-const RUNTIME_CACHE = 'dva-runtime-v4p2';
+// sw.js — PracticeQuizDVA (v1-2025-08-19)
+// Network-first for HTML (no stale shells). Cache-first only for truly static assets.
 
-const OFFLINE_URL = new URL('./offline.html', self.location).toString();
+const VERSION = 'v1-2025-08-19';
+const STATIC_CACHE  = `pq-dva-static-${VERSION}`;
+const RUNTIME_CACHE = `pq-dva-runtime-${VERSION}`;
 
+// We don't precache anything risky. (No addAll that can 404 on GH Pages.)
 self.addEventListener('install', (event) => {
-  event.waitUntil((async () => {
-    try {
-      const cache = await caches.open(CACHE_NAME);
-      await cache.addAll([OFFLINE_URL]);
-    } catch (e) {
-      console.warn('[SW] offline addAll failed:', e);
-    }
-  })());
+  event.waitUntil(caches.open(STATIC_CACHE));
   self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil((async () => {
-    if ('navigationPreload' in self.registration) {
-      try { await self.registration.navigationPreload.enable(); } catch {}
-    }
     const keys = await caches.keys();
-    await Promise.all(keys.map(k => (k!==CACHE_NAME && k!==RUNTIME_CACHE) ? caches.delete(k) : Promise.resolve()));
+    await Promise.all(keys.map(k => (k === STATIC_CACHE || k === RUNTIME_CACHE) ? null : caches.delete(k)));
     await self.clients.claim();
   })());
 });
 
-function isHTMLRequest(req, url) {
-  const accept = req.headers.get('accept') || '';
-  const path = url.pathname || '';
-  return req.mode === 'navigate' ||
-         accept.includes('text/html') ||
-         path.endsWith('.html') ||
-         path.endsWith('/') ||
-         path === '';
+function isHTMLRequest(request) {
+  return request.mode === 'navigate' ||
+         request.headers.get('accept')?.includes('text/html') ||
+         /\.html($|\?)/i.test(new URL(request.url).pathname);
+}
+
+function isStaticAsset(url) {
+  return /\.(png|jpg|jpeg|gif|webp|svg|ico|woff2?|ttf|eot)$/i.test(url.pathname);
 }
 
 self.addEventListener('fetch', (event) => {
@@ -51,58 +34,45 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(req.url);
   if (!url.protocol.startsWith('http')) return;
 
-  // HTML: always network-first (preload if available)
-  if (isHTMLRequest(req, url)) {
-    event.respondWith((async () => {
-      try {
-        const preloaded = 'navigationPreload' in event ? await event.preloadResponse : null;
-        const fresh = preloaded || await fetch(req, { cache: 'no-store', credentials: 'same-origin' });
-        return fresh;
-      } catch {
-        const cached = await caches.match(OFFLINE_URL);
-        return cached || new Response('<h1>Offline</h1>', { headers: { 'Content-Type': 'text/html' } });
-      }
-    })());
+  // Always get fresh HTML/navigations from the network
+  if (isHTMLRequest(req)) {
+    event.respondWith(
+      fetch(req, { cache: 'no-store' })
+        .catch(() => new Response(
+          '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><body style="font-family:system-ui;padding:2rem;text-align:center"><h1>Offline</h1><p>The app will work offline after it has loaded once.</p></body>',
+          { headers: { 'Content-Type': 'text/html; charset=UTF-8' } }
+        ))
+    );
     return;
   }
 
-  // APIs / JSON: never cache
-  if (url.pathname.includes('/api/') || url.pathname.endsWith('.json')) {
-    event.respondWith(fetch(req, { cache: 'no-store' }));
+  // Cache-first for images/fonts/icons
+  if (isStaticAsset(url)) {
+    event.respondWith(
+      caches.match(req).then(cached => {
+        if (cached) return cached;
+        return fetch(req).then(res => {
+          if (res.ok) caches.open(RUNTIME_CACHE).then(c => c.put(req, res.clone()));
+          return res;
+        });
+      })
+    );
     return;
   }
 
-  // Static binaries: cache-first with background refresh
-  const isStaticBinary = /\.(png|jpg|jpeg|gif|svg|ico|webp|woff|woff2|ttf|eot)$/i.test(url.pathname);
-  if (!isStaticBinary) {
-    // For JS/CSS or other assets, use network (no-store) to avoid stale logic
-    event.respondWith(fetch(req, { cache: 'no-store' }).catch(() => caches.match(req)));
-    return;
-  }
-
-  event.respondWith((async () => {
-    const cached = await caches.match(req);
-    const fetchAndCache = fetch(req).then(resp => {
-      if (resp && resp.status === 200) {
-        caches.open(RUNTIME_CACHE).then(c => c.put(req, resp.clone()));
-      }
-      return resp;
-    }).catch(() => cached);
-    return cached || fetchAndCache;
-  })());
+  // JS/CSS/JSON/etc → network with fallback to cache
+  event.respondWith(
+    fetch(req).then(res => res).catch(() => caches.match(req))
+  );
 });
 
+// Optional: let the page ask us to clear caches
 self.addEventListener('message', (event) => {
-  if (!event.data) return;
-  if (event.data.type === 'SKIP_WAITING') self.skipWaiting();
-  if (event.data.type === 'CLEAR_CACHE') {
+  if (event.data === 'CLEAR_SW_CACHES') {
     event.waitUntil((async () => {
       const keys = await caches.keys();
       await Promise.all(keys.map(k => caches.delete(k)));
-      if (event.ports && event.ports[0]) {
-        event.ports[0].postMessage({ type: 'CACHE_CLEARED', success: true });
-      }
-      await self.clients.claim();
+      event.source?.postMessage?.('CACHES_CLEARED');
     })());
   }
 });
