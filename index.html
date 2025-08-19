@@ -12533,7 +12533,29 @@ body{
       $('flaggedCount').textContent=state.flagged.size; $('skippedCount').textContent=state.skipped.size;
       show('results');
     }
-
+<script>
+function startExam(mode='exam'){
+  const loaded = loadQuestionsFromBank();
+  if (!loaded) {
+    alert('questionBank not found/empty or items dropped. Open console for details.');
+    return;
+  }
+  state.mode = mode;
+  state.questions = loaded.slice();
+  state.index = 0;
+  state.answers = Array(state.questions.length).fill(null);
+  state.flagged.clear(); state.skipped.clear(); state.times = [];
+  clearInterval(state.gTimer); clearInterval(state.qTimer);
+  state.startTs = Date.now(); state.qStartTs = Date.now();
+  document.getElementById('globalTimer').textContent='00:00';
+  document.getElementById('questionTimer').textContent='00:00';
+  show('exam'); renderQuestion();
+  state.gTimer=setInterval(updateTimers,1000);
+  state.qTimer=setInterval(updateTimers,1000);
+};
+    }
+</script>
+  <script>
     function reviewAnswers(){ show('exam'); state.index = state.flagged.size?[...state.flagged][0]:0; renderQuestion(); }
 
     // Wire UI
