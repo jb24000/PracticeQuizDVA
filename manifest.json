@@ -1,17 +1,18 @@
 {
-  "id": "./",
+  "id": "/PracticeQuizDVA/",
   "name": "AWS DVA-C02 Strategic Exam Trainer",
   "short_name": "DVA-C02 Trainer",
   "description": "Strategic exam trainer for AWS Certified Developer Associate certification with timing optimization",
   "start_url": "/PracticeQuizDVA/",
   "scope": "/PracticeQuizDVA/",
   "display": "standalone",
+  "display_override": ["standalone"],
   "background_color": "#232F3E",
   "theme_color": "#FF9900",
   "orientation": "portrait",
   "icons": [
-    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ],
   "shortcuts": [
     {
@@ -19,28 +20,28 @@
       "short_name": "Triage",
       "description": "30-second decision practice",
       "url": "./?mode=triage",
-      "icons": [{ "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+      "icons": [{ "src": "./icons/icon-96.png", "sizes": "96x96", "type": "image/png" }]
     },
     {
       "name": "Speed Rounds",
       "short_name": "Speed",
       "description": "90-second maximum per question",
       "url": "./?mode=speed",
-      "icons": [{ "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+      "icons": [{ "src": "./icons/icon-96.png", "sizes": "96x96", "type": "image/png" }]
     },
     {
       "name": "Full Exam",
       "short_name": "Exam",
       "description": "65 questions in 130 minutes",
       "url": "./?mode=exam",
-      "icons": [{ "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+      "icons": [{ "src": "./icons/icon-96.png", "sizes": "96x96", "type": "image/png" }]
     },
     {
       "name": "Strategic Practice",
       "short_name": "Strategic",
       "description": "Learn flag and skip workflow",
       "url": "./?mode=strategic",
-      "icons": [{ "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+      "icons": [{ "src": "./icons/icon-96.png", "sizes": "96x96", "type": "image/png" }]
     }
   ],
   "categories": ["education", "productivity"],
