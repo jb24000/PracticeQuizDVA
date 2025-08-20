@@ -12127,3 +12127,53 @@ window.questionBank = [
     }
 }
 ]; // <-- IMPORTANT: close the array and end with a semicolon
+
+// Randomize answer positions to fix the problem where correct answer is always position 0
+function randomizeQuestionBankAnswers(questions) {
+    return questions.map(question => {
+        // Skip if already randomized or has multiple correct answers
+        if (question.correct !== 0 || Array.isArray(question.correct)) {
+            return question;
+        }
+        
+        // Create array of indices [0, 1, 2, 3]
+        const indices = Array.from({length: question.options.length}, (_, i) => i);
+        
+        // Shuffle indices
+        for (let i = indices.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [indices[i], indices[j]] = [indices[j], indices[i]];
+        }
+        
+        // Reorder options based on shuffled indices
+        const newOptions = indices.map(i => question.options[i]);
+        
+        // Find where the correct answer moved to
+        const newCorrectIndex = indices.indexOf(0);
+        
+        // Update explanation's whyWrong indices if it exists
+        let newExplanation = {...question.explanation};
+        if (newExplanation.whyWrong) {
+            const newWhyWrong = {};
+            Object.entries(newExplanation.whyWrong).forEach(([key, value]) => {
+                const oldIndex = parseInt(key);
+                const newIndex = indices.indexOf(oldIndex);
+                if (newIndex !== newCorrectIndex) {
+                    newWhyWrong[newIndex] = value;
+                }
+            });
+            newExplanation.whyWrong = newWhyWrong;
+        }
+        
+        return {
+            ...question,
+            options: newOptions,
+            correct: newCorrectIndex,
+            explanation: newExplanation
+        };
+    });
+}
+
+// Apply the randomization to fix all questions
+window.questionBank = randomizeQuestionBankAnswers(window.questionBank);
+
