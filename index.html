@@ -376,5 +376,74 @@
     window.nextQuestion=next; window.skipQuestion=skipQuestion; window.toggleFlag=toggleFlag; window.resetQuiz=resetQuiz;
     window.reviewAnswers=()=>alert('Detailed review coming next build.');
   </script>
+  <script>
+  // === DVA install module (robust) ===
+  (function () {
+    const banner = document.getElementById('installBanner'); // if you use a banner
+    let deferredPrompt = null;
+
+    // Hide banner helper
+    function hideInstall() {
+      if (banner) banner.style.display = 'none';
+    }
+    // Show banner helper
+    function showInstall() {
+      if (banner) banner.style.display = 'flex';
+    }
+
+    // Already running as an installed app? hide UI
+    const isStandalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true;
+    if (isStandalone) hideInstall();
+
+    // If you have your own "Install App" button, wire it here:
+    window.installPWA = async function () {
+      // If Chrome gave us the event: use it
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const choice = await deferredPrompt.userChoice.catch(() => ({}));
+        deferredPrompt = null;
+        hideInstall();
+        return;
+      }
+      // Fallback hints for other browsers:
+      // - iOS Safari: Share → Add to Home Screen
+      // - Desktop Chrome/Edge: Use browser menu → "Install app"
+      alert(
+        'If no prompt appears:\n' +
+        '• iOS Safari: Share → Add to Home Screen\n' +
+        '• Desktop Chrome/Edge: Browser menu → “Install app”'
+      );
+    };
+
+    // Chrome/Edge: event fires when install criteria are met
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();        // prevent auto-mini-infobar
+      deferredPrompt = e;        // stash for our button
+      showInstall();             // reveal your banner/button
+      console.log('[PWA] beforeinstallprompt fired');
+    });
+
+    // When installed, hide install UI
+    window.addEventListener('appinstalled', () => {
+      console.log('[PWA] App installed');
+      hideInstall();
+      deferredPrompt = null;
+      localStorage.setItem('dva_installed', '1');
+    });
+
+    // Optionally, re-show after some time if user dismissed your banner
+    const dismissedAt = +localStorage.getItem('dva_install_dismissed') || 0;
+    document.getElementById('installBanner')?.querySelector('.secondary')
+      ?.addEventListener('click', () => {
+        hideInstall();
+        localStorage.setItem('dva_install_dismissed', Date.now().toString());
+      });
+
+    // If your page loads and the event didn't fire yet, keep banner hidden.
+    // It will auto-show when the event fires (if criteria are met).
+  })();
+</script>
 </body>
 </html>
