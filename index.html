@@ -1,349 +1,439 @@
-<!-- BUILD: DVA index v8 2025-08-19 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- BUILD: DVA index v11 -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#FF9900" />
+  <meta name="description" content="Strategic AWS Certified Developer Associate DVA-C02 Exam Trainer - Master timing and pass the exam" />
+  <meta name="theme-color" content="#FF9900" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#232F3E" media="(prefers-color-scheme: dark)" />
+  <link rel="manifest" href="./manifest.json?v=11" />
   <title>AWS DVA-C02 Strategic Exam Trainer</title>
   <style>
+    /* ===== Polished, contained look (matching your previous style) ===== */
     *{margin:0;padding:0;box-sizing:border-box}
     :root{
-      --primary:#FF9900;--primary-dark:#FF6600;--success:#28a745;--warning:#ffc107;--danger:#dc3545;--aws-blue:#0073bb;
-      --card:rgba(255,255,255,.12);--card2:rgba(255,255,255,.18);--text:#fff
+      --primary:#FF9900;--primary-dark:#FF6600;--primary-light:#FFB84D;
+      --success:#28a745;--warning:#ffc107;--danger:#dc3545;--aws-blue:#0073bb;
+      --text-white:#fff;--text-light:rgba(255,255,255,.95);
+      --card-bg:rgba(255,255,255,.1);--card-hover:rgba(255,255,255,.2)
     }
-    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Ubuntu;
-      min-height:100vh;background:linear-gradient(135deg,#FF6B00 0%,#FF9900 100%);
-      color:var(--text);display:flex;flex-direction:column;align-items:center}
-    .main-header{width:100%;padding:36px 20px;text-align:center;background:rgba(0,0,0,.08)}
-    .main-header h1{font-size:2.6rem;font-weight:900}
-    .container{width:100%;max-width:1100px;padding:0 20px 60px}
-    .features-card{background:var(--card);border:1px solid rgba(255,255,255,.2);
-      border-radius:20px;padding:24px;margin:18px 0;backdrop-filter:blur(8px)}
-    .mode-selection{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
-    .mode-card{background:var(--card2);border:1px solid rgba(255,255,255,.25);
-      padding:24px;border-radius:18px;cursor:pointer;transition:.2s}
-    .mode-card:hover{transform:translateY(-6px)}
-    .timer-section{display:none;gap:14px;margin:18px 0}
-    .timer-box{flex:1;min-width:180px;background:var(--card2);padding:14px;border-radius:14px;text-align:center}
-    .question-container,.results-container{display:none;background:#fff;color:#333;border-radius:18px;padding:22px;box-shadow:0 10px 34px rgba(0,0,0,.18)}
-    .badge{padding:6px 10px;border-radius:999px;font-weight:700;font-size:.8rem;color:#fff}
-    .bd1{background:var(--primary)}.bdE{background:var(--success)}.bdM{background:var(--warning)}.bdH{background:var(--danger)}
-    .action-btn{border:0;border-radius:999px;padding:8px 14px;color:#fff;font-weight:700;cursor:pointer}
-    .flag{background:var(--warning)}.skip{background:var(--primary)}
-    .scenario{background:#fff6ec;border-left:4px solid var(--primary);padding:12px;border-radius:10px;margin:10px 0}
-    .options{display:flex;flex-direction:column;gap:10px;margin-top:10px}
-    .option{border:2px solid #e5e5e5;border-radius:12px;padding:12px;display:flex;gap:10px;cursor:pointer}
-    .option:hover{border-color:#ffb14d}.option.selected{background:#fff1da;border-color:#ffb14d}
-    .option.correct{background:#e8f9ed;border-color:#28a745}.option.incorrect{background:#ffe8ea;border-color:#dc3545}
-    .letter{width:28px;height:28px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:#0073bb;color:#fff;font-weight:800}
-    .explanation{display:none;background:#f5faff;border:1px solid #d1e7ff;border-radius:12px;padding:14px;margin-top:12px}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,sans-serif;
+      min-height:100vh;background:linear-gradient(135deg,#FF6B6B 0%,#FF8787 100%);
+      display:flex;flex-direction:column;align-items:center;overflow-x:hidden
+    }
+    .main-header{width:100%;text-align:center;padding:40px 20px 30px;background:rgba(0,0,0,.1)}
+    .main-header h1{color:var(--text-white);font-size:2.8em;font-weight:800}
+    .main-header .tagline{color:var(--text-light);font-size:1.05em;margin-top:8px;opacity:.95}
+
+    .container{width:100%;max-width:1100px;padding:20px}
+
+    .features-card,.mode-card{
+      background:var(--card-bg);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+      border:1px solid rgba(255,255,255,.2);border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,.15)
+    }
+    .features-card{padding:26px;margin:18px 0}
+    .features-card h3{color:#fff;font-size:1.5em;margin-bottom:6px}
+    .features-card .subtitle{color:var(--text-light)}
+
+    .mode-selection{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin:20px 0 28px}
+    .mode-card{padding:24px;cursor:pointer;transition:transform .2s ease}
+    .mode-card:hover{transform:translateY(-6px);background:var(--card-hover)}
+    .mode-title{color:#fff;font-size:1.25em;font-weight:800;margin-bottom:6px}
+    .mode-desc{color:var(--text-light);font-size:.95em}
+
+    .timer-section{display:none;gap:16px;justify-content:center;margin:6px auto 0;flex-wrap:wrap}
+    .timer-box{min-width:170px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:14px;padding:14px;text-align:center;box-shadow:0 5px 20px rgba(0,0,0,.1)}
+    .timer-label{color:var(--text-light);font-size:.8em;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+    .timer-value{color:#fff;font-size:1.8em;font-weight:800}
+    .pace-indicator{margin-top:6px;padding:4px 10px;border-radius:20px;color:#fff;font-weight:800;font-size:.8em}
+    .pace-on-track{background:var(--success)}.pace-behind{background:var(--warning)}.pace-danger{background:var(--danger)}
+
+    .question-container{
+      display:none;background:#fff;border-radius:20px;padding:28px;margin:18px auto;max-width:1000px;
+      color:#333;box-shadow:0 10px 40px rgba(0,0,0,.15)
+    }
+    .question-header{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+    .badge{padding:6px 12px;border-radius:16px;font-size:.85em;font-weight:700}
+    .badge-domain{background:var(--primary);color:#fff}
+    .badge-difficulty-easy{background:var(--success);color:#fff}
+    .badge-difficulty-medium{background:#fd7e14;color:#fff}
+    .badge-difficulty-hard{background:var(--danger);color:#fff}
+    .scenario{background:#fff5f5;border-left:4px solid var(--primary);padding:14px;border-radius:8px;margin:10px 0 14px;color:#444}
+    .question-text{font-size:1.1em;font-weight:700;margin:8px 0 12px;color:#232F3E}
+
+    .options{display:flex;flex-direction:column;gap:10px}
+    .option{background:#fff;border:2px solid #e6e6e6;border-radius:10px;padding:12px;cursor:pointer;display:flex;gap:10px;align-items:flex-start;transition:all .15s}
+    .option:hover{border-color:#ffb84d;transform:translateX(3px);box-shadow:0 4px 12px rgba(0,0,0,.08)}
+    .option.selected{background:#FFF3E0;border-color:#ff9900}
+    .option.correct{background:#E8F5E9;border-color:#28a745}
+    .option.incorrect{background:#FFEBEE;border-color:#dc3545}
+    .option-letter{min-width:28px;height:28px;border-radius:50%;background:var(--aws-blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+
+    .explanation{display:none;margin-top:16px;background:linear-gradient(135deg,#f0f8ff,#f5faff);border:1px solid #d1e7ff;border-radius:12px;padding:18px}
     .controls{display:flex;gap:10px;margin-top:16px}
-    .btn{flex:1;border:0;border-radius:999px;padding:12px 18px;color:#fff;font-weight:800;cursor:pointer}
-    .btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary-dark))}
-    .btn.secondary{background:linear-gradient(135deg,#6c757d,#5a6268)}
-    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:18px 0}
-    .stat-card{background:#f7f7f7;border-radius:12px;padding:16px;text-align:center}
-    .score-circle{width:150px;height:150px;margin:0 auto 12px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:2.2rem;background:conic-gradient(var(--primary) 0deg,var(--primary) var(--deg),#e0e0e0 var(--deg))}
-    .score-text{width:120px;height:120px;border-radius:50%;background:#fff;color:#333;display:flex;align-items:center;justify-content:center}
-    .pass{color:#28a745;font-weight:900}.fail{color:#dc3545;font-weight:900}
-    .error-card{background:#fff3cd;color:#6b4e00;border:2px dashed #ffdd57;border-radius:16px;padding:18px;margin:18px 0}
+    .btn{flex:1;padding:12px 18px;border:none;border-radius:24px;color:#fff;font-weight:800;cursor:pointer;letter-spacing:.4px;text-transform:uppercase}
+    .btn-primary{background:linear-gradient(135deg,#ff9900,#ff6600)}
+    .btn-secondary{background:linear-gradient(135deg,#6c757d,#5a6268)}
+    .results-container{display:none;background:#fff;border-radius:20px;padding:28px;margin:18px auto;max-width:1000px;box-shadow:0 10px 40px rgba(0,0,0,.15)}
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:16px 0}
+    .stat-card{background:#f8f9fa;border-radius:12px;padding:16px;text-align:center}
+    @media (max-width:768px){.controls{flex-direction:column}.btn{width:100%}}
   </style>
 </head>
 <body>
-  <header class="main-header">
+  <div class="main-header">
     <h1>🎯 AWS DVA-C02 Strategic Exam Trainer</h1>
-    <p>Master exam timing & strategy with 500+ realistic scenarios.</p>
-  </header>
+    <p class="tagline">Master exam timing & strategy with 500+ realistic developer scenarios</p>
+  </div>
 
-  <main class="container">
-    <section class="features-card">
-      <h3>🎒 Professional Question Bank</h3>
-      <p>Security • Deployment • Performance • Cost optimization</p>
-    </section>
+  <div class="container">
+    <div class="features-card">
+      <h3>📦 Professional Question Bank</h3>
+      <p class="subtitle">Security • Deployment • Performance • Cost optimization • Best practices</p>
+    </div>
 
-    <!-- Visible error if questions fail to load -->
-    <section id="bankError" class="error-card" style="display:none"></section>
+    <div class="mode-selection" id="modeSelection">
+      <div class="mode-card" onclick="startMode('triage')">
+        <div class="mode-title">⚡ Triage Training</div>
+        <p class="mode-desc">30-second decision drills. Build skip/solve instincts.</p>
+      </div>
+      <div class="mode-card" onclick="startMode('speed')">
+        <div class="mode-title">🔥 Speed Rounds</div>
+        <p class="mode-desc">Hard 90s per question; automatic pace discipline.</p>
+      </div>
+      <div class="mode-card" onclick="startMode('exam')">
+        <div class="mode-title">🎯 Full Exam Simulation</div>
+        <p class="mode-desc">65 questions • 130-minute global countdown • pace coaching.</p>
+      </div>
+      <div class="mode-card" onclick="startMode('strategic')">
+        <div class="mode-title">🧠 Strategic Practice</div>
+        <p class="mode-desc">Mark / skip / return with flexible timing.</p>
+      </div>
+    </div>
 
-    <!-- Analysis screen -->
-    <section id="modeSelection" class="mode-selection">
-      <div class="mode-card" data-mode="triage"><b>⚡ Triage Training</b><p>Spot quick wins vs time sinks.</p></div>
-      <div class="mode-card" data-mode="speed"><b>🔥 Speed Rounds</b><p>90-second cap per question.</p></div>
-      <div class="mode-card" data-mode="exam"><b>🎯 Full Exam</b><p>65 Q · 130 min · realistic difficulty.</p></div>
-      <div class="mode-card" data-mode="strategic"><b>🧠 Strategic Practice</b><p>Mark/skip/return flows.</p></div>
-    </section>
+    <div class="timer-section" id="timerSection">
+      <div class="timer-box">
+        <div class="timer-label">Global Timer</div>
+        <div class="timer-value" id="globalTimer">00:00</div>
+      </div>
+      <div class="timer-box">
+        <div class="timer-label">Question Time</div>
+        <div class="timer-value" id="questionTimer">00:00</div>
+      </div>
+      <div class="timer-box">
+        <div class="timer-label">Pace Status</div>
+        <div class="timer-value" id="paceValue">--</div>
+        <div id="paceIndicator" class="pace-indicator pace-on-track">ON TRACK</div>
+      </div>
+    </div>
 
-    <!-- Timers -->
-    <section id="timerSection" class="timer-section">
-      <div class="timer-box"><div>Global</div><div id="globalTimer" style="font-weight:800;font-size:1.6rem">00:00</div></div>
-      <div class="timer-box"><div>Question</div><div id="questionTimer" style="font-weight:800;font-size:1.6rem">00:00</div></div>
-      <div class="timer-box"><div>Pace</div><div id="paceValue" style="font-weight:800;font-size:1.6rem">—</div></div>
-    </section>
-
-    <!-- Question -->
-    <section id="questionContainer" class="question-container">
-      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
-        <div style="display:flex;gap:8px">
-          <span id="domainBadge" class="badge bd1">Domain</span>
-          <span id="difficultyBadge" class="badge bdM">Medium</span>
-          <span id="questionNumber" class="badge" style="background:#333;color:#fff">Q1</span>
+    <div class="question-container" id="questionContainer">
+      <div class="question-header">
+        <div class="question-info">
+          <span class="badge badge-domain" id="domainBadge">Domain</span>
+          <span class="badge" id="difficultyBadge">Medium</span>
+          <span class="badge" id="questionNumber">Q1 of N</span>
         </div>
-        <div style="display:flex;gap:8px">
-          <button id="flagBtn" class="action-btn flag">🚩 Flag</button>
-          <button id="skipBtn" class="action-btn skip">⏭️ Skip</button>
+        <div class="question-actions" style="display:flex;gap:8px">
+          <button class="btn btn-secondary" style="flex:none" onclick="toggleFlag()">🚩 Flag</button>
+          <button class="btn btn-primary"  style="flex:none" onclick="skipQuestion()">⏭️ Skip</button>
         </div>
       </div>
 
-      <div id="scenario" class="scenario"></div>
-      <div id="questionText" style="font-size:1.1rem;font-weight:800;margin:10px 0"></div>
-      <div id="options" class="options"></div>
+      <div class="scenario" id="scenario"></div>
+      <div class="question-text" id="questionText"></div>
+      <div class="options" id="options"></div>
 
-      <div id="explanation" class="explanation">
-        <h4>✅ Correct Answer</h4><p id="correctExplanation"></p>
-        <h4>❌ Why Others Are Wrong</h4><div id="wrongExplanations"></div>
-        <h4>💡 Strategy Tip</h4><p id="strategyTip"></p>
+      <div class="explanation" id="explanation">
+        <h3>📚 Explanation</h3>
+        <div><strong>✅ Correct:</strong> <span id="correctExplanation"></span></div>
+        <div style="margin-top:8px"><strong>💡 Tip:</strong> <span id="strategyTip"></span></div>
       </div>
 
       <div class="controls">
-        <button id="prevBtn" class="btn secondary">Previous</button>
-        <button id="submitBtn" class="btn primary">Submit Answer</button>
-        <button id="nextBtn" class="btn primary" style="display:none">Next Question</button>
+        <button class="btn btn-secondary" onclick="previousQuestion()">Previous</button>
+        <button class="btn btn-primary" id="submitBtn" onclick="submitAnswer()">Submit</button>
+        <button class="btn btn-primary" id="nextBtn" style="display:none" onclick="nextQuestion()">Next</button>
       </div>
-    </section>
+    </div>
 
-    <!-- Results -->
-    <section id="resultsContainer" class="results-container">
-      <div style="text-align:center">
-        <div id="scoreCircle" class="score-circle" style="--deg:0deg"><div id="scoreText" class="score-text">0%</div></div>
-        <div id="passFail" class="fail">RESULT</div>
-      </div>
+    <div class="results-container" id="resultsContainer">
+      <h2>📊 Performance Analysis</h2>
       <div class="stats-grid">
-        <div class="stat-card"><div>Correct Answers</div><div id="correctCount" class="stat-value">0/0</div></div>
-        <div class="stat-card"><div>Total Minutes</div><div id="timeUsed" class="stat-value">0</div></div>
-        <div class="stat-card"><div>Avg Time/Question</div><div id="avgTime" class="stat-value">0s</div></div>
-        <div class="stat-card"><div>Slowest</div><div id="slowestTime" class="stat-value">—</div></div>
-        <div class="stat-card"><div>Fastest</div><div id="fastestTime" class="stat-value">—</div></div>
-        <div class="stat-card"><div>Flagged / Skipped</div><div class="stat-value"><span id="flaggedCount">0</span> / <span id="skippedCount">0</span></div></div>
+        <div class="stat-card"><div>Score</div><div id="scoreText" style="font-size:1.8em;font-weight:800;color:#0073bb">0%</div></div>
+        <div class="stat-card"><div>Correct</div><div id="correctCount" style="font-size:1.8em;font-weight:800;color:#0073bb">0/0</div></div>
+        <div class="stat-card"><div>Time Used</div><div id="timeUsed" style="font-size:1.8em;font-weight:800;color:#0073bb">00:00</div></div>
+        <div class="stat-card"><div>Flagged</div><div id="flaggedCount" style="font-size:1.8em;font-weight:800;color:#0073bb">0</div></div>
       </div>
       <div class="controls">
-        <button id="reviewBtn" class="btn primary">Detailed Review</button>
-        <button id="newSessionBtn" class="btn secondary">Start New Session</button>
-        <button id="anotherExamBtn" class="btn primary">Take Another Exam</button>
+        <button class="btn btn-primary" onclick="reviewAnswers()">Detailed Review</button>
+        <button class="btn btn-secondary" onclick="resetQuiz()">Take Another Exam</button>
       </div>
-    </section>
-  </main>
+    </div>
+  </div>
 
-  <!-- -------- 1) Robust questions.js loader (tries multiple paths) -------- -->
+  <!-- (Optional) Extension noise blocker -->
   <script>
-  (async () => {
-    // Adjust these paths to match your repo layout
-    const CANDIDATES = [
-      "./questions.js?v=5",
-      "./data/questions.js?v=5",
-      "./questions/questions.js?v=5"
-    ];
-
-    function loadScript(src){
-      return new Promise((resolve,reject)=>{
-        const s=document.createElement('script');
-        s.src=src; s.onload=()=>resolve(src); s.onerror=()=>reject(new Error("Failed to load "+src));
-        document.head.appendChild(s);
-      });
-    }
-
-    let loadedFrom=null;
-    for(const path of CANDIDATES){
+    (function(){
+      const props=['ethereum','tronWeb','solana','walletRouter'];
       try{
-        await loadScript(path);
-        if(Array.isArray(window.questionBank) && window.questionBank.length){
-          loadedFrom=path;
-          console.log("[DVA] questionBank loaded:", window.questionBank.length, "from", path);
-          break;
-        }
-      }catch(e){ console.warn(e.message); }
-    }
-
-    if(!loadedFrom){
-      const el=document.getElementById('bankError');
-      el.style.display='block';
-      el.innerHTML=[
-        "<b>⚠️ Could not load questions</b>",
-        "Tried:",
-        ...CANDIDATES.map(p=>`<code>${p}</code>`),
-        "<br>Make sure your file sets <code>window.questionBank = [ … ]</code> and the path is correct."
-      ].join("<br>");
-      // Tiny demo so UI still works
-      window.questionBank=[{
-        id:"demo_01", domain:"Deployment", difficulty:"Medium",
-        scenario:"Zero-downtime Lambda deployment needed.",
-        question:"Best approach?",
-        options:["In-place update","Versions + alias traffic shifting","Delete & recreate","Change memory"],
-        correct:1,
-        explanation:{correct:"Use versions + alias shifting (or CodeDeploy).", whyWrong:{0:"Risky",2:"Downtime",3:"Irrelevant"}, examStrategy:"Prefer canary/linear with aliases."}
-      }];
-      console.warn("[DVA] Using demo question because no bank was found.");
-    }
-
-    window.__BANK_READY__=true; // let the trainer start
-  })();
+        props.forEach(p=>Object.defineProperty(window,p,{get:()=>undefined,set:()=>{},configurable:false}));
+      }catch(e){}
+    })();
   </script>
 
-  <!-- -------- 2) Loader helpers & normalizer -------- -->
+  <!-- Load your bank -->
+  <script src="./questions.js?v=11"></script>
+  <!-- Bridge: if someone wrote 'const questionBank = [...]', promote it -->
+  <script>if(typeof window.questionBank==="undefined" && typeof questionBank!=="undefined"){window.questionBank=questionBank}</script>
+
   <script>
+    // ===== Mode configuration =====
+    const MODES = {
+      triage:    { label:'Triage',     total:24, timePerQ:30,  perQWarn:30,  globalMin:null,  autoAdvance:true,  filter:q=> (q.difficulty||'').toLowerCase()!=='easy' },
+      speed:     { label:'Speed',      total:40, timePerQ:90,  perQWarn:90,  globalMin:null,  autoAdvance:true,  filter:null },
+      exam:      { label:'Full Exam',  total:65, timePerQ:null, perQWarn:90, globalMin:130,   autoAdvance:false, filter:null }, // no hard per-Q cap
+      strategic: { label:'Strategic',  total:30, timePerQ:null, perQWarn:null,globalMin:null, autoAdvance:false, filter:null }
+    };
+
+    // ===== State + helpers =====
+    const state = {
+      mode:null, questions:[], index:0,
+      answers:[], correctCount:0, flagged:new Set(), skipped:new Set(),
+      startedAt:null, qStartedAt:null, perQTimes:[],
+      timers:{ global:null, perQ:null }
+    };
+
     const $ = id => document.getElementById(id);
-    const Views = { analysis:['modeSelection'], exam:['timerSection','questionContainer'], results:['resultsContainer'] };
-    const A='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const mmss = s => `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+    const pad2 = n => String(n).padStart(2,'0');
+    const fmtSec = s => `${pad2(Math.floor(s/60))}:${pad2(s%60)}`;
+    function deltaClock(s){ s=Math.abs(s); const m=(s/60)|0, sec=s%60; return `${m}m ${pad2(sec)}`; }
 
-    function normalizeBank() {
-      let qb = window.questionBank;
-      if (!qb) return null;
-      if (!Array.isArray(qb) && typeof qb==='object') {
-        const flat=[]; for(const k in qb) if (Array.isArray(qb[k])) flat.push(...qb[k]); qb=flat;
+    function sample(arr,n){
+      if(n>=arr.length) return [...arr].sort(()=>Math.random()-0.5);
+      const out=[], used=new Set();
+      while(out.length<n){ const i=(Math.random()*arr.length)|0; if(!used.has(i)){used.add(i); out.push(arr[i]);} }
+      return out;
+    }
+
+    function overallDelta(cfg, perQElapsed){
+      // target per question = timePerQ (triage/speed) else global average (exam=120s)
+      const base = cfg.timePerQ || (cfg.globalMin ? Math.round((cfg.globalMin*60)/state.questions.length) : (cfg.perQWarn||90));
+      const answered = state.answers.filter(a=>a!==null).length;
+      const expected = answered * base + Math.min(perQElapsed, base);
+      const actual = Math.floor((Date.now() - state.startedAt)/1000);
+      return actual - expected; // + behind, - ahead
+    }
+
+    // ===== Engine =====
+    function startMode(modeName){
+      if(!Array.isArray(window.questionBank) || !window.questionBank.length){
+        alert('Questions not loaded.'); return;
       }
-      if (!Array.isArray(qb) || !qb.length) return null;
+      const cfg = MODES[modeName];
+      state.mode = modeName;
 
-      return qb.map(q=>{
-        const ci = typeof q.correct==='string' ? A.indexOf((q.correct||'').toUpperCase()) : q.correct;
-        const whyWrong = (q.explanation && q.explanation.whyWrong) || {};
-        const wrong = Array.isArray(q.options) ? q.options.map((_,i)=> i===ci?'': (whyWrong[i]??whyWrong[String(i)]??'')) : [];
-        return {
-          id:q.id||'', domain:q.domain||'General', difficulty:q.difficulty||'Medium',
-          timeRecommendation:q.timeRecommendation||null,
-          scenario:q.scenario||'', question:q.question||'', options:q.options||[],
-          correct:Number.isInteger(ci)?ci:0,
-          why:(q.explanation && (q.explanation.correct||'')) || '',
-          wrong, tip:(q.explanation && q.explanation.examStrategy) || ''
-        };
-      }).filter(q=>Array.isArray(q.options)&&q.options.length>=2);
+      const pool = cfg.filter ? window.questionBank.filter(cfg.filter) : window.questionBank;
+      state.questions = sample(pool, cfg.total);
+      state.index = 0;
+      state.answers = new Array(state.questions.length).fill(null);
+      state.correctCount = 0;
+      state.flagged.clear(); state.skipped.clear();
+      state.perQTimes = new Array(state.questions.length).fill(0);
+      state.startedAt = Date.now();
+
+      // UI setup
+      $('modeSelection').style.display='none';
+      $('timerSection').style.display='flex';
+      $('questionContainer').style.display='block';
+      $('resultsContainer').style.display='none';
+      $('explanation').style.display='none';
+
+      clearInterval(state.timers.global); clearInterval(state.timers.perQ);
+      if(cfg.globalMin){
+        const end = state.startedAt + cfg.globalMin*60*1000;
+        state.timers.global = setInterval(()=>{
+          const left = Math.max(0, ((end - Date.now())/1000)|0);
+          $('globalTimer').textContent = fmtSec(left);
+          if(left<=0){ clearInterval(state.timers.global); finish(); }
+        }, 250);
+      }else{
+        state.timers.global = setInterval(()=>{
+          const elapsed = ((Date.now()-state.startedAt)/1000)|0;
+          $('globalTimer').textContent = fmtSec(elapsed);
+        }, 250);
+      }
+
+      renderQuestion(true);
     }
 
-    function reportBankProblem(title, detail){
-      const el=$('bankError'); el.style.display='block';
-      el.innerHTML = `<b>⚠️ ${title}</b><br>${detail||''}`;
+    function startQuestionClock(){
+      const cfg = MODES[state.mode];
+      clearInterval(state.timers.perQ);
+      state.qStartedAt = Date.now();
+
+      state.timers.perQ = setInterval(()=>{
+        const elapsed = ((Date.now()-state.qStartedAt)/1000)|0;
+        $('questionTimer').textContent = fmtSec(elapsed);
+
+        // Hard cap only if timePerQ set (triage/speed)
+        if(cfg.timePerQ){
+          const left = cfg.timePerQ - elapsed;
+          if(left<=0){
+            recordTimeForCurrent();
+            state.skipped.add(state.index);
+            clearInterval(state.timers.perQ);
+            if(cfg.autoAdvance){
+              nextQuestion();
+            }else{
+              $('submitBtn').style.display='none';
+              $('nextBtn').style.display='block';
+            }
+            return;
+          }
+        }
+
+        // Pace coaching
+        const delta = overallDelta(cfg, elapsed); // + behind, - ahead
+        const ind = $('paceIndicator'); const val = $('paceValue');
+
+        // Current question warning when over perQWarn (e.g., 90s for exam)
+        if(cfg.perQWarn && elapsed > cfg.perQWarn){
+          ind.className='pace-indicator pace-danger';
+          ind.textContent=`OVER ${cfg.perQWarn}s`;
+          val.textContent = `+${elapsed-cfg.perQWarn}s | Δ ${delta>=0?'+':'-'}${deltaClock(delta)}`;
+        }else{
+          if(delta > 15){ ind.className='pace-indicator pace-behind'; ind.textContent='BEHIND'; }
+          else if(delta < -15){ ind.className='pace-indicator pace-on-track'; ind.textContent='AHEAD'; }
+          else { ind.className='pace-indicator pace-on-track'; ind.textContent='ON TRACK'; }
+          val.textContent = `Δ ${delta>=0?'+':'-'}${deltaClock(delta)}`;
+        }
+      }, 1000);
     }
-  </script>
 
-  <!-- -------- 3) Trainer engine -------- -->
-  <script>
-    const state = { mode:null, questions:[], index:0, answers:[], flagged:new Set(), skipped:new Set(), times:[], startTs:null, qStartTs:null, gTimer:null, qTimer:null };
+    function recordTimeForCurrent(){
+      const secs = ((Date.now()-state.qStartedAt)/1000)|0;
+      state.perQTimes[state.index] += secs;
+    }
 
-    function show(view){
-      Object.values(Views).flat().forEach(id=>$(id).style.display='none');
-      (Views[view]||[]).forEach(id=>$(id).style.display=id==='timerSection'?'flex':'block');
+    function renderQuestion(first=false){
+      const q = state.questions[state.index];
+      if(!q){ finish(); return; }
+
+      $('domainBadge').textContent = q.domain || 'Domain';
+      const diff = (q.difficulty||'medium').toLowerCase();
+      const db = $('difficultyBadge');
+      db.textContent = diff[0].toUpperCase()+diff.slice(1);
+      db.className = 'badge ' + (diff==='easy'?'badge-difficulty-easy':diff==='hard'?'badge-difficulty-hard':'badge-difficulty-medium');
+      $('questionNumber').textContent = `Q${state.index+1} of ${state.questions.length}`;
+      $('scenario').textContent = q.scenario || '';
+      $('questionText').textContent = q.question || '';
+
+      const wrap = $('options'); wrap.innerHTML='';
+      const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      (q.options||[]).forEach((opt,i)=>{
+        const div=document.createElement('div');
+        div.className='option';
+        div.onclick=()=>selectOption(i);
+        div.innerHTML=`<div class="option-letter">${letters[i]}</div><div class="option-text">${opt}</div>`;
+        if(state.answers[state.index]===i) div.classList.add('selected');
+        wrap.appendChild(div);
+      });
+
+      $('explanation').style.display='none';
+      $('submitBtn').style.display='block';
+      $('nextBtn').style.display='none';
+
+      startQuestionClock();
+
+      if(first){
+        $('paceIndicator').className='pace-indicator pace-on-track';
+        $('paceIndicator').textContent='ON TRACK';
+        $('paceValue').textContent='Δ +0m 00s';
+      }
+    }
+
+    function selectOption(i){
+      state.answers[state.index]=i;
+      [...$('options').children].forEach((el,idx)=>el.classList.toggle('selected', idx===i));
+    }
+
+    function submitAnswer(){
+      const q=state.questions[state.index];
+      if(state.answers[state.index]==null){ alert('Select an answer or Skip.'); return; }
+      recordTimeForCurrent();
+      clearInterval(state.timers.perQ);
+
+      const chosen=state.answers[state.index];
+      [...$('options').children].forEach((el,idx)=>{
+        el.classList.remove('selected');
+        el.classList.add(idx===q.correct?'correct':(idx===chosen?'incorrect':''));
+      });
+      if(chosen===q.correct) state.correctCount++;
+
+      $('correctExplanation').textContent = (q.explanation && (q.explanation.correct||q.explanation)) || '';
+      $('strategyTip').textContent = (q.explanation && (q.explanation.examStrategy||'')) || '';
+      $('explanation').style.display='block';
+      $('submitBtn').style.display='none';
+      $('nextBtn').style.display='block';
+    }
+
+    function nextQuestion(){
+      clearInterval(state.timers.perQ);
+      if(state.index < state.questions.length-1){ state.index++; renderQuestion(); }
+      else { finish(); }
+    }
+    function previousQuestion(){
+      clearInterval(state.timers.perQ);
+      if(state.index>0){ state.index--; renderQuestion(); }
+    }
+    function skipQuestion(){
+      recordTimeForCurrent();
+      state.skipped.add(state.index);
+      nextQuestion();
+    }
+    function toggleFlag(){
+      if(state.flagged.has(state.index)) state.flagged.delete(state.index);
+      else state.flagged.add(state.index);
+    }
+
+    function finish(){
+      clearInterval(state.timers.global); clearInterval(state.timers.perQ);
+      $('questionContainer').style.display='none';
+      $('resultsContainer').style.display='block';
+
+      const total=state.questions.length;
+      const pct = Math.round((state.correctCount/total)*100);
+      $('scoreText').textContent=`${pct}%`;
+      $('correctCount').textContent=`${state.correctCount}/${total}`;
+      const elapsed = ((Date.now()-state.startedAt)/1000)|0;
+      $('timeUsed').textContent=fmtSec(elapsed);
+      $('flaggedCount').textContent=state.flagged.size;
+    }
+
+    // Expose a clean reset
+    function resetQuiz(){
+      clearInterval(state.timers.global); clearInterval(state.timers.perQ);
+      state.mode=null; state.questions=[]; state.index=0; state.answers=[]; state.flagged.clear(); state.skipped.clear();
+      $('resultsContainer').style.display='none';
+      $('questionContainer').style.display='none';
+      $('timerSection').style.display='none';
+      $('modeSelection').style.display='grid';
+      $('globalTimer').textContent='00:00';
+      $('questionTimer').textContent='00:00';
+      $('paceIndicator').className='pace-indicator pace-on-track';
+      $('paceIndicator').textContent='ON TRACK';
+      $('paceValue').textContent='--';
       window.scrollTo(0,0);
     }
 
-    function startExam(mode='exam'){
-      const loaded = normalizeBank();
-      if (!loaded) {
-        reportBankProblem(
-          (typeof window.questionBank==='undefined')?'questionBank is undefined':'questionBank has 0 valid items',
-          'Using a demo item so you can see the flow.'
-        );
-        // normalizeBank already returned null only if bank is invalid;
-        // but our loader sets a demo, so try again:
-        const demo = normalizeBank();
-        state.questions = demo || [];
-      } else {
-        state.questions = loaded;
-      }
+    // Public API
+    window.startMode = startMode;
+    window.resetQuiz = resetQuiz;
+    window.reviewAnswers = () => alert('Detailed review coming next build.');
 
-      state.mode=mode; state.index=0;
-      state.answers = Array(state.questions.length).fill(null);
-      state.flagged.clear(); state.skipped.clear(); state.times=[];
-      clearInterval(state.gTimer); clearInterval(state.qTimer);
-      state.startTs=Date.now(); state.qStartTs=Date.now();
-      $('globalTimer').textContent='00:00'; $('questionTimer').textContent='00:00';
-      show('exam'); renderQuestion();
-      state.gTimer=setInterval(updateTimers,1000); state.qTimer=setInterval(updateTimers,1000);
-    }
-
-    function updateTimers(){
-      const now=Date.now();
-      const gs=Math.max(0,Math.round((now-(state.startTs||now))/1000));
-      const qs=Math.max(0,Math.round((now-(state.qStartTs||now))/1000));
-      $('globalTimer').textContent=mmss(gs); $('questionTimer').textContent=mmss(qs);
-    }
-
-    function renderQuestion(){
-      const q = state.questions[state.index]; if(!q){ return finishExam(); }
-      $('domainBadge').textContent=q.domain||'Domain';
-      const dif=(q.difficulty||'Medium').toLowerCase();
-      $('difficultyBadge').className='badge '+(dif==='easy'?'bdE':dif==='hard'?'bdH':'bdM');
-      $('difficultyBadge').textContent=(q.difficulty||'Medium').toString();
-      $('questionNumber').textContent=`Q${state.index+1} of ${state.questions.length}`;
-      $('scenario').textContent=q.scenario||'';
-      $('questionText').textContent=q.question||'';
-      $('explanation').style.display='none';
-
-      const box=$('options'); box.innerHTML='';
-      q.options.forEach((t,i)=>{
-        const d=document.createElement('div'); d.className='option';
-        if(state.answers[state.index]===i) d.classList.add('selected');
-        d.innerHTML=`<div class="letter">${String.fromCharCode(65+i)}</div><div>${t}</div>`;
-        d.onclick=()=>{[...box.children].forEach(x=>x.classList.remove('selected')); d.classList.add('selected'); state.answers[state.index]=i;};
-        box.appendChild(d);
-      });
-
-      $('prevBtn').disabled = state.index===0;
-      state.qStartTs=Date.now();
-    }
-
-    function saveTime(){ const ms=Math.max(0,Date.now()-state.qStartTs); state.times[state.index]=(state.times[state.index]||0)+ms; state.qStartTs=Date.now(); }
-    function prevQuestion(){ saveTime(); if(state.index>0){ state.index--; renderQuestion(); } }
-    function nextQuestion(){ saveTime(); if(state.index<state.questions.length-1){ state.index++; renderQuestion(); } else { finishExam(); } }
-    function skipQuestion(){ state.skipped.add(state.index); nextQuestion(); }
-    function toggleFlag(){ state.flagged.has(state.index)?state.flagged.delete(state.index):state.flagged.add(state.index); }
-
-    function submitAnswer(){
-      const q = state.questions[state.index]; const sel=state.answers[state.index];
-      const opts=[...$('options').children];
-      opts.forEach((el,i)=>{ el.classList.remove('correct','incorrect'); if(i===q.correct) el.classList.add('correct'); if(sel!=null && i===sel && sel!==q.correct) el.classList.add('incorrect'); });
-      $('correctExplanation').textContent=q.why||'';
-      const w=$('wrongExplanations'); w.innerHTML=''; (q.wrong||[]).forEach((txt,i)=>{ if(!txt) return; const p=document.createElement('p'); p.textContent=`${String.fromCharCode(65+i)}: ${txt}`; w.appendChild(p); });
-      $('strategyTip').textContent=q.tip||'';
-      $('explanation').style.display='block';
-      $('submitBtn').style.display='none'; $('nextBtn').style.display='inline-block';
-    }
-
-    function finishExam(){
-      saveTime(); clearInterval(state.gTimer); clearInterval(state.qTimer);
-      const total=state.questions.length||0;
-      const correct=state.answers.reduce((n,a,i)=>n+(a===state.questions[i]?.correct?1:0),0);
-      const pct=Math.round((correct/Math.max(1,total))*100);
-      const deg=Math.round(pct*3.6);
-      $('scoreCircle').style.setProperty('--deg',`${deg}deg`); $('scoreText').textContent=`${pct}%`;
-      const pass=pct>=72; const pf=$('passFail'); pf.textContent=pass?'PASS':'FAIL'; pf.className=pass?'pass':'fail';
-      $('correctCount').textContent=`${correct}/${total}`;
-      const totalMs=(state.times||[]).reduce((a,b)=>a+(b||0),0);
-      const answered=state.answers.filter(a=>a!=null).length;
-      $('timeUsed').textContent=String(Math.round(totalMs/60000));
-      $('avgTime').textContent= answered?`${Math.round((totalMs/answered)/1000)}s`:'0s';
-      const times=(state.times||[]).filter(v=>Number.isFinite(v)&&v>0);
-      $('slowestTime').textContent=times.length?`${Math.round(Math.max(...times)/1000)}s`:'—';
-      $('fastestTime').textContent=times.length?`${Math.round(Math.min(...times)/1000)}s`:'—';
-      $('flaggedCount').textContent=state.flagged.size; $('skippedCount').textContent=state.skipped.size;
-      show('results');
-    }
-
-    // ---- Wait for bank readiness, then wire UI ----
-    function waitForBankReady(cb){
-      if (window.__BANK_READY__) return cb();
-      const iv=setInterval(()=>{ if(window.__BANK_READY__){ clearInterval(iv); cb(); } },50);
-    }
-
-    document.addEventListener('DOMContentLoaded',()=>{
-      document.querySelectorAll('.mode-card').forEach(c=>{
-        c.addEventListener('click',()=>waitForBankReady(()=>startExam(c.dataset.mode||'exam')));
-      });
-      $('flagBtn').onclick=toggleFlag; $('skipBtn').onclick=skipQuestion;
-      $('prevBtn').onclick=prevQuestion; $('submitBtn').onclick=submitAnswer; $('nextBtn').onclick=nextQuestion;
-      $('reviewBtn').onclick=()=>{ show('exam'); state.index = state.flagged.size?[...state.flagged][0]:0; renderQuestion(); };
-      $('newSessionBtn').onclick=()=>{ clearInterval(state.gTimer); clearInterval(state.qTimer); show('analysis'); };
-      $('anotherExamBtn').onclick=()=>waitForBankReady(()=>startExam('exam'));
-      show('analysis');
-    });
   </script>
 </body>
 </html>
