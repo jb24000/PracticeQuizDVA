@@ -61,8 +61,10 @@
       <p>Security • Deployment • Performance • Cost optimization</p>
     </section>
 
+    <!-- Visible error if questions fail to load -->
     <section id="bankError" class="error-card" style="display:none"></section>
 
+    <!-- Analysis screen -->
     <section id="modeSelection" class="mode-selection">
       <div class="mode-card" data-mode="triage"><b>⚡ Triage Training</b><p>Spot quick wins vs time sinks.</p></div>
       <div class="mode-card" data-mode="speed"><b>🔥 Speed Rounds</b><p>90-second cap per question.</p></div>
@@ -70,12 +72,14 @@
       <div class="mode-card" data-mode="strategic"><b>🧠 Strategic Practice</b><p>Mark/skip/return flows.</p></div>
     </section>
 
+    <!-- Timers -->
     <section id="timerSection" class="timer-section">
       <div class="timer-box"><div>Global</div><div id="globalTimer" style="font-weight:800;font-size:1.6rem">00:00</div></div>
       <div class="timer-box"><div>Question</div><div id="questionTimer" style="font-weight:800;font-size:1.6rem">00:00</div></div>
       <div class="timer-box"><div>Pace</div><div id="paceValue" style="font-weight:800;font-size:1.6rem">—</div></div>
     </section>
 
+    <!-- Question -->
     <section id="questionContainer" class="question-container">
       <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
         <div style="display:flex;gap:8px">
@@ -106,6 +110,7 @@
       </div>
     </section>
 
+    <!-- Results -->
     <section id="resultsContainer" class="results-container">
       <div style="text-align:center">
         <div id="scoreCircle" class="score-circle" style="--deg:0deg"><div id="scoreText" class="score-text">0%</div></div>
@@ -127,79 +132,99 @@
     </section>
   </main>
 
-  <!-- (Optional) Soft wallet sanitiser to avoid extension redefinition errors -->
+  <!-- -------- 1) Robust questions.js loader (tries multiple paths) -------- -->
   <script>
-    (function(){
-      ['ethereum','tronWeb','solana','walletRouter'].forEach(p=>{
-        try{ if(!(p in window)) Object.defineProperty(window,p,{get:()=>undefined,set:v=>v,configurable:true}); }catch(_){}
+  (async () => {
+    // Adjust these paths to match your repo layout
+    const CANDIDATES = [
+      "./questions.js?v=5",
+      "./data/questions.js?v=5",
+      "./questions/questions.js?v=5"
+    ];
+
+    function loadScript(src){
+      return new Promise((resolve,reject)=>{
+        const s=document.createElement('script');
+        s.src=src; s.onload=()=>resolve(src); s.onerror=()=>reject(new Error("Failed to load "+src));
+        document.head.appendChild(s);
       });
-      const orig=document.createElement; document.createElement=function(t){const el=orig.call(document,t);
-        if(String(t).toLowerCase()==='script'){const s=el.setAttribute; el.setAttribute=function(n,v){
-          if(n==='src'&&String(v).startsWith('chrome-extension://')) return; return s.call(this,n,v);
-        }}
-        return el;
-      };
-    })();
+    }
+
+    let loadedFrom=null;
+    for(const path of CANDIDATES){
+      try{
+        await loadScript(path);
+        if(Array.isArray(window.questionBank) && window.questionBank.length){
+          loadedFrom=path;
+          console.log("[DVA] questionBank loaded:", window.questionBank.length, "from", path);
+          break;
+        }
+      }catch(e){ console.warn(e.message); }
+    }
+
+    if(!loadedFrom){
+      const el=document.getElementById('bankError');
+      el.style.display='block';
+      el.innerHTML=[
+        "<b>⚠️ Could not load questions</b>",
+        "Tried:",
+        ...CANDIDATES.map(p=>`<code>${p}</code>`),
+        "<br>Make sure your file sets <code>window.questionBank = [ … ]</code> and the path is correct."
+      ].join("<br>");
+      // Tiny demo so UI still works
+      window.questionBank=[{
+        id:"demo_01", domain:"Deployment", difficulty:"Medium",
+        scenario:"Zero-downtime Lambda deployment needed.",
+        question:"Best approach?",
+        options:["In-place update","Versions + alias traffic shifting","Delete & recreate","Change memory"],
+        correct:1,
+        explanation:{correct:"Use versions + alias shifting (or CodeDeploy).", whyWrong:{0:"Risky",2:"Downtime",3:"Irrelevant"}, examStrategy:"Prefer canary/linear with aliases."}
+      }];
+      console.warn("[DVA] Using demo question because no bank was found.");
+    }
+
+    window.__BANK_READY__=true; // let the trainer start
+  })();
   </script>
 
-  <!-- 👇 Load YOUR questions (defines window.questionBank = [ … ]) -->
-  <script src="./questions.js?v=1"></script>
-
-  <!-- Small fallback demo so the UI still shows if questionBank fails -->
+  <!-- -------- 2) Loader helpers & normalizer -------- -->
   <script>
-    const __fallbackDemo = [{
-      id:'demo_01', domain:'Deployment', difficulty:'Medium',
-      scenario:'Zero-downtime Lambda deployment needed.',
-      question:'Best approach?',
-      options:['In-place update','Versions + alias traffic shifting','Delete & recreate','Change memory'],
-      correct:1,
-      explanation:{correct:'Use versions + alias shifting (or CodeDeploy).',
-        whyWrong:{0:'Risky partial rollout',2:'Downtime',3:'Does not shift traffic'},
-        examStrategy:'Prefer canary/linear with aliases.'}
-    }];
-  </script>
-
-  <script>
-    /* ------------ Loader + diagnostics ------------- */
     const $ = id => document.getElementById(id);
     const Views = { analysis:['modeSelection'], exam:['timerSection','questionContainer'], results:['resultsContainer'] };
     const A='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const mmss = s => `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
 
-    function reportBankProblem(title, detail) {
-      const el=$('bankError');
-      el.style.display='block';
-      el.innerHTML = `<b>⚠️ ${title}</b><br>${detail||''}`;
+    function normalizeBank() {
+      let qb = window.questionBank;
+      if (!qb) return null;
+      if (!Array.isArray(qb) && typeof qb==='object') {
+        const flat=[]; for(const k in qb) if (Array.isArray(qb[k])) flat.push(...qb[k]); qb=flat;
+      }
+      if (!Array.isArray(qb) || !qb.length) return null;
+
+      return qb.map(q=>{
+        const ci = typeof q.correct==='string' ? A.indexOf((q.correct||'').toUpperCase()) : q.correct;
+        const whyWrong = (q.explanation && q.explanation.whyWrong) || {};
+        const wrong = Array.isArray(q.options) ? q.options.map((_,i)=> i===ci?'': (whyWrong[i]??whyWrong[String(i)]??'')) : [];
+        return {
+          id:q.id||'', domain:q.domain||'General', difficulty:q.difficulty||'Medium',
+          timeRecommendation:q.timeRecommendation||null,
+          scenario:q.scenario||'', question:q.question||'', options:q.options||[],
+          correct:Number.isInteger(ci)?ci:0,
+          why:(q.explanation && (q.explanation.correct||'')) || '',
+          wrong, tip:(q.explanation && q.explanation.examStrategy) || ''
+        };
+      }).filter(q=>Array.isArray(q.options)&&q.options.length>=2);
     }
 
-    function loadQuestionsFromBank(){
-      try{
-        let qb = window.questionBank;
-        if (!qb) return null;
-        if (!Array.isArray(qb) && typeof qb==='object'){
-          const flat=[]; for (const k in qb) if (Array.isArray(qb[k])) flat.push(...qb[k]); qb=flat;
-        }
-        if (!Array.isArray(qb) || !qb.length) return null;
-        const out = qb.map(q=>{
-          const ci = typeof q.correct==='string' ? A.indexOf((q.correct||'').toUpperCase()) : q.correct;
-          const whyWrong = (q.explanation && q.explanation.whyWrong) || {};
-          const wrong = Array.isArray(q.options) ? q.options.map((_,i)=> i===ci?'': (whyWrong[i]??whyWrong[String(i)]??'')) : [];
-          return {
-            id:q.id||'', domain:q.domain||'General', difficulty:q.difficulty||'Medium',
-            timeRecommendation:q.timeRecommendation||null,
-            scenario:q.scenario||'', question:q.question||'', options:q.options||[],
-            correct:Number.isInteger(ci)?ci:0,
-            why:(q.explanation && (q.explanation.correct||'')) || '',
-            wrong, tip:(q.explanation && q.explanation.examStrategy) || ''
-          };
-        }).filter(q=>Array.isArray(q.options)&&q.options.length>=2);
-        return out.length?out:null;
-      }catch(e){ reportBankProblem('Error parsing questionBank', e.message); return null; }
+    function reportBankProblem(title, detail){
+      const el=$('bankError'); el.style.display='block';
+      el.innerHTML = `<b>⚠️ ${title}</b><br>${detail||''}`;
     }
   </script>
 
+  <!-- -------- 3) Trainer engine -------- -->
   <script>
-    /* ------------------- Trainer engine ------------------- */
     const state = { mode:null, questions:[], index:0, answers:[], flagged:new Set(), skipped:new Set(), times:[], startTs:null, qStartTs:null, gTimer:null, qTimer:null };
 
     function show(view){
@@ -209,14 +234,20 @@
     }
 
     function startExam(mode='exam'){
-      const loaded = loadQuestionsFromBank();
+      const loaded = normalizeBank();
       if (!loaded) {
-        reportBankProblem((typeof window.questionBank==='undefined')?'questionBank is undefined':'questionBank has 0 valid items',
-                          'Using one demo question so you can see the flow.');
-        state.questions = __fallbackDemo.slice();
+        reportBankProblem(
+          (typeof window.questionBank==='undefined')?'questionBank is undefined':'questionBank has 0 valid items',
+          'Using a demo item so you can see the flow.'
+        );
+        // normalizeBank already returned null only if bank is invalid;
+        // but our loader sets a demo, so try again:
+        const demo = normalizeBank();
+        state.questions = demo || [];
       } else {
         state.questions = loaded;
       }
+
       state.mode=mode; state.index=0;
       state.answers = Array(state.questions.length).fill(null);
       state.flagged.clear(); state.skipped.clear(); state.times=[];
@@ -295,22 +326,22 @@
       show('results');
     }
 
-    // Wire UI
+    // ---- Wait for bank readiness, then wire UI ----
+    function waitForBankReady(cb){
+      if (window.__BANK_READY__) return cb();
+      const iv=setInterval(()=>{ if(window.__BANK_READY__){ clearInterval(iv); cb(); } },50);
+    }
+
     document.addEventListener('DOMContentLoaded',()=>{
-      document.querySelectorAll('.mode-card').forEach(c=>c.addEventListener('click',()=>startExam(c.dataset.mode||'exam')));
+      document.querySelectorAll('.mode-card').forEach(c=>{
+        c.addEventListener('click',()=>waitForBankReady(()=>startExam(c.dataset.mode||'exam')));
+      });
       $('flagBtn').onclick=toggleFlag; $('skipBtn').onclick=skipQuestion;
       $('prevBtn').onclick=prevQuestion; $('submitBtn').onclick=submitAnswer; $('nextBtn').onclick=nextQuestion;
       $('reviewBtn').onclick=()=>{ show('exam'); state.index = state.flagged.size?[...state.flagged][0]:0; renderQuestion(); };
       $('newSessionBtn').onclick=()=>{ clearInterval(state.gTimer); clearInterval(state.qTimer); show('analysis'); };
-      $('anotherExamBtn').onclick=()=>startExam('exam');
-
-      // Show visible error if bank missing at load
-      if (!loadQuestionsFromBank()) {
-        reportBankProblem(
-          (typeof window.questionBank==='undefined') ? 'questionBank is undefined' : 'questionBank has 0 valid questions',
-          'Ensure questions.js sets window.questionBank = [ … ] and is included before these scripts (no type="module").'
-        );
-      }
+      $('anotherExamBtn').onclick=()=>waitForBankReady(()=>startExam('exam'));
+      show('analysis');
     });
   </script>
 </body>
