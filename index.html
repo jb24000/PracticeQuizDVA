@@ -238,7 +238,7 @@
   <script>
     /* ===== Mode config ===== */
     const MODES = {
-      triage:    { label:'Triage',     total:24, timePerQ:30,  perQWarn:30,  globalMin:null,  autoAdvance:true,  filter:q=>(q.difficulty||'').toLowerCase()!=='easy' },
+      triage:    { label:'Triage',     total:10, timePerQ:30,  perQWarn:30,  globalMin:null,  autoAdvance:true,  filter:q=>(q.difficulty||'').toLowerCase()!=='easy' },
       speed:     { label:'Speed',      total:40, timePerQ:90,  perQWarn:90,  globalMin:null,  autoAdvance:true,  filter:null },
       exam:      { label:'Full Exam',  total:65, timePerQ:null, perQWarn:90, globalMin:130,   autoAdvance:false, filter:null },
       strategic: { label:'Strategic',  total:30, timePerQ:null, perQWarn:null,globalMin:null, autoAdvance:false, filter:null }
